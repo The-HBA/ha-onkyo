@@ -1,0 +1,210 @@
+{
+ "_about": "Hand-written from project-soul/specs/eiscp-tx-rz50.md (sessions 05, 24, 26, 27 and the guided session). Not private; the sanitizer never overwrites this file.",
+ "mode_names": {
+  "00": "Stereo",
+  "01": "Direct",
+  "03": "Game-RPG",
+  "05": "Game-Action",
+  "06": "Game-Rock",
+  "08": "Orchestra",
+  "09": "Unplugged",
+  "0A": "Studio-Mix",
+  "0B": "TV Logic",
+  "0C": "All Ch Stereo",
+  "0D": "Theater-Dimensional",
+  "0E": "Game-Sports",
+  "0F": "Mono",
+  "11": "Pure Audio",
+  "13": "Mono Music",
+  "40": "DTS-HD",
+  "80": "Dolby Audio - Surr",
+  "82": "DTS Neural:X",
+  "84": "THX Cinema",
+  "85": "THX Cinema",
+  "89": "THX Games",
+  "8A": "THX Games",
+  "8B": "THX Music",
+  "8C": "THX Music"
+ },
+ "mode_output": {
+  "00": "2.1 ch",
+  "01": "2.0 ch",
+  "0D": "2.1 ch",
+  "0F": "2.1 ch",
+  "11": "2.0 ch"
+ },
+ "default_output": "6.1 ch",
+ "signals": {
+  "pcm_44k": {
+   "ifa": "HDMI 1,PCM,44.1 kHz,2.0 ch,{mode},{output},",
+   "modes": [
+    "82",
+    "84",
+    "85",
+    "8B",
+    "8C",
+    "89",
+    "8A",
+    "08",
+    "09",
+    "0A",
+    "0B",
+    "03",
+    "05",
+    "06",
+    "0E",
+    "0C",
+    "13",
+    "0D",
+    "11",
+    "01",
+    "00",
+    "0F",
+    "80"
+   ],
+   "default_mode": "82",
+   "names": {}
+  },
+  "pcm_48k": {
+   "ifa": "HDMI 1,PCM,48 kHz,2.0 ch,{mode},{output},",
+   "modes": [
+    "82",
+    "84",
+    "85",
+    "8B",
+    "8C",
+    "89",
+    "8A",
+    "08",
+    "09",
+    "0A",
+    "0B",
+    "03",
+    "05",
+    "06",
+    "0E",
+    "0C",
+    "13",
+    "0D",
+    "11",
+    "01",
+    "00",
+    "0F",
+    "80"
+   ],
+   "default_mode": "82",
+   "names": {}
+  },
+  "truehd_atmos": {
+   "ifa": "HDMI 1,Dolby Atmos/TrueHD,48 kHz,,{mode},{output},",
+   "modes": [
+    "80",
+    "08",
+    "09",
+    "0A",
+    "0B",
+    "03",
+    "05",
+    "06",
+    "0E",
+    "0C",
+    "13",
+    "0D",
+    "11",
+    "01",
+    "00"
+   ],
+   "default_mode": "80",
+   "names": {
+    "80": "Dolby Atmos"
+   }
+  },
+  "no_signal": {
+   "ifa": "ANALOG,,,,{mode},{output},",
+   "modes": [
+    "82",
+    "84",
+    "85",
+    "8B",
+    "8C",
+    "89",
+    "8A",
+    "08",
+    "09",
+    "0A",
+    "0B",
+    "03",
+    "05",
+    "06",
+    "0E",
+    "0C",
+    "13",
+    "0D",
+    "11",
+    "01",
+    "00",
+    "0F",
+    "80"
+   ],
+   "default_mode": "0C",
+   "names": {}
+  }
+ },
+ "start_signal": "pcm_44k",
+ "input_signals": {
+  "10": "pcm_44k"
+ },
+ "default_input_signal": "no_signal",
+ "set_maps": {
+  "DSS": {
+   "C00": "111",
+   "C01": "211",
+   "C02": "121",
+   "C03": "112"
+  }
+ },
+ "set_map_pushes": {
+  "DSS": [
+   "DBC00"
+  ]
+ },
+ "ranges": {
+  "MVL": {
+   "min": 0,
+   "max": 200,
+   "source": "2016 sheet (00-C8, 0.5 dB); ends not tested on the TX-RZ50"
+  },
+  "TFR": {
+   "min": -10,
+   "max": 10,
+   "source": "2016 sheet (-A to +A); ends not tested"
+  },
+  "SWL": {
+   "min": -30,
+   "max": 24,
+   "source": "2016 sheet (-1E to +18, 0.5 dB); ends not tested"
+  },
+  "AVS": {
+   "min": -100,
+   "max": 100,
+   "step": 5,
+   "source": "assumed; 5 ms steps seen, ends not tested"
+  },
+  "SLP": {
+   "min": 1,
+   "max": 90,
+   "cycle": [
+    "OFF",
+    "1E",
+    "3C",
+    "5A"
+   ],
+   "source": "SLPUP from OFF gave 1E; rest of the cycle assumed"
+  }
+ },
+ "input_effects": {
+  "24": {
+   "TUN": "08750"
+  }
+ }
+}

@@ -1,0 +1,46 @@
+{
+ "model": "TX-RZ50",
+ "firmware": "R145-1119-1284-0034-0000",
+ "fwv_reply": "R145111912840034",
+ "captured": "2026-11-26",
+ "mac": "0009B0000001",
+ "friendly_name": "Onkyo Test",
+ "mode_lock_seconds": 3.0,
+ "power_on_volume": "7C",
+ "power_on_burst": [
+  "PWR",
+  "SLI",
+  "DIM",
+  "TGA",
+  "NST",
+  "AMT",
+  "LMD",
+  "MOT",
+  "RAS",
+  "TFR",
+  "VL3",
+  "PCT",
+  "DGF",
+  "STW",
+  "FLD",
+  "MVL",
+  "PRS",
+  "HDO",
+  "IFA",
+  "IFV",
+  "NDS"
+ ],
+ "power_on_only": {
+  "PCT": "00"
+ },
+ "power_off_pushes": [
+  "TGA00",
+  "NSTS--1",
+  "AMT00",
+  "VL350",
+  "NSTS--1"
+ ],
+ "connect_push": [
+  "NJA2-http://receiver.invalid/album_art.cgi"
+ ]
+}
