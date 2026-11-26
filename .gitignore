@@ -16,3 +16,6 @@ project-soul/
 .claude/
 .cursorrules
 .clinerules
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
