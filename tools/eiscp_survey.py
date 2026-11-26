@@ -9,7 +9,9 @@ Modes:
   read    query codes (each sent with QSTN) and log the replies; read-only
   listen  send nothing, log what the receiver pushes; read-only
   sweep   send every three character code with QSTN in batches and log what answers; read-only
-  write   per message: read and record, set, read back, restore, verify (restore protocol)
+  write   per message: read and record, set, read back, restore, verify (restore protocol);
+          a power write (PWR, ZPW, PW3, PW4) also puts the zone volume back, since power-on
+          sets it to the power-on level
 
 Run from the repository root, for example:
   python tools/eiscp_survey.py --host 192.0.2.10 --out session.jsonl read PWR NRI
@@ -44,6 +46,10 @@ if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
 
 VOLUME_CODES = frozenset({"MVL", "ZVL", "VL3", "VL4"})
+# Power-on sets the zone volume to the receiver's power-on level (TX-RZ50: MVL 7C = -20 dB, even
+# when it was 4C before), so a power write also records the zone volume and puts it back.
+POWER_VOLUME = {"PWR": "MVL", "ZPW": "ZVL", "PW3": "VL3", "PW4": "VL4"}
+POWER_ON = "01"
 DEFAULT_PORT = 60128
 EXIT_REFUSED = 2
 EXIT_NOT_RESTORED = 3
@@ -286,6 +292,17 @@ async def write_one(session: Session, message: str, args: argparse.Namespace) ->
     restore = restore_message(message, query_code, before, args.restore)
     result["restore"] = restore
     session.note(f"write {message}: recorded {query_code}={before}, restore with {restore}")
+    volume_code = POWER_VOLUME.get(code) if query_code == code else None
+    volume_before: str | None = None
+    if volume_code is not None:
+        vol_msg = await session.query(volume_code, args.wait)
+        if vol_msg is None or vol_msg.param == "N/A":
+            got = vol_msg and vol_msg.param
+            msg = f"cannot record {volume_code} before a power write (reply: {got!r})"
+            raise Refused(msg)
+        volume_before = vol_msg.param
+        result["volume_before"] = volume_before
+        session.note(f"power write: recorded {volume_code}={volume_before}")
     set_sent = False
     try:
         mark = len(session.inbox)
@@ -301,12 +318,42 @@ async def write_one(session: Session, message: str, args: argparse.Namespace) ->
         result["settle_s"] = round(time.monotonic() - sent_at, 2)
         readback = await session.query(query_code, args.wait)
         result["readback"] = readback.param if readback else None
+        if volume_code is not None and volume_before is not None:
+            result["volume_after_set"] = await keep_volume(
+                session, query_code, volume_code, volume_before, args
+            )
     finally:
         if set_sent:
             result["restored"] = await restore_and_verify(
                 session, restore, query_code, before, args
             )
+            if volume_code is not None and volume_before is not None:
+                result["volume_after_restore"] = await keep_volume(
+                    session, query_code, volume_code, volume_before, args
+                )
+                if result["volume_after_restore"] != volume_before:
+                    result["restored"] = False
     return result
+
+
+async def keep_volume(
+    session: Session, power_code: str, volume_code: str, level: str, args: argparse.Namespace
+) -> str | None:
+    """While the zone is on, put its volume back to ``level``; return the volume read at the end."""
+    try:
+        power = await session.query(power_code, args.wait)
+        if power is None or power.param != POWER_ON:
+            return level  # in standby the stored level is kept; nothing to put back
+        now = await session.query(volume_code, args.wait)
+        if now is not None and now.param != level:
+            session.note(f"power changed {volume_code} to {now.param}; setting it back to {level}")
+            await session.send(f"{volume_code}{level}", "restore")
+            await asyncio.sleep(args.settle)
+            now = await session.query(volume_code, args.wait)
+    except ConnectionClosedError:
+        session.note(f"connection closed before {volume_code} was confirmed")
+        return None
+    return now.param if now else None
 
 
 async def restore_and_verify(

@@ -20,7 +20,7 @@ def reply_packet(message: str) -> bytes:
 
 class FakeReceiver:
     def __init__(self) -> None:
-        self.state = {"MVL": "3C", "SLI": "11", "DSS": "211"}
+        self.state = {"PWR": "01", "MVL": "3C", "SLI": "11", "DSS": "211"}
         self.received: list[str] = []
         self.refuse = {"SLI": {"FF"}}
         self.server: asyncio.Server | None = None
@@ -42,6 +42,8 @@ class FakeReceiver:
             return ["DSS" + self.state["DSS"]]
         if code not in self.state:
             return []
+        if code == "PWR" and param == "01" and self.state["PWR"] != "01":
+            self.state["MVL"] = "7C"  # like the TX-RZ50: power-on jumps to the power-on level
         if param == "QSTN":
             return [code + self.state[code]]
         if param in self.refuse.get(code, set()):
@@ -187,3 +189,30 @@ async def test_listen_logs_pushes(receiver: tuple[FakeReceiver, int], tmp_path: 
     args = make_args(tmp_path, port, "listen", "--duration", "0.3")
     assert await survey.run(args) == 0
     assert fake.received == []
+
+
+async def test_power_write_puts_the_volume_back(
+    receiver: tuple[FakeReceiver, int], tmp_path: Path
+) -> None:
+    fake, port = receiver
+    args = make_args(tmp_path, port, "write", "PWR00", "--settle", "0.05", "--wait", "0.2")
+    assert await survey.run(args) == 0
+    assert fake.state == {"PWR": "01", "MVL": "3C", "SLI": "11", "DSS": "211"}
+    assert "MVL3C" in fake.received
+    result = json.loads(result_text(tmp_path))
+    assert result["volume_before"] == "3C"
+    assert result["volume_after_restore"] == "3C"
+    assert result["restored"] is True
+
+
+async def test_power_on_from_standby_keeps_the_volume_down(
+    receiver: tuple[FakeReceiver, int], tmp_path: Path
+) -> None:
+    fake, port = receiver
+    fake.state["PWR"] = "00"
+    args = make_args(tmp_path, port, "write", "PWR01", "--settle", "0.05", "--wait", "0.2")
+    assert await survey.run(args) == 0
+    result = json.loads(result_text(tmp_path))
+    assert result["volume_after_set"] == "3C"
+    assert fake.state["PWR"] == "00"
+    assert fake.state["MVL"] == "3C"
