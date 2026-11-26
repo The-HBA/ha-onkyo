@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+node_modules/
+.env
+*.log
+# Agent and tool files never go to this public repository
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+project-soul/
+.agents/
+.claude/
+.cursorrules
+.clinerules
