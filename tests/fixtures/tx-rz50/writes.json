@@ -1,0 +1,1275 @@
+[
+ {
+  "code": "AEQ",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
+  ]
+ },
+ {
+  "code": "AMT",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": []
+ },
+ {
+  "code": "APS",
+  "param": "01",
+  "kind": "same_silent",
+  "before": "01",
+  "reply": null,
+  "readback": "01",
+  "pushes": []
+ },
+ {
+  "code": "APS",
+  "param": "00",
+  "kind": "changed",
+  "before": "01",
+  "reply": "00",
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "ARC",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD4152432020202020203A4F6E2020"
+  ]
+ },
+ {
+  "code": "AVS",
+  "param": "UP",
+  "kind": "changed",
+  "before": "0000",
+  "reply": "+005",
+  "readback": "+005",
+  "pushes": [
+   "FLD412F5653796E633A20202B356D73"
+  ]
+ },
+ {
+  "code": "AVS",
+  "param": "DOWN",
+  "kind": "changed",
+  "before": "0000",
+  "reply": "-005",
+  "readback": "-005",
+  "pushes": [
+   "FLD412F5653796E633A20202D356D73"
+  ]
+ },
+ {
+  "code": "CTL",
+  "param": "+01",
+  "kind": "refused",
+  "before": "000",
+  "reply": "N/A",
+  "readback": "000",
+  "pushes": []
+ },
+ {
+  "code": "CTL",
+  "param": "-01",
+  "kind": "refused",
+  "before": "000",
+  "reply": "N/A",
+  "readback": "000",
+  "pushes": []
+ },
+ {
+  "code": "CTL",
+  "param": "UP",
+  "kind": "refused",
+  "before": "000",
+  "reply": "N/A",
+  "readback": "000",
+  "pushes": [
+   "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
+  ]
+ },
+ {
+  "code": "CTL",
+  "param": "DOWN",
+  "kind": "refused",
+  "before": "000",
+  "reply": "N/A",
+  "readback": "000",
+  "pushes": []
+ },
+ {
+  "code": "CTS",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ]
+ },
+ {
+  "code": "DBC",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ]
+ },
+ {
+  "code": "DCE",
+  "param": "01",
+  "kind": "silent",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "DGF",
+  "param": "02",
+  "kind": "ignored",
+  "before": "03",
+  "reply": "03",
+  "readback": "03",
+  "pushes": [
+   "FLD442E46696C7465723A4175746F20"
+  ]
+ },
+ {
+  "code": "DIF",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "DIM",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": []
+ },
+ {
+  "code": "DIM",
+  "param": "02",
+  "kind": "changed",
+  "before": "00",
+  "reply": "02",
+  "readback": "02",
+  "pushes": []
+ },
+ {
+  "code": "DIM",
+  "param": "03",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "DIM",
+  "param": "08",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "DLC",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "DSS",
+  "param": "C01",
+  "kind": "changed",
+  "before": "112",
+  "reply": "211",
+  "readback": "211",
+  "pushes": [
+   "DBC00",
+   "FLD44697261632020203A536C6F7431"
+  ]
+ },
+ {
+  "code": "DSS",
+  "param": "C02",
+  "kind": "changed",
+  "before": "112",
+  "reply": "121",
+  "readback": "121",
+  "pushes": [
+   "DBC00",
+   "FLD44697261632020203A536C6F7432"
+  ]
+ },
+ {
+  "code": "DSS",
+  "param": "C00",
+  "kind": "changed",
+  "before": "112",
+  "reply": "111",
+  "readback": "111",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD44697261632020203A204F666620"
+  ]
+ },
+ {
+  "code": "DSS",
+  "param": "C03",
+  "kind": "ignored",
+  "before": "112",
+  "reply": "112",
+  "readback": "112",
+  "pushes": [
+   "FLD44697261632020203A536C6F7433"
+  ]
+ },
+ {
+  "code": "EQS",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD457175616C697A6572203A503120"
+  ]
+ },
+ {
+  "code": "HAO",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ]
+ },
+ {
+  "code": "HAS",
+  "param": "01",
+  "kind": "refused",
+  "before": "02",
+  "reply": "N/A",
+  "readback": "02",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,Stereo,2.1 ch,"
+  ]
+ },
+ {
+  "code": "HOI",
+  "param": "11",
+  "kind": "refused",
+  "before": "11",
+  "reply": "N/A",
+  "readback": "11",
+  "pushes": []
+ },
+ {
+  "code": "HSF",
+  "param": "01",
+  "kind": "same",
+  "before": "01",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD48444D49344B384B3A344B456E68"
+  ]
+ },
+ {
+  "code": "HSF",
+  "param": "00",
+  "kind": "changed",
+  "before": "01",
+  "reply": "00",
+  "readback": "00",
+  "pushes": [
+   "FLD48444D49344B384B3A344B537464"
+  ]
+ },
+ {
+  "code": "IRL",
+  "param": "00",
+  "kind": "same_silent",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": [
+   "FLD462E495220556E6C6F636B656420"
+  ]
+ },
+ {
+  "code": "IRL",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": null,
+  "readback": "01",
+  "pushes": [
+   "FLD20462E4952204C6F636B65642020"
+  ]
+ },
+ {
+  "code": "KYL",
+  "param": "00",
+  "kind": "same_silent",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": [
+   "FLD204B657920556E6C6F636B656420"
+  ]
+ },
+ {
+  "code": "KYL",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": null,
+  "readback": "01",
+  "pushes": [
+   "FLD20204B6579204C6F636B65642020"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "82",
+  "kind": "same",
+  "before": "82",
+  "reply": "82",
+  "readback": "82",
+  "pushes": [
+   "FLD20445453204E657572616C3A5820"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "84",
+  "kind": "changed",
+  "before": "82",
+  "reply": "84",
+  "readback": "84",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD20205448582043696E656D612020"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "85",
+  "kind": "changed",
+  "before": "82",
+  "reply": "85",
+  "readback": "85",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD20205448582043696E656D612020"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "8B",
+  "kind": "changed",
+  "before": "82",
+  "reply": "8B",
+  "readback": "8B",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD2020544858204D75736963202020"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "8C",
+  "kind": "changed",
+  "before": "82",
+  "reply": "8C",
+  "readback": "8C",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD2020544858204D75736963202020"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "89",
+  "kind": "changed",
+  "before": "82",
+  "reply": "89",
+  "readback": "89",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD20205448582047616D6573202020"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "8A",
+  "kind": "changed",
+  "before": "82",
+  "reply": "8A",
+  "readback": "8A",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD20205448582047616D6573202020"
+  ]
+ },
+ {
+  "code": "LMD",
+  "param": "82",
+  "kind": "changed",
+  "before": "00",
+  "reply": "82",
+  "readback": "82",
+  "pushes": []
+ },
+ {
+  "code": "LTN",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD4C6174654E696768743A204F6E20"
+  ]
+ },
+ {
+  "code": "LTN",
+  "param": "02",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "LTN",
+  "param": "03",
+  "kind": "changed",
+  "before": "00",
+  "reply": "03",
+  "readback": "03",
+  "pushes": [
+   "FLD4C6174654E696768743A4175746F"
+  ]
+ },
+ {
+  "code": "MGV",
+  "param": "000",
+  "kind": "same",
+  "before": "000",
+  "reply": "000",
+  "readback": "000",
+  "pushes": []
+ },
+ {
+  "code": "MMT",
+  "param": "00",
+  "kind": "same_silent",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "MMT",
+  "param": "01",
+  "kind": "silent",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": [
+   "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
+  ]
+ },
+ {
+  "code": "MOT",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ]
+ },
+ {
+  "code": "MRM",
+  "param": "00",
+  "kind": "same_silent",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "MRM",
+  "param": "01",
+  "kind": "silent",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "MRM",
+  "param": "00",
+  "kind": "silent",
+  "before": "44",
+  "reply": null,
+  "readback": "44",
+  "pushes": []
+ },
+ {
+  "code": "MT3",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": []
+ },
+ {
+  "code": "MVL",
+  "param": "4B",
+  "kind": "changed",
+  "before": "4C",
+  "reply": "4B",
+  "readback": "4B",
+  "pushes": [
+   "FLD566F6C756D652020202D34342E35"
+  ]
+ },
+ {
+  "code": "MVL",
+  "param": "DOWN",
+  "kind": "changed",
+  "before": "4C",
+  "reply": "4B",
+  "readback": "4B",
+  "pushes": [
+   "FLD566F6C756D652020202D34342E35"
+  ]
+ },
+ {
+  "code": "NSB",
+  "param": "ON",
+  "kind": "same",
+  "before": "ON",
+  "reply": "ON",
+  "readback": "ON",
+  "pushes": []
+ },
+ {
+  "code": "OSD",
+  "param": "MENU",
+  "kind": "command",
+  "before": null,
+  "reply": null,
+  "readback": null,
+  "pushes": []
+ },
+ {
+  "code": "OSD",
+  "param": "EXIT",
+  "kind": "command",
+  "before": null,
+  "reply": null,
+  "readback": null,
+  "pushes": []
+ },
+ {
+  "code": "PPS",
+  "param": "111",
+  "kind": "same",
+  "before": "111",
+  "reply": "111",
+  "readback": "111",
+  "pushes": [
+   "NLSC-P",
+   "NJA2-http://receiver.invalid/album_art.cgi"
+  ]
+ },
+ {
+  "code": "PW3",
+  "param": "01",
+  "kind": "refused_push",
+  "before": "00",
+  "reply": null,
+  "readback": "00",
+  "pushes": [
+   "PW300",
+   "MRM44",
+   "FLD4E6F7420417661696C61626C6520"
+  ]
+ },
+ {
+  "code": "RAS",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD52652D455120202020203A4F6E20"
+  ]
+ },
+ {
+  "code": "SAM",
+  "param": "FR",
+  "kind": "same",
+  "before": "FR",
+  "reply": "FR",
+  "readback": "FR",
+  "pushes": [
+   "LMD00",
+   "MOT00",
+   "RAS00",
+   "FLD53542041737369676E203A204620",
+   "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,Stereo,2.1 ch,",
+   "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
+  ]
+ },
+ {
+  "code": "SL3",
+  "param": "10",
+  "kind": "changed",
+  "before": "80",
+  "reply": "10",
+  "readback": "10",
+  "pushes": [
+   "PW300",
+   "NSTS--1",
+   "MRM44",
+   "FLD4E6F7420417661696C61626C6520",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLA",
+  "param": "00",
+  "kind": "refused",
+  "before": "04",
+  "reply": "N/A",
+  "readback": "04",
+  "pushes": []
+ },
+ {
+  "code": "SLI",
+  "param": "02",
+  "kind": "changed",
+  "before": "10",
+  "reply": "02",
+  "readback": "02",
+  "pushes": [
+   "FLD5053352020202020202D34342E30",
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "01",
+  "kind": "changed",
+  "before": "10",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD5769692055202020202D34342E30",
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "11",
+  "kind": "changed",
+  "before": "10",
+  "reply": "11",
+  "readback": "11",
+  "pushes": [
+   "NSTS--1",
+   "FLD53747265616D696E672D34342E30",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "05",
+  "kind": "changed",
+  "before": "10",
+  "reply": "05",
+  "readback": "05",
+  "pushes": [
+   "NSTS--1",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "FLD4854504320202020202D34342E30",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "03",
+  "kind": "changed",
+  "before": "10",
+  "reply": "03",
+  "readback": "03",
+  "pushes": [
+   "FLD4155582020202020202D34342E30",
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "23",
+  "kind": "changed",
+  "before": "10",
+  "reply": "23",
+  "readback": "23",
+  "pushes": [
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD4344202020202020202D34342E30",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "22",
+  "kind": "changed",
+  "before": "10",
+  "reply": "22",
+  "readback": "22",
+  "pushes": [
+   "FLD50484F4E4F202020202D34342E30",
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "25",
+  "kind": "changed",
+  "before": "10",
+  "reply": "25",
+  "readback": "25",
+  "pushes": [
+   "FLD414D202020202020202D34342E30",
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "PRS00",
+   "TUN00522",
+   "PRZ00",
+   "TUZ00522",
+   "PR300",
+   "TU300522",
+   "FLD414D2020353232206B487A202D2D",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "24",
+  "kind": "changed",
+  "before": "10",
+  "reply": "24",
+  "readback": "24",
+  "pushes": [
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD464D2038372E35304D487A202D2D",
+   "PRS00",
+   "TUN08750",
+   "PRZ00",
+   "TUZ08750",
+   "PR300",
+   "TU308750",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "2B",
+  "kind": "changed",
+  "before": "10",
+  "reply": "2B",
+  "readback": "2B",
+  "pushes": [
+   "NLTF3000000000C0000FFFF00NET",
+   "NLSC0P",
+   "NLSU0-TuneIn",
+   "NLSU1-Spotify",
+   "NLSU2-Deezer",
+   "NLSU3-Tidal",
+   "NLSU4-AmazonMusic",
+   "NLSU5-Chromecast built-in",
+   "NLSU6-DTS Play-Fi",
+   "NLSU7-AirPlay",
+   "NLSU8-Alexa",
+   "NLSU9-Music Server",
+   "NLSU0-USB",
+   "NLSU1-Play Queue",
+   "NSTS--1",
+   "FLD4E45542020202020202D34342E30",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "2E",
+  "kind": "changed",
+  "before": "10",
+  "reply": "2E",
+  "readback": "2E",
+  "pushes": [
+   "NLTF3000000000C0000FFFF00NET",
+   "NLSC0P",
+   "NLSU0-TuneIn",
+   "NLSU1-Spotify",
+   "NLSU2-Deezer",
+   "NLSU3-Tidal",
+   "NLSU4-AmazonMusic",
+   "NLSU5-Chromecast built-in",
+   "NLSU6-DTS Play-Fi",
+   "NLSU7-AirPlay",
+   "NLSU8-Alexa",
+   "NLSU9-Music Server",
+   "NLSU0-USB",
+   "NLSU1-Play Queue",
+   "NTINow Pairing...",
+   "FLD424C5545544F4F54482D34342E30",
+   "NLTF422000000000001FFFF00",
+   "NSTS--1",
+   "NLSC-P",
+   "AEQ00",
+   "DBC00",
+   "NLTF422000000000001FFFF00",
+   "NLSC0P",
+   "LMD0C",
+   "NJA2-http://receiver.invalid/album_art.cgi",
+   "NTINow Pairing...",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "NSTS--1",
+   "NTINow Pairing..."
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "12",
+  "kind": "changed",
+  "before": "10",
+  "reply": "12",
+  "readback": "12",
+  "pushes": [
+   "NSTS--1",
+   "AEQ00",
+   "DBC00",
+   "LMD0C",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD50726F6A6563746F722D34342E30",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "SLI",
+  "param": "80",
+  "kind": "refused",
+  "before": "10",
+  "reply": "N/A",
+  "readback": "10",
+  "pushes": []
+ },
+ {
+  "code": "SLP",
+  "param": "0A",
+  "kind": "changed",
+  "before": "OFF",
+  "reply": "0A",
+  "readback": "0A",
+  "pushes": [
+   "FLD20536C656570203130206D696E20"
+  ]
+ },
+ {
+  "code": "SLP",
+  "param": "UP",
+  "kind": "changed",
+  "before": "OFF",
+  "reply": "1E",
+  "readback": "1E",
+  "pushes": [
+   "FLD20536C656570203330206D696E20"
+  ]
+ },
+ {
+  "code": "SLZ",
+  "param": "10",
+  "kind": "changed",
+  "before": "80",
+  "reply": "10",
+  "readback": "10",
+  "pushes": [
+   "NSTS--1",
+   "NSTS--1"
+  ]
+ },
+ {
+  "code": "STW",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ]
+ },
+ {
+  "code": "SWL",
+  "param": "-09",
+  "kind": "changed",
+  "before": "-0A",
+  "reply": "-09",
+  "readback": "-09",
+  "pushes": [
+   "FLD535720202020203A202D34956442"
+  ]
+ },
+ {
+  "code": "SWL",
+  "param": "-0B",
+  "kind": "changed",
+  "before": "-0A",
+  "reply": "-0B",
+  "readback": "-0B",
+  "pushes": [
+   "FLD535720202020203A202D35956442"
+  ]
+ },
+ {
+  "code": "SWL",
+  "param": "UP",
+  "kind": "changed",
+  "before": "-0A",
+  "reply": "-09",
+  "readback": "-09",
+  "pushes": [
+   "FLD535720202020203A202D34956442"
+  ]
+ },
+ {
+  "code": "SWL",
+  "param": "DOWN",
+  "kind": "changed",
+  "before": "-0A",
+  "reply": "-0B",
+  "readback": "-0B",
+  "pushes": [
+   "FLD535720202020203A202D35956442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "B+1",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B+1T00",
+  "readback": "B+1T00",
+  "pushes": [
+   "FLD42617373202020203A202B316442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "B-1",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B-1T00",
+  "readback": "B-1T00",
+  "pushes": [
+   "FLD42617373202020203A202D316442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "BUP",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B+1T00",
+  "readback": "B+1T00",
+  "pushes": [
+   "FLD42617373202020203A202B316442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "BDOWN",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B-1T00",
+  "readback": "B-1T00",
+  "pushes": [
+   "FLD42617373202020203A202D316442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "T+1",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B00T+1",
+  "readback": "B00T+1",
+  "pushes": [
+   "FLD547265626C6520203A202B316442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "T-1",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B00T-1",
+  "readback": "B00T-1",
+  "pushes": [
+   "FLD547265626C6520203A202D316442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "TUP",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B00T+1",
+  "readback": "B00T+1",
+  "pushes": [
+   "FLD547265626C6520203A202B316442"
+  ]
+ },
+ {
+  "code": "TFR",
+  "param": "TDOWN",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B00T-1",
+  "readback": "B00T-1",
+  "pushes": [
+   "FLD547265626C6520203A202D316442"
+  ]
+ },
+ {
+  "code": "TGA",
+  "param": "01",
+  "kind": "same_silent",
+  "before": "01",
+  "reply": null,
+  "readback": "01",
+  "pushes": []
+ },
+ {
+  "code": "VL3",
+  "param": "4F",
+  "kind": "refused",
+  "before": "50",
+  "reply": "N/A",
+  "readback": "50",
+  "pushes": []
+ },
+ {
+  "code": "VL3",
+  "param": "DOWN",
+  "kind": "refused",
+  "before": "50",
+  "reply": "N/A",
+  "readback": "50",
+  "pushes": []
+ },
+ {
+  "code": "VOC",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD566F63616C20202020203A202B31"
+  ]
+ },
+ {
+  "code": "VOC",
+  "param": "02",
+  "kind": "changed",
+  "before": "00",
+  "reply": "02",
+  "readback": "02",
+  "pushes": [
+   "FLD566F63616C20202020203A202B32",
+   "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
+  ]
+ },
+ {
+  "code": "VSL",
+  "param": "LAST",
+  "kind": "refused",
+  "before": "LAST",
+  "reply": "N/A",
+  "readback": "LAST",
+  "pushes": []
+ },
+ {
+  "code": "ZMT",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": []
+ },
+ {
+  "code": "ZPW",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": []
+ }
+]
