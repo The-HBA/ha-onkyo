@@ -130,7 +130,7 @@ def test_recorded_accepted_write_gives_the_recorded_reply(
     if write.reply is None:  # KYL, IRL answer on the display only
         assert not [m for m in result.broadcast if m.startswith(code)]
     else:
-        assert result.broadcast[0] == code + write.reply
+        assert code + write.reply in result.broadcast
     assert value(receiver, code) == write.readback
 
 
@@ -192,12 +192,15 @@ def test_sub_level_sync_and_sleep(receiver: Receiver) -> None:
 
 def test_dirac_slots_write_with_dsscxx(receiver: Receiver) -> None:
     assert value(receiver, "DSS") == "112"
-    assert receiver.handle("DSS", "C01").broadcast[:2] == ["DSS211", "DBC00"]
+    pushed = receiver.handle("DSS", "C01").broadcast
+    assert pushed[:2] == ["DBC00", "DSS211"]  # as captured: the push comes before the new value
+    assert pushed[2] == "IFAN/A"  # IFA is briefly N/A, then the new text follows
+    assert pushed[3].startswith("IFAHDMI 1,")
     assert value(receiver, "DSS") == "211"
-    assert receiver.handle("DSS", "C03").broadcast[0] == "DSS112"  # back, from another slot
+    assert "DSS112" in receiver.handle("DSS", "C03").broadcast  # back, from another slot
     assert receiver.handle("DSS", "C03").broadcast == ["DSS112"]  # same slot: echo only
     off = receiver.handle("DSS", "C00").broadcast
-    assert off[0] == "DSS111"
+    assert "DSS111" in off
     assert {"AEQ00", "MOT00", "STW00"} <= set(off)
     assert value(receiver, "DSS") == "111"
 
@@ -248,6 +251,33 @@ def test_input_without_signal_uses_mode_0c_and_movie_gets_its_own_back(receiver:
     assert "LMD82" in back
     assert value(receiver, "LMD") == "82"
     assert value(receiver, "IFA") == FIXTURE_DATA.on["IFA"]
+
+
+@pytest.mark.parametrize("sid", ["11", "03", "2B"])
+def test_inputs_the_capture_saw_keep_the_mode(receiver: Receiver, sid: str) -> None:
+    messages = receiver.handle("SLI", sid).broadcast
+    assert not [m for m in messages if m.startswith("LMD")]
+    assert value(receiver, "LMD") == "82"
+    assert value(receiver, "IFA") == "ANALOG,,,,DTS Neural:X,6.1 ch,"
+    assert receiver.handle("LMD", "84").broadcast[0] == "LMD84"  # no mode change, so no lock
+
+
+def test_mode_change_pushes_ifa_and_ifv(receiver: Receiver) -> None:
+    messages = receiver.handle("LMD", "84").broadcast
+    assert messages[0] == "LMD84"
+    assert any(m.startswith("IFAHDMI 1,PCM,44.1 kHz,2.0 ch,THX Cinema") for m in messages)
+    assert any(m.startswith("IFVHDMI 1,") for m in messages)
+
+
+def test_music_optimizer_works_only_in_stereo(receiver: Receiver, clock: Clock) -> None:
+    assert receiver.handle("MOT", "01").replies == ["MOTN/A"]  # Neural:X
+    clock.now += 60
+    receiver.handle("LMD", "00")
+    assert receiver.handle("MOT", "01").broadcast == ["MOT01"]
+    assert value(receiver, "MOT") == "01"
+    clock.now += 4
+    receiver.handle("LMD", "82")
+    assert receiver.handle("MOT", "01").replies == ["MOTN/A"]
 
 
 def test_passing_fm_moves_the_tuner_to_fm(receiver: Receiver) -> None:
@@ -552,7 +582,9 @@ def test_sanitizer_replaces_mac_name_and_ip_found_in_the_capture(tmp_path: Path)
     ]
 
 
-def test_sanitizer_stops_when_a_private_value_survives(tmp_path: Path) -> None:
+def test_sanitizer_stops_when_a_private_value_survives(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     capture, out = tmp_path / "capture", tmp_path / "fixture"
     capture.mkdir()
     make_capture(capture, "AABBCC112233", "Living Room Receiver", "192.168.7.9")
@@ -562,4 +594,7 @@ def test_sanitizer_stops_when_a_private_value_survives(tmp_path: Path) -> None:
     )
     assert scrub.leftovers("host 192.168.7.9 mac aabbcc112233")
     assert not scrub.leftovers(scrub.text("host 192.168.7.9 mac aabbcc112233"))
+    monkeypatch.setattr(sanitize_capture.Scrubber, "text", lambda _self, value: value)
+    with pytest.raises(SystemExit, match="private values"):
+        sanitize_capture.sanitize(capture, out)
     assert not out.exists()

@@ -1,4 +1,4 @@
-"""Receiver simulator built from a sanitized capture (ARCHITECTURE.md C2)."""
+"""Receiver simulator built from a sanitized capture."""
 
 from .fixture import Fixture
 from .receiver import Receiver, Result

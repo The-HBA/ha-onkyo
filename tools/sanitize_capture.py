@@ -2,7 +2,7 @@
 
     python tools/sanitize_capture.py captures/2026-11-26-tx-rz50 tests/fixtures/tx-rz50
 
-Input (see ARCHITECTURE.md C1): ``survey.json``, ``nri.xml`` and the sessions folder of one
+Input (raw capture format): ``survey.json``, ``nri.xml`` and the sessions folder of one
 day and model. Output (read by ``tools/eiscp_sim``):
 
 - ``profile.json``: model, firmware, placeholder identity, power-on and power-off pushes.

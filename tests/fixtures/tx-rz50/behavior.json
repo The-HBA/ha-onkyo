@@ -1,5 +1,5 @@
 {
- "_about": "Hand-written from project-soul/specs/eiscp-tx-rz50.md (sessions 05, 24, 26, 27 and the guided session). Not private; the sanitizer never overwrites this file.",
+ "_about": "Hand-written from the TX-RZ50 capture of 2026-11-26 (sessions 05, 24, 26, 27 and the guided session). Not private; the sanitizer never overwrites this file.",
  "mode_names": {
   "00": "Stereo",
   "01": "Direct",
@@ -205,6 +205,17 @@
  "input_effects": {
   "24": {
    "TUN": "08750"
+  }
+ },
+ "mode_gates": {
+  "MOT": {
+   "modes": [
+    "00"
+   ],
+   "values": [
+    "00",
+    "01"
+   ]
   }
  }
 }

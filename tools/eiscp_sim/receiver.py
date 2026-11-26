@@ -2,7 +2,7 @@
 
 ``Receiver.handle(code, param)`` returns a ``Result``: ``replies`` go only to the connection
 that asked, ``broadcast`` goes to every open connection (the real receiver pushes every change
-to every client). The behaviour follows ARCHITECTURE.md C2 and the capture of 2026-11-26.
+to every client). The behaviour follows the TX-RZ50 capture of 2026-11-26.
 """
 
 from __future__ import annotations
@@ -159,7 +159,7 @@ class Receiver:
             if code in self.fixture.standby and self.fixture.standby[code] is not None:
                 self.values[code] = value  # follows power (TGA, TPD)
         self.values["MVL"] = profile["power_on_volume"]
-        self._mark_mode(self.values["LMD"])
+        self.last_mode_change = self.clock()
         return Result(broadcast=self._burst())
 
     def _burst(self) -> list[str]:
@@ -204,7 +204,15 @@ class Receiver:
         record = self._pick("LMD", target)
         extra = [p for p in record.pushes if not p.startswith("FLD")] if record else []
         self._apply(extra)
-        return Result(broadcast=["LMD" + target, *extra, "FLD" + shown])
+        return Result(
+            broadcast=[
+                "LMD" + target,
+                *extra,
+                "FLD" + shown,
+                "IFA" + self._ifa(),
+                "IFV" + self._ifv(),
+            ]
+        )
 
     def _sli(self, param: str) -> Result:
         record = self._pick("SLI", param)
@@ -223,7 +231,10 @@ class Receiver:
         old_signal = self.signal
         self.signal = behavior["input_signals"].get(sid, behavior["default_input_signal"])
         spec = behavior["signals"][self.signal]
-        mode = self.input_modes.get(sid, spec["default_mode"])
+        keep = self.values["LMD"] if self.values["LMD"] in spec["modes"] else spec["default_mode"]
+        mode = self.input_modes.get(
+            sid, keep
+        )  # an input keeps the mode unless the capture says not
         before = self.values["LMD"]
         self._mark_mode(mode)
         messages = ["SLI" + sid, "FLD" + self._display(), *pushes]
@@ -294,6 +305,13 @@ class Receiver:
 
     def _generic(self, code: str, param: str) -> Result:  # noqa: PLR0911
         behavior = self.fixture.behavior
+        gate = behavior.get("mode_gates", {}).get(code)
+        if gate is not None:  # available only in some listening modes (MOT: not in Neural:X)
+            if self.values["LMD"] not in gate["modes"]:
+                return refuse(code)
+            if param in gate["values"]:
+                self.values[code] = param
+                return Result(broadcast=[code + param])
         record = self._pick(code, param)
         mapping = behavior.get("set_maps", {}).get(code)
         if mapping is not None and param in mapping:
@@ -304,7 +322,10 @@ class Receiver:
             pushes = pushes or list(behavior.get("set_map_pushes", {}).get(code, []))
             self.values[code] = new
             self._apply(pushes)
-            return Result(broadcast=[code + new, *pushes])
+            # the capture shows the pushes first, then the new value; IFA and IFV follow
+            return Result(
+                broadcast=[*pushes, code + new, "IFAN/A", "IFA" + self._ifa(), "IFV" + self._ifv()]
+            )
         if record is not None:
             return self._replay(record)
         if code not in self.fixture.on:
@@ -356,9 +377,11 @@ class Receiver:
                 self.values[code] = param
 
     def _mark_mode(self, mode: str) -> None:
+        """Store the mode; a real change starts the 3 s window in which mode sets are ignored."""
+        if mode != self.values["LMD"]:
+            self.last_mode_change = self.clock()
         self.values["LMD"] = mode
         self.input_modes[self.values["SLI"]] = mode
-        self.last_mode_change = self.clock()
 
 
 def _hex(text: str) -> int | None:
