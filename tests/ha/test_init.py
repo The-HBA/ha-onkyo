@@ -55,7 +55,7 @@ async def test_entity_unavailable_when_connection_drops(
     hass: HomeAssistant, entry: MockConfigEntry, sim: SimServer
 ) -> None:
     await setup(hass, entry)
-    with patch.object(type(entry.runtime_data.receiver), "connected", False):
+    with patch.object(type(entry.runtime_data.receiver), "connected", False):  # noqa: FBT003
         entry.runtime_data.async_set_updated_data(entry.runtime_data._snapshot(frozenset({"*"})))
         await hass.async_block_till_done()
         assert hass.states.get(ENTITY).state == STATE_UNAVAILABLE  # type: ignore[union-attr]

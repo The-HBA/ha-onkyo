@@ -25,8 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: uv venv --python 3.14 && uv pip install -r requirements_dev.txt
-      - run: .venv/bin/pytest -q tests/lib tests/tools tests/test_boundary.py --cov=custom_components/onkyo_eiscp/lib
+      # The package __init__ imports Home Assistant, so the tests need it installed; the plugin stays off.
+      - run: uv venv --python 3.14 && uv pip install -r requirements_test_ha.txt
+      - run: .venv/bin/pytest -q -p no:homeassistant tests/lib tests/tools tests/test_boundary.py --cov=custom_components/onkyo_eiscp/lib
 
   home-assistant:
     runs-on: ubuntu-latest

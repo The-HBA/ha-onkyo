@@ -137,7 +137,7 @@ async def test_power_mute_and_volume_steps(hass: HomeAssistant, entry: MockConfi
         {ATTR_ENTITY_ID: ENTITY, ATTR_MEDIA_VOLUME_MUTED: True},
         blocking=True,
     )
-    await poll_state(hass, "is_volume_muted", True)
+    await poll_state(hass, "is_volume_muted", True)  # noqa: FBT003
     await hass.services.async_call(
         MEDIA_PLAYER, SERVICE_TURN_OFF, {ATTR_ENTITY_ID: ENTITY}, blocking=True
     )
