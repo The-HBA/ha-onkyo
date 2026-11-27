@@ -1,6 +1,6 @@
 [project]
 name = "ha-onkyo"
-version = "0.0.0"
+version = "0.0.1"
 description = "Home Assistant integration and tools for Onkyo, Pioneer and Integra network receivers (eISCP)."
 requires-python = ">=3.14"
 license = "MIT"
@@ -20,7 +20,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["TC003", "S101", "PLR2004", "INP001", "D", "ANN401", "SLF001"]
+"tests/**" = ["ARG001", "TC001", "TC002", "TC003", "S101", "PLR2004", "INP001", "D", "ANN401", "SLF001"]
 "tools/**" = ["E402", "ASYNC109", "PLW2901", "ARG001", "INP001", "T201", "D", "PLR0913", "C901", "PLR0912", "PLR0915", "BLE001", "S311"]
 
 [tool.mypy]

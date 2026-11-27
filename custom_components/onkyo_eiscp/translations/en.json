@@ -1,0 +1,139 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Add an Onkyo receiver",
+        "description": "Enter the address of the receiver. It must be on the same network as Home Assistant, with network control enabled.",
+        "data": {
+          "host": "Host or IP address",
+          "port": "Port"
+        },
+        "data_description": {
+          "host": "For example 192.168.1.50.",
+          "port": "The eISCP port. Leave it at 60128 unless you changed it."
+        }
+      },
+      "confirm": {
+        "title": "Add {name}",
+        "description": "Add the receiver at {host} to Home Assistant?"
+      },
+      "reconfigure": {
+        "title": "Change the receiver address",
+        "data": {
+          "host": "Host or IP address",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot reach the receiver. Check the address and that network control is on.",
+      "no_identity": "The receiver did not report its identity.",
+      "wrong_device": "That address belongs to a different receiver.",
+      "already_configured": "Another entry already uses that address.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This receiver is already set up.",
+      "core_conflict": "The core Onkyo integration already uses this receiver. The receiver allows one connection per computer, so remove that entry first.",
+      "cannot_connect": "Cannot reach the receiver.",
+      "reconfigure_successful": "The receiver address was changed.",
+      "unique_id_mismatch": "That address belongs to a different receiver."
+    }
+  },
+  "options": {
+    "abort": {
+      "not_loaded": "The receiver is not connected right now. Try again when it is."
+    },
+    "step": {
+      "init": {
+        "title": "Receiver options",
+        "menu_options": {
+          "inputs": "Rename or hide inputs",
+          "input_order": "Order of inputs",
+          "listening_modes": "Rename or hide listening modes",
+          "volume": "Volume",
+          "save": "Save and close"
+        }
+      },
+      "inputs": {
+        "title": "Inputs",
+        "description": "Pick an input to rename or hide it. Leave the field empty and submit to go back.",
+        "data": {
+          "input": "Input"
+        }
+      },
+      "input_edit": {
+        "title": "Edit input {code}",
+        "description": "An empty name goes back to the receiver's own name.",
+        "data": {
+          "name": "Name",
+          "hidden": "Hide from the source list"
+        }
+      },
+      "input_order": {
+        "title": "Order of inputs",
+        "description": "Clear the field, then pick the inputs in the order you want them in the source list. Inputs you leave out follow in the receiver's order.",
+        "data": {
+          "input_order": "Inputs"
+        }
+      },
+      "listening_modes": {
+        "title": "Listening modes",
+        "description": "Pick a listening mode to rename or hide it. Leave the field empty and submit to go back.",
+        "data": {
+          "mode": "Listening mode"
+        }
+      },
+      "mode_edit": {
+        "title": "Edit listening mode {code}",
+        "description": "An empty name goes back to the standard name.",
+        "data": {
+          "name": "Name",
+          "hidden": "Hide from the listening mode list"
+        }
+      },
+      "volume": {
+        "title": "Volume",
+        "description": "The maximum volume is 100 % on the volume slider; Home Assistant never sets the receiver above it.",
+        "data": {
+          "max_volume": "Maximum volume",
+          "restore_volume": "Put the volume back after power on"
+        },
+        "data_description": {
+          "restore_volume": "Some receivers jump to a loud level at power on. When on, the volume from before standby is set again."
+        }
+      }
+    },
+    "error": {
+      "name_in_use": "Another entry already uses this name."
+    }
+  },
+  "entity": {
+    "media_player": {
+      "main": {
+        "name": "Main zone"
+      }
+    }
+  },
+  "exceptions": {
+    "not_available": {
+      "message": "The receiver does not allow this right now."
+    },
+    "no_reply": {
+      "message": "The receiver did not answer."
+    },
+    "not_connected": {
+      "message": "The receiver is not connected."
+    },
+    "zone_power_refused": {
+      "message": "The receiver refused to switch this zone on."
+    },
+    "unknown_source": {
+      "message": "Unknown source: {name}."
+    },
+    "unknown_sound_mode": {
+      "message": "Unknown listening mode: {name}."
+    }
+  }
+}
