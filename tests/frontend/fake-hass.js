@@ -46,10 +46,16 @@ const MODE_TABLE = {
 const PCM_MODES = ["82", "84", "85", "8B", "8C", "89", "8A", "08", "09", "0A", "0B", "03", "05", "06", "0E", "0C", "13", "0D", "11", "01", "00", "0F", "80"];
 const ATMOS_MODES = ["80", "08", "09", "0A", "0B", "03", "05", "06", "0E", "0C", "13", "0D", "11", "01", "00"];
 const SIGNALS = {
-  pcm: { modes: PCM_MODES, mode: "00", iaName: null, format: "PCM" },
-  atmos: { modes: ATMOS_MODES, mode: "80", iaName: "Dolby Atmos", format: "Dolby Atmos/TrueHD" },
-  dtsx: { modes: null, mode: "82", iaName: "DTS:X", format: "DTS:X" },
-  none: { modes: PCM_MODES, mode: "0C", iaName: null, format: "" },
+  pcm: { modes: PCM_MODES, mode: "00", iaName: null, format: "PCM", rate: "44.1 kHz", channels: "2.0 ch", port: "ANALOG", out: "2.1 ch", video: null },
+  atmos: {
+    modes: ATMOS_MODES, mode: "80", iaName: "Dolby Atmos", format: "Dolby Atmos/TrueHD", rate: "48 kHz", channels: "", port: "HDMI 1", out: "6.1 ch",
+    video: { port: "HDMI 1", res: "4K (3840x2160) 23 Hz", color: "RGB", depth: "24 bit", hdr: "HDR10", outRes: "4K (3840x2160) 23 Hz" },
+  },
+  dtsx: {
+    modes: null, mode: "82", iaName: "DTS:X", format: "DTS:X", rate: "48 kHz", channels: "7.1 ch", port: "HDMI 1", out: "6.1 ch",
+    video: { port: "HDMI 1", res: "4K (3840x2160) 24 Hz", color: "YCbCr 4:2:0", depth: "30 bit", hdr: "Dolby Vision", outRes: "4K (3840x2160) 24 Hz" },
+  },
+  none: { modes: PCM_MODES, mode: "0C", iaName: null, format: "", rate: "", channels: "", port: "ANALOG", out: "6.1 ch", video: null },
 };
 
 const LABELS = { on: "On", off: "Off", standby: "Standby", unavailable: "Unavailable" };
@@ -77,9 +83,10 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     modeNames: {},
     order: null,
     dirac: "slot_3",
-    numbers: { bass: -2, treble: 0, subwoofer_level: -5, center_level: 0, vocal_enhancer: 0, dialog_level: 0, av_sync: 0 },
-    selects: { equalizer: "off", dimmer: "bright", digital_filter: "auto", hdmi_output: "main" },
-    switches: { cinema_filter: false },
+    numbers: { bass: -2, treble: 0, subwoofer_level: -5, center_level: 0, vocal_enhancer: 0, dialog_level: 0, av_sync: 0, sleep_timer: 0 },
+    selects: { equalizer: "off", dimmer: "bright", digital_filter: "auto", hdmi_output: "main", late_night: "off" },
+    switches: { cinema_filter: false, music_optimizer: false },
+    keys: [],
   };
   const calls = [];
   const wsCalls = [];
@@ -110,10 +117,15 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     entities.push(reg(`number.onkyo_tx_rz50_${key}`, key));
   }
   for (const key of Object.keys(rx.selects)) {
-    if (model === "small" && key !== "dimmer") continue;
+    if (model === "small" && !["dimmer", "late_night"].includes(key)) continue;
     entities.push(reg(`select.onkyo_tx_rz50_${key}`, key));
   }
-  if (model !== "small") entities.push(reg("switch.onkyo_tx_rz50_cinema_filter", "cinema_filter"));
+  if (model !== "small") {
+    entities.push(reg("switch.onkyo_tx_rz50_cinema_filter", "cinema_filter"));
+    entities.push(reg("switch.onkyo_tx_rz50_music_optimizer", "music_optimizer"));
+    entities.push(reg("sensor.onkyo_tx_rz50_video_input", "video_input"));
+  }
+  entities.push(reg("remote.onkyo_tx_rz50_remote", "remote"));
   entities.push(reg("sensor.onkyo_tx_rz50_temperature", "temperature"));
   for (const item of entities) hass.entities[item.entity_id] = item;
   hass.entities["light.ceiling"] = { entity_id: "light.ceiling", device_id: "device_light", platform: "hue" };
@@ -165,8 +177,25 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     if (spec.dirac) {
       states["select.onkyo_tx_rz50_dirac_live"] = mkState("select.onkyo_tx_rz50_dirac_live", unavailable || !on ? "unavailable" : rx.dirac, { options: spec.dirac });
     }
-    states["sensor.onkyo_tx_rz50_audio_input"] = mkState("sensor.onkyo_tx_rz50_audio_input", on ? SIGNALS[rx.signal].format || "unknown" : "unavailable", { input_format: SIGNALS[rx.signal].format });
-    const ranges = { bass: [-10, 10, 1, "dB"], treble: [-10, 10, 1, "dB"], subwoofer_level: [-15, 12, 0.5, "dB"], center_level: [-12, 12, 0.5, "dB"], vocal_enhancer: [0, 5, 1, ""], dialog_level: [0, 6, 1, ""], av_sync: [-100, 500, 5, "ms"] };
+    const sig = SIGNALS[rx.signal];
+    const hasSignal = on && sig.format;
+    states["sensor.onkyo_tx_rz50_audio_input"] = mkState(
+      "sensor.onkyo_tx_rz50_audio_input",
+      !on ? "unavailable" : hasSignal ? `${sig.format} ${sig.rate}`.trim() : "unknown",
+      on ? { input_port: sig.port, input_format: sig.format, sample_rate: sig.rate, input_channels: sig.channels, listening_mode: modeName(rx.mode), output_channels: sig.out } : {},
+    );
+    const video = sig.video;
+    states["sensor.onkyo_tx_rz50_video_input"] = mkState(
+      "sensor.onkyo_tx_rz50_video_input",
+      !on ? "unavailable" : video ? `${video.res} ${video.hdr}` : "unknown",
+      on && video
+        ? { input_port: video.port, input_resolution: video.res, input_color_format: video.color, input_depth: video.depth, output: "Main", output_resolution: video.outRes, output_color_format: video.color, output_depth: video.depth, hdr: video.hdr }
+        : {},
+    );
+    const mot = "switch.onkyo_tx_rz50_music_optimizer";
+    states[mot] = mkState(mot, !on || rx.mode !== "00" ? "unavailable" : rx.switches.music_optimizer ? "on" : "off");
+    states["remote.onkyo_tx_rz50_remote"] = mkState("remote.onkyo_tx_rz50_remote", unavailable ? "unavailable" : on ? "on" : "off");
+    const ranges = { bass: [-10, 10, 1, "dB"], treble: [-10, 10, 1, "dB"], subwoofer_level: [-15, 12, 0.5, "dB"], center_level: [-12, 12, 0.5, "dB"], vocal_enhancer: [0, 5, 1, ""], dialog_level: [0, 6, 1, ""], av_sync: [-100, 500, 5, "ms"], sleep_timer: [0, 90, 1, "min"] };
     for (const [key, value] of Object.entries(rx.numbers)) {
       const id = `number.onkyo_tx_rz50_${key}`;
       if (!hass.entities[id]) continue;
@@ -174,7 +203,7 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
       const refused = model !== "small" && ["center_level", "dialog_level"].includes(key);
       states[id] = mkState(id, unavailable || !on || refused ? "unavailable" : String(value), { min, max, step, ...(unit ? { unit_of_measurement: unit } : {}) });
     }
-    const options = { equalizer: ["off", "preset_1", "preset_2", "preset_3"], dimmer: ["bright", "dim", "dark"], digital_filter: ["slow", "sharp", "auto"], hdmi_output: ["off", "main", "sub", "both"] };
+    const options = { late_night: ["off", "low", "high", "auto"], equalizer: ["off", "preset_1", "preset_2", "preset_3"], dimmer: ["bright", "dim", "dark"], digital_filter: ["slow", "sharp", "auto"], hdmi_output: ["off", "main", "sub", "both"] };
     for (const [key, value] of Object.entries(rx.selects)) {
       const id = `select.onkyo_tx_rz50_${key}`;
       if (hass.entities[id]) states[id] = mkState(id, unavailable ? "unavailable" : value, { options: options[key] });
@@ -243,13 +272,17 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
         break;
       }
       case "select.select_option": {
+        if (data.option === "high" && data.entity_id.endsWith("late_night") && ["pcm", "none"].includes(rx.signal)) {
+          throw new Error("Late night High is not available with this signal");
+        }
         const name = data.entity_id.split("onkyo_tx_rz50_")[1];
         if (name === "dirac_live") rx.dirac = data.option; else rx.selects[name] = data.option;
         break;
       }
       case "number.set_value": rx.numbers[data.entity_id.split("onkyo_tx_rz50_")[1]] = data.value; break;
-      case "switch.turn_on": rx.switches.cinema_filter = true; break;
-      case "switch.turn_off": rx.switches.cinema_filter = false; break;
+      case "switch.turn_on": rx.switches[data.entity_id.split("onkyo_tx_rz50_")[1]] = true; break;
+      case "switch.turn_off": rx.switches[data.entity_id.split("onkyo_tx_rz50_")[1]] = false; break;
+      case "remote.send_command": rx.keys.push(...data.command); break;
       default:
     }
     commit();

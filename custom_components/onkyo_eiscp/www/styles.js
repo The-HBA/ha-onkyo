@@ -135,7 +135,7 @@ export const STYLE = `
   color:var(--primary-text-color);font-size:15px;font-weight:500}
 
 /* info */
-.np{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.np{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:12px}
 .np .k{font-size:12px;color:var(--secondary-text-color)}
 .np .big{font-size:18px;line-height:1.25;font-weight:400;margin:2px 0}
 .np .s{font-size:13px;color:var(--secondary-text-color);line-height:1.35}

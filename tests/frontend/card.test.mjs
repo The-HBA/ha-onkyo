@@ -400,7 +400,7 @@ describe("editor", () => {
 });
 
 describe("fit (DESIGN.md Review)", () => {
-  const tabs = ["Main", "Modes"];
+  const tabs = ["Main", "Modes", "Remote", "Playing"];
   for (const viewport of [PHONE, SMALL_PHONE]) {
     for (const model of ["rz50", "small"]) {
       for (const signal of ["pcm", "atmos", "dtsx", "none"]) {
@@ -465,7 +465,7 @@ describe("long names and keys", () => {
     using({}, async (page) => {
       await page.locator("onkyo-remote-card [role=tab]").first().focus();
       await page.keyboard.press("End");
-      assert.equal(await page.locator("onkyo-remote-card .p-modes").count(), 1);
+      assert.equal(await page.locator("onkyo-remote-card .p-info").count(), 1);
       await page.keyboard.press("Home");
       assert.equal(await page.locator("onkyo-remote-card .p-main").count(), 1);
       await page.locator("onkyo-remote-card [data-slider]").focus();
