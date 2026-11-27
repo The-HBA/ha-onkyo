@@ -190,6 +190,27 @@ describe("playing tab", () => {
       assert.equal(await grid.locator(".opt.sel").innerText(), "60 min");
     }));
 
+  test("sleep timer unavailable while on: hidden, with one grey line", () =>
+    using({}, "Playing", async (page) => {
+      await page.evaluate(() => {
+        const id = "number.onkyo_tx_rz50_sleep_timer";
+        window.hass.states[id] = { ...window.hass.states[id], state: "unavailable" };
+        window.hass.onChange();
+      });
+      assert.equal(await card(page, ".lbl").filter({ hasText: "Sleep timer" }).count(), 0);
+      assert.match(await card(page, ".qnote").innerText(), /Sleep timer is not available/);
+    }));
+
+  test("an unavailable video sensor while on hides the Video column", () =>
+    using({}, "Playing", async (page) => {
+      await page.evaluate(() => {
+        const id = "sensor.onkyo_tx_rz50_video_input";
+        window.hass.states[id] = { ...window.hass.states[id], state: "unavailable" };
+        window.hass.onChange();
+      });
+      assert.equal(await card(page, ".np > div").count(), 1);
+    }));
+
   test("Music Optimizer in Stereo is a switch that toggles", () =>
     using({ signal: "pcm" }, "Playing", async (page) => {
       const toggle = card(page, ".tgl");

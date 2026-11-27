@@ -72,10 +72,12 @@ function videoColumn(ctx, on) {
 
 function nowPlaying(ctx) {
   const { remote, h } = ctx;
-  const hasAudio = Boolean(remote.entityId("sensor.audio_input"));
-  const hasVideo = Boolean(remote.entityId("sensor.video_input"));
-  if (!hasAudio && !hasVideo) return "";
   const on = remote.power === "on";
+  // "unknown" is the sensors' state for no signal; "unavailable" while on means no information.
+  const shown = (key) => Boolean(remote.state(key)) && !(on && remote.state(key).state === "unavailable");
+  const hasAudio = shown("sensor.audio_input");
+  const hasVideo = shown("sensor.video_input");
+  if (!hasAudio && !hasVideo) return "";
   const column = (title, data) =>
     `<div><div class="k">${title}</div><div class="big">${h.esc(data.big)}</div>${data.lines
       .filter(Boolean)
@@ -116,7 +118,9 @@ function quickSettings(ctx) {
       label: minutes ? `${minutes} min` : "Off",
       selected: present(sleep) && Number(sleep.state) === minutes,
     }));
-    if (options.length > 1) parts.push(`<div class="lbl">Sleep timer</div>${h.segmented(options, { action: "sleep", cols: options.length })}`);
+    if (on && !present(sleep)) {
+      notes.push("Sleep timer is not available now");
+    } else if (options.length > 1) parts.push(`<div class="lbl">Sleep timer</div>${h.segmented(options, { action: "sleep", cols: options.length })}`);
   }
 
   const optimizer = remote.state("switch.music_optimizer");
@@ -131,6 +135,6 @@ function quickSettings(ctx) {
   }
 
   if (parts.length === 0 && notes.length === 0) return "";
-  const note = notes.length ? `<div class="qnote">${h.icon("alertO", 18)}<span>${notes.map(h.esc).join(". ")}</span></div>` : "";
+  const note = notes.length ? h.qnote(notes.join(". ")) : "";
   return `<div class="grp ctl wide"><div class="gh"><span class="gt">Quick settings</span></div>${parts.join("")}${note}</div>`;
 }
