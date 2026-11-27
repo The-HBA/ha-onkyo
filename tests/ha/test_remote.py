@@ -74,6 +74,15 @@ async def test_unknown_key_is_rejected_before_anything_is_sent(
 ) -> None:
     await setup(hass, entry)
     remote = entity_id(hass, REMOTE, "remote")
+    sent: list[str] = []
+    receiver = entry.runtime_data.receiver
+    original = receiver.set
+
+    async def spy(code: str, param: str) -> str:
+        sent.append(code + param)
+        return await original(code, param)
+
+    receiver.set = spy  # type: ignore[method-assign]
     with pytest.raises(ServiceValidationError):
         await hass.services.async_call(
             REMOTE,
@@ -81,3 +90,4 @@ async def test_unknown_key_is_rejected_before_anything_is_sent(
             {ATTR_ENTITY_ID: remote, ATTR_COMMAND: ["menu", "banana"]},
             blocking=True,
         )
+    assert sent == []

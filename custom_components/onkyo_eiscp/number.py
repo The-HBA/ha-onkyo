@@ -95,7 +95,9 @@ class OnkyoNumber(_Range):
 
     async def async_set_native_value(self, value: float) -> None:
         """Send the value; only the dB levels take fractions."""
-        number: float = value if self._command.value is Value.SIGNED_HEX else round(value)
+        step = self._attr_native_step or 1.0
+        snapped = round(value / step) * step  # the receiver takes whole steps only
+        number: float = snapped if self._command.value is Value.SIGNED_HEX else round(snapped)
         await self._send(encode(self._command, number))
 
 

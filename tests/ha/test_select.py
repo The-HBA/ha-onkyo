@@ -134,3 +134,22 @@ async def test_mode_change_keeps_selects_working(
     )
     await hass.async_block_till_done()
     assert hass.states.get(entity_id(hass, SELECT, "dirac_slot")).state == "slot_3"  # type: ignore[union-attr]
+
+
+async def test_refused_option_returns_with_the_mode_that_allows_it(
+    hass: HomeAssistant, entry: MockConfigEntry
+) -> None:
+    await setup(hass, entry)
+    late = entity_id(hass, SELECT, "late_night")
+    with pytest.raises(HomeAssistantError):
+        await choose(hass, late, "high")
+    await hass.async_block_till_done()
+    assert "high" not in hass.states.get(late).attributes[ATTR_OPTIONS]  # type: ignore[union-attr]
+    await hass.services.async_call(
+        MEDIA_PLAYER,
+        SERVICE_SELECT_SOUND_MODE,
+        {ATTR_ENTITY_ID: PLAYER, ATTR_SOUND_MODE: "Stereo"},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+    assert "high" in hass.states.get(late).attributes[ATTR_OPTIONS]  # type: ignore[union-attr]

@@ -65,3 +65,21 @@ async def test_switches_follow_power(hass: HomeAssistant, entry: MockConfigEntry
         MEDIA_PLAYER, "turn_off", {ATTR_ENTITY_ID: PLAYER}, blocking=True
     )
     await wait_state(hass, entity, STATE_UNAVAILABLE)
+
+
+async def test_music_optimizer_refusal_is_remembered_per_mode(
+    hass: HomeAssistant, entry: MockConfigEntry
+) -> None:
+    await setup(hass, entry)
+    entity = entity_id(hass, SWITCH, "music_optimizer")
+    with pytest.raises(HomeAssistantError):
+        await call(hass, SERVICE_TURN_ON, entity)
+    await wait_state(hass, entity, STATE_UNAVAILABLE)
+    for mode in ("Stereo", "DTS Neural:X"):
+        await hass.services.async_call(
+            MEDIA_PLAYER,
+            SERVICE_SELECT_SOUND_MODE,
+            {ATTR_ENTITY_ID: PLAYER, ATTR_SOUND_MODE: mode},
+            blocking=True,
+        )
+        await wait_state(hass, entity, STATE_OFF if mode == "Stereo" else STATE_UNAVAILABLE)

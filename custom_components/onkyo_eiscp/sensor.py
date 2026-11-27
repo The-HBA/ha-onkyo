@@ -6,7 +6,7 @@ import logging
 from dataclasses import asdict
 from typing import TYPE_CHECKING, Any
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
 from homeassistant.const import EntityCategory, UnitOfTemperature
 from homeassistant.helpers.event import async_track_time_interval
 
@@ -84,6 +84,7 @@ class OnkyoTemperatureSensor(OnkyoSetting, SensorEntity):
     """The receiver's temperature; not pushed, so polled while the receiver is on."""
 
     _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_entity_registry_enabled_default = False

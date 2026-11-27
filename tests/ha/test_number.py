@@ -143,3 +143,30 @@ async def test_numbers_are_unavailable_in_standby(
         MEDIA_PLAYER, "turn_off", {ATTR_ENTITY_ID: PLAYER}, blocking=True
     )
     await wait_state(hass, bass, STATE_UNAVAILABLE)
+
+
+async def test_av_sync_is_snapped_to_its_step(hass: HomeAssistant, entry: MockConfigEntry) -> None:
+    await setup(hass, entry)
+    sync = entity_id(hass, NUMBER, "av_sync")
+    await set_value(hass, sync, 7)  # not a multiple of 5 ms
+    await wait_state(hass, sync, "5.0")
+    await set_value(hass, sync, 0)
+    await wait_state(hass, sync, "0.0")
+
+
+async def test_entities_do_not_write_state_for_other_codes(
+    hass: HomeAssistant, entry: MockConfigEntry
+) -> None:
+    await setup(hass, entry)
+    bass = entity_id(hass, NUMBER, "bass")
+    before = hass.states.get(bass).last_updated  # type: ignore[union-attr]
+    volume = 0.4
+    await hass.services.async_call(
+        MEDIA_PLAYER,
+        "volume_set",
+        {ATTR_ENTITY_ID: PLAYER, "volume_level": volume},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+    assert hass.states.get(PLAYER).attributes["volume_level"] == pytest.approx(volume, abs=0.02)  # type: ignore[union-attr]
+    assert hass.states.get(bass).last_updated == before  # type: ignore[union-attr]
