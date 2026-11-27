@@ -114,6 +114,121 @@
       "main": {
         "name": "Main zone"
       }
+    },
+    "select": {
+      "dirac_slot": {
+        "name": "Dirac Live",
+        "state": {
+          "off": "Off",
+          "slot_1": "Slot 1",
+          "slot_2": "Slot 2",
+          "slot_3": "Slot 3"
+        }
+      },
+      "late_night": {
+        "name": "Late night",
+        "state": {
+          "off": "Off",
+          "low": "Low",
+          "high": "High",
+          "auto": "Auto"
+        }
+      },
+      "dimmer": {
+        "name": "Display dimmer",
+        "state": {
+          "bright": "Bright",
+          "dim": "Dim",
+          "dark": "Dark",
+          "off": "Display off",
+          "bright_led_off": "Bright, LED off"
+        }
+      },
+      "equalizer": {
+        "name": "Equalizer",
+        "state": {
+          "off": "Off",
+          "preset_1": "Preset 1",
+          "preset_2": "Preset 2",
+          "preset_3": "Preset 3"
+        }
+      },
+      "digital_filter": {
+        "name": "Digital filter",
+        "state": {
+          "slow": "Slow",
+          "sharp": "Sharp",
+          "short": "Short",
+          "auto": "Auto"
+        }
+      },
+      "hdmi_output": {
+        "name": "HDMI output",
+        "state": {
+          "off": "Off",
+          "main": "Main",
+          "sub": "Sub",
+          "both": "Both",
+          "both_main": "Both (main first)",
+          "both_sub": "Both (sub first)"
+        }
+      }
+    },
+    "number": {
+      "bass": {
+        "name": "Bass"
+      },
+      "treble": {
+        "name": "Treble"
+      },
+      "subwoofer_level": {
+        "name": "Subwoofer level"
+      },
+      "subwoofer2_level": {
+        "name": "Subwoofer 2 level"
+      },
+      "center_level": {
+        "name": "Center level"
+      },
+      "vocal_enhancer": {
+        "name": "Vocal enhancer"
+      },
+      "dialog_level": {
+        "name": "Dialog level"
+      },
+      "av_sync": {
+        "name": "AV sync"
+      },
+      "sleep_timer": {
+        "name": "Sleep timer"
+      }
+    },
+    "switch": {
+      "music_optimizer": {
+        "name": "Music Optimizer"
+      },
+      "cinema_filter": {
+        "name": "Cinema filter"
+      }
+    },
+    "sensor": {
+      "audio_input": {
+        "name": "Audio input"
+      },
+      "video_input": {
+        "name": "Video input"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "front_display": {
+        "name": "Front display"
+      }
+    },
+    "remote": {
+      "remote": {
+        "name": "Remote"
+      }
     }
   },
   "exceptions": {
@@ -134,6 +249,12 @@
     },
     "unknown_sound_mode": {
       "message": "Unknown listening mode: {name}."
+    },
+    "unknown_option": {
+      "message": "Unknown option: {name}."
+    },
+    "unknown_remote_key": {
+      "message": "Unknown remote key: {name}."
     }
   }
 }

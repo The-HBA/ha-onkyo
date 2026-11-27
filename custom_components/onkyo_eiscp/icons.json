@@ -1,0 +1,35 @@
+{
+  "entity": {
+    "select": {
+      "dirac_slot": { "default": "mdi:sine-wave" },
+      "late_night": { "default": "mdi:weather-night" },
+      "dimmer": { "default": "mdi:brightness-6" },
+      "equalizer": { "default": "mdi:equalizer" },
+      "digital_filter": { "default": "mdi:filter-variant" },
+      "hdmi_output": { "default": "mdi:hdmi-port" }
+    },
+    "number": {
+      "bass": { "default": "mdi:music-clef-bass" },
+      "treble": { "default": "mdi:music-clef-treble" },
+      "subwoofer_level": { "default": "mdi:speaker" },
+      "subwoofer2_level": { "default": "mdi:speaker" },
+      "center_level": { "default": "mdi:speaker" },
+      "vocal_enhancer": { "default": "mdi:account-voice" },
+      "dialog_level": { "default": "mdi:message-text" },
+      "av_sync": { "default": "mdi:timer-sync-outline" },
+      "sleep_timer": { "default": "mdi:sleep" }
+    },
+    "switch": {
+      "music_optimizer": { "default": "mdi:music-note-plus" },
+      "cinema_filter": { "default": "mdi:filmstrip" }
+    },
+    "sensor": {
+      "audio_input": { "default": "mdi:waveform" },
+      "video_input": { "default": "mdi:video-input-hdmi" },
+      "front_display": { "default": "mdi:monitor" }
+    },
+    "remote": {
+      "remote": { "default": "mdi:remote" }
+    }
+  }
+}
