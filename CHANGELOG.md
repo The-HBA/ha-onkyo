@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.2
+
+- Renamed to Onkyo Remote and switched to the Onkyo logo. The integration ID `onkyo_eiscp` is unchanged, so nothing needs to be set up again.
+
 ## 0.0.1
 
 First test release. It has one media player and the options to name things as you like.
