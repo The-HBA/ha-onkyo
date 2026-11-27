@@ -10,7 +10,8 @@
    "FLD4E6F7420417661696C61626C6520",
    "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
    "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "AMT",
@@ -19,7 +20,18 @@
   "before": "00",
   "reply": "01",
   "readback": "01",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
+ },
+ {
+  "code": "AMT",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [],
+  "session": "session-35-power-mrm.jsonl"
  },
  {
   "code": "APS",
@@ -28,7 +40,8 @@
   "before": "01",
   "reply": null,
   "readback": "01",
-  "pushes": []
+  "pushes": [],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "APS",
@@ -37,7 +50,8 @@
   "before": "01",
   "reply": "00",
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "ARC",
@@ -48,7 +62,8 @@
   "readback": "01",
   "pushes": [
    "FLD4152432020202020203A4F6E2020"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "AVS",
@@ -59,7 +74,8 @@
   "readback": "+005",
   "pushes": [
    "FLD412F5653796E633A20202B356D73"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "AVS",
@@ -70,7 +86,104 @@
   "readback": "-005",
   "pushes": [
    "FLD412F5653796E633A20202D356D73"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "+005",
+  "kind": "changed",
+  "before": "0000",
+  "reply": "+005",
+  "readback": "+005",
+  "pushes": [
+   "FLD412F5653796E633A20202B356D73"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "+250",
+  "kind": "changed",
+  "before": "0000",
+  "reply": "+250",
+  "readback": "+250",
+  "pushes": [
+   "FLD412F5653796E633A2B3235306D73"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "+500",
+  "kind": "changed",
+  "before": "0000",
+  "reply": "+500",
+  "readback": "+500",
+  "pushes": [
+   "FLD412F5653796E633A2B3530306D73"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "+505",
+  "kind": "refused",
+  "before": "0000",
+  "reply": "N/A",
+  "readback": "0000",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "-005",
+  "kind": "changed",
+  "before": "0000",
+  "reply": "-005",
+  "readback": "-005",
+  "pushes": [
+   "FLD412F5653796E633A20202D356D73"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "-100",
+  "kind": "changed",
+  "before": "0000",
+  "reply": "-100",
+  "readback": "-100",
+  "pushes": [
+   "FLD412F5653796E633A2D3130306D73"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "-105",
+  "kind": "refused",
+  "before": "0000",
+  "reply": "N/A",
+  "readback": "0000",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "AVS",
+  "param": "-500",
+  "kind": "refused",
+  "before": "0000",
+  "reply": "N/A",
+  "readback": "0000",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "CTL",
@@ -79,7 +192,8 @@
   "before": "000",
   "reply": "N/A",
   "readback": "000",
-  "pushes": []
+  "pushes": [],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "CTL",
@@ -88,7 +202,8 @@
   "before": "000",
   "reply": "N/A",
   "readback": "000",
-  "pushes": []
+  "pushes": [],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "CTL",
@@ -100,7 +215,8 @@
   "pushes": [
    "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
    "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "CTL",
@@ -109,7 +225,8 @@
   "before": "000",
   "reply": "N/A",
   "readback": "000",
-  "pushes": []
+  "pushes": [],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "CTS",
@@ -120,7 +237,8 @@
   "readback": "00",
   "pushes": [
    "FLD4E6F7420417661696C61626C6520"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "DBC",
@@ -131,7 +249,8 @@
   "readback": "00",
   "pushes": [
    "FLD4E6F7420417661696C61626C6520"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "DCE",
@@ -140,7 +259,8 @@
   "before": "00",
   "reply": null,
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "DGF",
@@ -151,7 +271,32 @@
   "readback": "03",
   "pushes": [
    "FLD442E46696C7465723A4175746F20"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
+ },
+ {
+  "code": "DGF",
+  "param": "00",
+  "kind": "changed",
+  "before": "03",
+  "reply": "00",
+  "readback": "00",
+  "pushes": [
+   "FLD442E46696C7465723A536C6F7720"
+  ],
+  "session": "session-31-dgf.jsonl"
+ },
+ {
+  "code": "DGF",
+  "param": "01",
+  "kind": "changed",
+  "before": "03",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD442E46696C7465723A5368617270"
+  ],
+  "session": "session-31-dgf.jsonl"
  },
  {
   "code": "DIF",
@@ -160,7 +305,8 @@
   "before": "00",
   "reply": "N/A",
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "DIM",
@@ -169,7 +315,8 @@
   "before": "00",
   "reply": "01",
   "readback": "01",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "DIM",
@@ -178,7 +325,8 @@
   "before": "00",
   "reply": "02",
   "readback": "02",
-  "pushes": []
+  "pushes": [],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "DIM",
@@ -187,7 +335,8 @@
   "before": "00",
   "reply": "N/A",
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "DIM",
@@ -196,7 +345,8 @@
   "before": "00",
   "reply": "N/A",
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "DLC",
@@ -205,7 +355,8 @@
   "before": "00",
   "reply": "N/A",
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "DSS",
@@ -217,7 +368,8 @@
   "pushes": [
    "DBC00",
    "FLD44697261632020203A536C6F7431"
-  ]
+  ],
+  "session": "session-20-dirac.jsonl"
  },
  {
   "code": "DSS",
@@ -229,7 +381,8 @@
   "pushes": [
    "DBC00",
    "FLD44697261632020203A536C6F7432"
-  ]
+  ],
+  "session": "session-20-dirac.jsonl"
  },
  {
   "code": "DSS",
@@ -246,7 +399,8 @@
    "PCT00",
    "STW00",
    "FLD44697261632020203A204F666620"
-  ]
+  ],
+  "session": "session-20-dirac.jsonl"
  },
  {
   "code": "DSS",
@@ -257,7 +411,8 @@
   "readback": "112",
   "pushes": [
    "FLD44697261632020203A536C6F7433"
-  ]
+  ],
+  "session": "session-20-dirac.jsonl"
  },
  {
   "code": "EQS",
@@ -268,7 +423,8 @@
   "readback": "01",
   "pushes": [
    "FLD457175616C697A6572203A503120"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "HAO",
@@ -279,7 +435,8 @@
   "readback": "00",
   "pushes": [
    "FLD4E6F7420417661696C61626C6520"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "HAS",
@@ -291,7 +448,8 @@
   "pushes": [
    "FLD4E6F7420417661696C61626C6520",
    "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,Stereo,2.1 ch,"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "HOI",
@@ -300,7 +458,8 @@
   "before": "11",
   "reply": "N/A",
   "readback": "11",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "HSF",
@@ -311,7 +470,8 @@
   "readback": "01",
   "pushes": [
    "FLD48444D49344B384B3A344B456E68"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "HSF",
@@ -322,7 +482,8 @@
   "readback": "00",
   "pushes": [
    "FLD48444D49344B384B3A344B537464"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "IRL",
@@ -333,7 +494,8 @@
   "readback": "00",
   "pushes": [
    "FLD462E495220556E6C6F636B656420"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "IRL",
@@ -344,7 +506,8 @@
   "readback": "01",
   "pushes": [
    "FLD20462E4952204C6F636B65642020"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "KYL",
@@ -355,7 +518,8 @@
   "readback": "00",
   "pushes": [
    "FLD204B657920556E6C6F636B656420"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "KYL",
@@ -366,7 +530,8 @@
   "readback": "01",
   "pushes": [
    "FLD20204B6579204C6F636B65642020"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "LMD",
@@ -377,7 +542,8 @@
   "readback": "82",
   "pushes": [
    "FLD20445453204E657572616C3A5820"
-  ]
+  ],
+  "session": "session-26-listening-modes.jsonl"
  },
  {
   "code": "LMD",
@@ -395,7 +561,8 @@
    "PCT00",
    "STW00",
    "FLD20205448582043696E656D612020"
-  ]
+  ],
+  "session": "session-26-listening-modes.jsonl"
  },
  {
   "code": "LMD",
@@ -413,7 +580,8 @@
    "PCT00",
    "STW00",
    "FLD20205448582043696E656D612020"
-  ]
+  ],
+  "session": "session-26-listening-modes.jsonl"
  },
  {
   "code": "LMD",
@@ -431,7 +599,8 @@
    "PCT00",
    "STW00",
    "FLD2020544858204D75736963202020"
-  ]
+  ],
+  "session": "session-26-listening-modes.jsonl"
  },
  {
   "code": "LMD",
@@ -449,7 +618,8 @@
    "PCT00",
    "STW00",
    "FLD2020544858204D75736963202020"
-  ]
+  ],
+  "session": "session-26-listening-modes.jsonl"
  },
  {
   "code": "LMD",
@@ -467,7 +637,8 @@
    "PCT00",
    "STW00",
    "FLD20205448582047616D6573202020"
-  ]
+  ],
+  "session": "session-26-listening-modes.jsonl"
  },
  {
   "code": "LMD",
@@ -485,7 +656,939 @@
    "PCT00",
    "STW00",
    "FLD20205448582047616D6573202020"
-  ]
+  ],
+  "session": "session-26-listening-modes.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "08",
+  "kind": "changed",
+  "before": "82",
+  "reply": "08",
+  "readback": "08",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD20204F7263686573747261202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "09",
+  "kind": "changed",
+  "before": "82",
+  "reply": "09",
+  "readback": "09",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD2020556E706C7567676564202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "0A",
+  "kind": "changed",
+  "before": "82",
+  "reply": "0A",
+  "readback": "0A",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD202053747564696F2D4D69782020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "0B",
+  "kind": "changed",
+  "before": "82",
+  "reply": "0B",
+  "readback": "0B",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD2020205456204C6F676963202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "03",
+  "kind": "changed",
+  "before": "82",
+  "reply": "03",
+  "readback": "03",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD20202047616D652D525047202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "05",
+  "kind": "changed",
+  "before": "82",
+  "reply": "05",
+  "readback": "05",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD2047616D652D416374696F6E2020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "06",
+  "kind": "changed",
+  "before": "82",
+  "reply": "06",
+  "readback": "06",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD202047616D652D526F636B202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "0E",
+  "kind": "changed",
+  "before": "82",
+  "reply": "0E",
+  "readback": "0E",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD2047616D652D53706F7274732020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "0C",
+  "kind": "changed",
+  "before": "82",
+  "reply": "0C",
+  "readback": "0C",
+  "pushes": [
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "FLD20416C6C43682053746572656F20"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "13",
+  "kind": "changed",
+  "before": "82",
+  "reply": "13",
+  "readback": "13",
+  "pushes": [
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "FLD20204D6F6E6F204D757369632020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "0D",
+  "kind": "changed",
+  "before": "82",
+  "reply": "0D",
+  "readback": "0D",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "PCT00",
+   "STW00",
+   "FLD202020202020546865617465722D",
+   "FLD2020202020546865617465722D44",
+   "FLD20202020546865617465722D4469",
+   "FLD202020546865617465722D44696D",
+   "FLD2020546865617465722D44696D65",
+   "FLD20546865617465722D44696D656E",
+   "FLD546865617465722D44696D656E73",
+   "FLD6865617465722D44696D656E7369",
+   "FLD65617465722D44696D656E73696F",
+   "FLD617465722D44696D656E73696F6E",
+   "FLD7465722D44696D656E73696F6E61",
+   "FLD65722D44696D656E73696F6E616C",
+   "FLD722D44696D656E73696F6E616C20",
+   "FLD2D44696D656E73696F6E616C2020",
+   "FLD44696D656E73696F6E616C202020",
+   "FLD696D656E73696F6E616C20202020",
+   "FLD6D656E73696F6E616C2020202020",
+   "FLD656E73696F6E616C202020202020",
+   "FLD6E73696F6E616C20202020202020",
+   "FLD73696F6E616C2020202020202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "11",
+  "kind": "changed",
+  "before": "82",
+  "reply": "11",
+  "readback": "11",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD20205075726520417564696F2020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "01",
+  "kind": "changed",
+  "before": "82",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD2020202044697265637420202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "00",
+  "kind": "changed",
+  "before": "82",
+  "reply": "00",
+  "readback": "00",
+  "pushes": [
+   "MOT00",
+   "RAS00",
+   "FLD2020202053746572656F20202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "0F",
+  "kind": "changed",
+  "before": "82",
+  "reply": "0F",
+  "readback": "0F",
+  "pushes": [
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "FLD20202020204D6F6E6F2020202020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "80",
+  "kind": "changed",
+  "before": "82",
+  "reply": "80",
+  "readback": "80",
+  "pushes": [
+   "FLD202012134453757220362E312020"
+  ],
+  "session": "session-32-lmd-stereo.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "02",
+  "kind": "silent",
+  "before": "82",
+  "reply": null,
+  "readback": "82",
+  "pushes": [
+   "FLD20445453204E657572616C3A5820"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "04",
+  "kind": "changed",
+  "before": "82",
+  "reply": "84",
+  "readback": "84",
+  "pushes": [
+   "AEQ00",
+   "DBC00",
+   "MOT00",
+   "RAS00",
+   "VOC00",
+   "PCT00",
+   "STW00",
+   "FLD20205448582043696E656D612020",
+   "IFAN/A",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "07",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "12",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "14",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "15",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "16",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "17",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "23",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "25",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "26",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "2E",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "40",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "41",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "42",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "43",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "44",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "45",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "50",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "51",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "52",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "81",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "83",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "86",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "87",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "88",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "8D",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "8E",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "8F",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "90",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "91",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "92",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "93",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "94",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "95",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "96",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "97",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "98",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "99",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "9A",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A0",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A1",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A2",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A3",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A4",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A5",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A6",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAHDMI 4,PCM,48 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "A7",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "FF",
+  "kind": "refused",
+  "before": "82",
+  "reply": "N/A",
+  "readback": "82",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-33-lmd-other.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "1F",
+  "kind": "changed",
+  "before": "82",
+  "reply": "1F",
+  "readback": "N/A",
+  "pushes": [
+   "ZPW01",
+   "SLZ80",
+   "NSTS--1",
+   "NSTS--1",
+   "AEQ00",
+   "RAS00",
+   "VOC00",
+   "FLD57686F6C65486F7573654D6F6465",
+   "ZMT00",
+   "VL350",
+   "NSTS--1"
+  ],
+  "session": "session-33-lmd-other.jsonl"
  },
  {
   "code": "LMD",
@@ -494,7 +1597,18 @@
   "before": "00",
   "reply": "82",
   "readback": "82",
-  "pushes": []
+  "pushes": [],
+  "session": "session-18-restore-lmd.jsonl"
+ },
+ {
+  "code": "LMD",
+  "param": "82",
+  "kind": "changed",
+  "before": "0C",
+  "reply": "82",
+  "readback": "82",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "LTN",
@@ -505,7 +1619,8 @@
   "readback": "01",
   "pushes": [
    "FLD4C6174654E696768743A204F6E20"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "LTN",
@@ -514,7 +1629,8 @@
   "before": "00",
   "reply": "N/A",
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "LTN",
@@ -525,7 +1641,8 @@
   "readback": "03",
   "pushes": [
    "FLD4C6174654E696768743A4175746F"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "MGV",
@@ -534,7 +1651,8 @@
   "before": "000",
   "reply": "000",
   "readback": "000",
-  "pushes": []
+  "pushes": [],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "MMT",
@@ -543,7 +1661,8 @@
   "before": "00",
   "reply": null,
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "MMT",
@@ -555,7 +1674,8 @@
   "pushes": [
    "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
    "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "MOT",
@@ -566,7 +1686,8 @@
   "readback": "00",
   "pushes": [
    "FLD4E6F7420417661696C61626C6520"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "MRM",
@@ -575,7 +1696,8 @@
   "before": "00",
   "reply": null,
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "MRM",
@@ -584,7 +1706,8 @@
   "before": "00",
   "reply": null,
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "MRM",
@@ -593,7 +1716,8 @@
   "before": "44",
   "reply": null,
   "readback": "44",
-  "pushes": []
+  "pushes": [],
+  "session": "session-25-mrm.jsonl"
  },
  {
   "code": "MT3",
@@ -602,7 +1726,8 @@
   "before": "00",
   "reply": "N/A",
   "readback": "00",
-  "pushes": []
+  "pushes": [],
+  "session": "session-23-zones.jsonl"
  },
  {
   "code": "MVL",
@@ -613,7 +1738,8 @@
   "readback": "4B",
   "pushes": [
    "FLD566F6C756D652020202D34342E35"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "MVL",
@@ -624,7 +1750,20 @@
   "readback": "4B",
   "pushes": [
    "FLD566F6C756D652020202D34342E35"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
+ },
+ {
+  "code": "MVL",
+  "param": "00",
+  "kind": "changed",
+  "before": "68",
+  "reply": "00",
+  "readback": "00",
+  "pushes": [
+   "FLD566F6C756D6520202020202D6F6F"
+  ],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "NSB",
@@ -633,7 +1772,8 @@
   "before": "ON",
   "reply": "ON",
   "readback": "ON",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "OSD",
@@ -642,7 +1782,8 @@
   "before": null,
   "reply": null,
   "readback": null,
-  "pushes": []
+  "pushes": [],
+  "session": "session-21-osd.jsonl"
  },
  {
   "code": "OSD",
@@ -651,7 +1792,8 @@
   "before": null,
   "reply": null,
   "readback": null,
-  "pushes": []
+  "pushes": [],
+  "session": "session-21-osd.jsonl"
  },
  {
   "code": "PPS",
@@ -663,7 +1805,8 @@
   "pushes": [
    "NLSC-P",
    "NJA2-http://receiver.invalid/album_art.cgi"
-  ]
+  ],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "PW3",
@@ -676,7 +1819,18 @@
    "PW300",
    "MRM44",
    "FLD4E6F7420417661696C61626C6520"
-  ]
+  ],
+  "session": "session-23-zones.jsonl"
+ },
+ {
+  "code": "PWR",
+  "param": "00",
+  "kind": "changed",
+  "before": "01",
+  "reply": "00",
+  "readback": "00",
+  "pushes": [],
+  "session": "session-35-power-mrm.jsonl"
  },
  {
   "code": "RAS",
@@ -687,7 +1841,8 @@
   "readback": "01",
   "pushes": [
    "FLD52652D455120202020203A4F6E20"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "SAM",
@@ -703,7 +1858,8 @@
    "FLD53542041737369676E203A204620",
    "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,Stereo,2.1 ch,",
    "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "SL3",
@@ -718,7 +1874,8 @@
    "MRM44",
    "FLD4E6F7420417661696C61626C6520",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-23-zones.jsonl"
  },
  {
   "code": "SLA",
@@ -727,7 +1884,8 @@
   "before": "04",
   "reply": "N/A",
   "readback": "04",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "SLI",
@@ -748,7 +1906,8 @@
    "PCT00",
    "STW00",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -769,7 +1928,8 @@
    "PCT00",
    "STW00",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -782,7 +1942,8 @@
    "NSTS--1",
    "FLD53747265616D696E672D34342E30",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -799,7 +1960,8 @@
    "VOC00",
    "FLD4854504320202020202D34342E30",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -818,7 +1980,8 @@
    "PCT00",
    "STW00",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -839,7 +2002,8 @@
    "STW00",
    "FLD4344202020202020202D34342E30",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -860,7 +2024,8 @@
    "PCT00",
    "STW00",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -888,7 +2053,8 @@
    "TU300522",
    "FLD414D2020353232206B487A202D2D",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -915,7 +2081,8 @@
    "PR300",
    "TU308750",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -942,7 +2109,8 @@
    "NSTS--1",
    "FLD4E45542020202020202D34342E30",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -985,7 +2153,8 @@
    "STW00",
    "NSTS--1",
    "NTINow Pairing..."
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -1006,7 +2175,8 @@
    "STW00",
    "FLD50726F6A6563746F722D34342E30",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-24-inputs.jsonl"
  },
  {
   "code": "SLI",
@@ -1015,7 +2185,28 @@
   "before": "10",
   "reply": "N/A",
   "readback": "10",
-  "pushes": []
+  "pushes": [],
+  "session": "session-24-inputs.jsonl"
+ },
+ {
+  "code": "SLI",
+  "param": "25",
+  "kind": "changed",
+  "before": "11",
+  "reply": "25",
+  "readback": "25",
+  "pushes": [],
+  "session": "session-30-tuner.jsonl"
+ },
+ {
+  "code": "SLI",
+  "param": "22",
+  "kind": "changed",
+  "before": "11",
+  "reply": "22",
+  "readback": "22",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "SLP",
@@ -1026,7 +2217,8 @@
   "readback": "0A",
   "pushes": [
    "FLD20536C656570203130206D696E20"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "SLP",
@@ -1037,7 +2229,45 @@
   "readback": "1E",
   "pushes": [
    "FLD20536C656570203330206D696E20"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
+ },
+ {
+  "code": "SLP",
+  "param": "01",
+  "kind": "changed",
+  "before": "OFF",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD20536C656570202031206D696E20"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "SLP",
+  "param": "5A",
+  "kind": "changed",
+  "before": "OFF",
+  "reply": "5A",
+  "readback": "5A",
+  "pushes": [
+   "FLD20536C656570203930206D696E20"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "SLP",
+  "param": "5B",
+  "kind": "refused",
+  "before": "OFF",
+  "reply": "N/A",
+  "readback": "OFF",
+  "pushes": [
+   "IFAANALOG,,,,All Ch Stereo,6.1 ch,",
+   "IFVHDMI 4,4K(3840x2160) 59 Hz,YCbCr444,24bit,MAIN,4K(3840x2160) 59 Hz,YCbCr444,24bit,,,"
+  ],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "SLZ",
@@ -1049,7 +2279,8 @@
   "pushes": [
    "NSTS--1",
    "NSTS--1"
-  ]
+  ],
+  "session": "session-23-zones.jsonl"
  },
  {
   "code": "STW",
@@ -1060,7 +2291,8 @@
   "readback": "00",
   "pushes": [
    "FLD4E6F7420417661696C61626C6520"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "SWL",
@@ -1071,7 +2303,8 @@
   "readback": "-09",
   "pushes": [
    "FLD535720202020203A202D34956442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "SWL",
@@ -1082,7 +2315,8 @@
   "readback": "-0B",
   "pushes": [
    "FLD535720202020203A202D35956442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "SWL",
@@ -1093,7 +2327,8 @@
   "readback": "-09",
   "pushes": [
    "FLD535720202020203A202D34956442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "SWL",
@@ -1104,7 +2339,52 @@
   "readback": "-0B",
   "pushes": [
    "FLD535720202020203A202D35956442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
+ },
+ {
+  "code": "SWL",
+  "param": "-1E",
+  "kind": "same",
+  "before": "-1E",
+  "reply": "-1E",
+  "readback": "-1E",
+  "pushes": [
+   "FLD535720202020203A2D3135906442"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "SWL",
+  "param": "+18",
+  "kind": "changed",
+  "before": "-1E",
+  "reply": "+18",
+  "readback": "+18",
+  "pushes": [
+   "FLD535720202020203A2B3132906442"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "SWL",
+  "param": "-1F",
+  "kind": "refused",
+  "before": "-1E",
+  "reply": "N/A",
+  "readback": "-1E",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "SWL",
+  "param": "+19",
+  "kind": "refused",
+  "before": "-1E",
+  "reply": "N/A",
+  "readback": "-1E",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "TFR",
@@ -1115,7 +2395,8 @@
   "readback": "B+1T00",
   "pushes": [
    "FLD42617373202020203A202B316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "TFR",
@@ -1126,7 +2407,8 @@
   "readback": "B-1T00",
   "pushes": [
    "FLD42617373202020203A202D316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "TFR",
@@ -1137,7 +2419,8 @@
   "readback": "B+1T00",
   "pushes": [
    "FLD42617373202020203A202B316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "TFR",
@@ -1148,7 +2431,8 @@
   "readback": "B-1T00",
   "pushes": [
    "FLD42617373202020203A202D316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "TFR",
@@ -1159,7 +2443,8 @@
   "readback": "B00T+1",
   "pushes": [
    "FLD547265626C6520203A202B316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "TFR",
@@ -1170,7 +2455,8 @@
   "readback": "B00T-1",
   "pushes": [
    "FLD547265626C6520203A202D316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "TFR",
@@ -1181,7 +2467,8 @@
   "readback": "B00T+1",
   "pushes": [
    "FLD547265626C6520203A202B316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
  },
  {
   "code": "TFR",
@@ -1192,7 +2479,96 @@
   "readback": "B00T-1",
   "pushes": [
    "FLD547265626C6520203A202D316442"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "B-A",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B-AT00",
+  "readback": "B-AT00",
+  "pushes": [
+   "FLD42617373202020203A2D31306442"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "B+A",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B+AT00",
+  "readback": "B+AT00",
+  "pushes": [
+   "FLD42617373202020203A2B31306442"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "B-B",
+  "kind": "refused",
+  "before": "B00T00",
+  "reply": "N/A",
+  "readback": "B00T00",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "B+B",
+  "kind": "refused",
+  "before": "B00T00",
+  "reply": "N/A",
+  "readback": "B00T00",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "T-A",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B00T-A",
+  "readback": "B00T-A",
+  "pushes": [
+   "FLD547265626C6520203A2D31306442"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "T+A",
+  "kind": "changed",
+  "before": "B00T00",
+  "reply": "B00T+A",
+  "readback": "B00T+A",
+  "pushes": [
+   "FLD547265626C6520203A2B31306442"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "T-B",
+  "kind": "refused",
+  "before": "B00T00",
+  "reply": "N/A",
+  "readback": "B00T00",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "TFR",
+  "param": "T+B",
+  "kind": "refused",
+  "before": "B00T00",
+  "reply": "N/A",
+  "readback": "B00T00",
+  "pushes": [],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "TGA",
@@ -1201,7 +2577,18 @@
   "before": "01",
   "reply": null,
   "readback": "01",
-  "pushes": []
+  "pushes": [],
+  "session": "session-17-write-toggles.jsonl"
+ },
+ {
+  "code": "TUN",
+  "param": "(via SLI25)",
+  "kind": "changed",
+  "before": "08750",
+  "reply": "00522",
+  "readback": "00522",
+  "pushes": [],
+  "session": "session-30-tuner.jsonl"
  },
  {
   "code": "VL3",
@@ -1210,7 +2597,8 @@
   "before": "50",
   "reply": "N/A",
   "readback": "50",
-  "pushes": []
+  "pushes": [],
+  "session": "session-23-zones.jsonl"
  },
  {
   "code": "VL3",
@@ -1219,7 +2607,8 @@
   "before": "50",
   "reply": "N/A",
   "readback": "50",
-  "pushes": []
+  "pushes": [],
+  "session": "session-23-zones.jsonl"
  },
  {
   "code": "VOC",
@@ -1230,7 +2619,8 @@
   "readback": "01",
   "pushes": [
    "FLD566F63616C20202020203A202B31"
-  ]
+  ],
+  "session": "session-17-write-toggles.jsonl"
  },
  {
   "code": "VOC",
@@ -1243,7 +2633,165 @@
    "FLD566F63616C20202020203A202B32",
    "IFAHDMI 1,PCM,44.1 kHz,2.0 ch,DTS Neural:X,6.1 ch,",
    "IFVHDMI 1,1920 x 1080p  60 Hz,YCbCr422,24bit,MAIN,1920 x 1080p  60 Hz,YCbCr422,24bit,,,"
-  ]
+  ],
+  "session": "session-19-write-ranges.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "03",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "04",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "05",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "06",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "02",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "01",
+  "kind": "refused",
+  "before": "00",
+  "reply": "N/A",
+  "readback": "00",
+  "pushes": [
+   "FLD4E6F7420417661696C61626C6520",
+   "IFAANALOG,,,,All Ch Stereo,6.1 ch,"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "01",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD566F63616C20202020203A202B31"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "02",
+  "kind": "changed",
+  "before": "00",
+  "reply": "02",
+  "readback": "02",
+  "pushes": [
+   "FLD566F63616C20202020203A202B32"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "03",
+  "kind": "changed",
+  "before": "00",
+  "reply": "03",
+  "readback": "03",
+  "pushes": [
+   "FLD566F63616C20202020203A202B33"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "04",
+  "kind": "changed",
+  "before": "00",
+  "reply": "04",
+  "readback": "04",
+  "pushes": [
+   "FLD566F63616C20202020203A202B34"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "05",
+  "kind": "changed",
+  "before": "00",
+  "reply": "05",
+  "readback": "05",
+  "pushes": [
+   "FLD566F63616C20202020203A202B35"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "06",
+  "kind": "ignored",
+  "before": "00",
+  "reply": "00",
+  "readback": "00",
+  "pushes": [
+   "FLD566F63616C20202020203A202030"
+  ],
+  "session": "session-34-silent-input.jsonl"
+ },
+ {
+  "code": "VOC",
+  "param": "UP",
+  "kind": "changed",
+  "before": "00",
+  "reply": "01",
+  "readback": "01",
+  "pushes": [
+   "FLD566F63616C20202020203A202B31"
+  ],
+  "session": "session-34-silent-input.jsonl"
  },
  {
   "code": "VSL",
@@ -1252,7 +2800,8 @@
   "before": "LAST",
   "reply": "N/A",
   "readback": "LAST",
-  "pushes": []
+  "pushes": [],
+  "session": "session-22-new-codes.jsonl"
  },
  {
   "code": "ZMT",
@@ -1261,7 +2810,8 @@
   "before": "00",
   "reply": "01",
   "readback": "01",
-  "pushes": []
+  "pushes": [],
+  "session": "session-23-zones.jsonl"
  },
  {
   "code": "ZPW",
@@ -1270,6 +2820,7 @@
   "before": "00",
   "reply": "01",
   "readback": "01",
-  "pushes": []
+  "pushes": [],
+  "session": "session-23-zones.jsonl"
  }
 ]

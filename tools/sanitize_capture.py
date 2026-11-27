@@ -181,6 +181,7 @@ def build_writes(codes: dict[str, Any], capture: Path | None = None) -> list[dic
                 "reply": write.get("reply"),
                 "readback": write.get("readback"),
                 "pushes": write.get("also", []),
+                "session": write.get("session", ""),
             }
             if kind == "refused_push" and capture is not None and "session" in write:
                 rows = read_session(capture / write["session"])

@@ -48,7 +48,11 @@ class Fixture:
         profile = _read(folder / "profile.json")
         state = _read(folder / "state.json")
         writes: dict[tuple[str, str], list[Write]] = {}
+        behavior = _read(folder / "behavior.json")
+        skip = set(behavior.get("context_sessions", []))
         for item in _read(folder / "writes.json"):
+            if item.get("session") in skip:
+                continue  # taken on another input or in another state; ranges cover them
             write = Write(
                 code=item["code"],
                 param=item["param"],
@@ -67,7 +71,7 @@ class Fixture:
             standby=state["standby"],
             writes=writes,
             nri=nri,
-            behavior=_read(folder / "behavior.json"),
+            behavior=behavior,
             inputs=inputs,
         )
 
