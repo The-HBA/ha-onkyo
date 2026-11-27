@@ -1,0 +1,20 @@
+{
+  "domain": "onkyo_eiscp",
+  "name": "Onkyo eISCP",
+  "after_dependencies": ["lovelace"],
+  "codeowners": ["@The-HBA"],
+  "config_flow": true,
+  "dependencies": ["frontend", "http", "panel_custom"],
+  "documentation": "https://github.com/The-HBA/ha-onkyo",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/The-HBA/ha-onkyo/issues",
+  "loggers": ["custom_components.onkyo_eiscp"],
+  "requirements": [],
+  "ssdp": [
+    { "manufacturer": "ONKYO", "deviceType": "urn:schemas-upnp-org:device:MediaRenderer:1" },
+    { "manufacturer": "Onkyo & Pioneer Corporation", "deviceType": "urn:schemas-upnp-org:device:MediaRenderer:1" },
+    { "manufacturer": "Pioneer", "deviceType": "urn:schemas-upnp-org:device:MediaRenderer:1" }
+  ],
+  "version": "0.0.0"
+}
