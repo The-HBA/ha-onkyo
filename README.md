@@ -1,4 +1,4 @@
-# ha-onkyo
+# Onkyo Remote (ha-onkyo)
 
 A Home Assistant integration for Onkyo network receivers (and Pioneer and Integra models that use the same eISCP protocol). It is local only: it talks to the receiver on your network, with no cloud and no accounts.
 
@@ -21,8 +21,8 @@ Coming later: zones 2 and 3, tone and levels, Dirac Live slots, sensors, a remot
 ## Install
 
 1. In HACS, open the menu, choose Custom repositories, and add `https://github.com/The-HBA/ha-onkyo` as an Integration.
-2. Install Onkyo eISCP and restart Home Assistant.
-3. Go to Settings, Devices and services, Add integration, and pick Onkyo eISCP. Enter the receiver's address.
+2. Install Onkyo Remote and restart Home Assistant.
+3. Go to Settings, Devices and services, Add integration, and pick Onkyo Remote. Enter the receiver's address.
 
 Home Assistant 2026.9 or newer is needed. Network control must be on in the receiver's menu.
 

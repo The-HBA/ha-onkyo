@@ -1,6 +1,6 @@
 {
   "domain": "onkyo_eiscp",
-  "name": "Onkyo eISCP",
+  "name": "Onkyo Remote",
   "after_dependencies": ["lovelace"],
   "codeowners": ["@The-HBA"],
   "config_flow": true,
@@ -16,5 +16,5 @@
     { "manufacturer": "Onkyo & Pioneer Corporation", "deviceType": "urn:schemas-upnp-org:device:MediaRenderer:1" },
     { "manufacturer": "Pioneer", "deviceType": "urn:schemas-upnp-org:device:MediaRenderer:1" }
   ],
-  "version": "0.0.1"
+  "version": "0.0.2"
 }
