@@ -33,7 +33,9 @@ def core_entries_on(hass: HomeAssistant, host: str) -> list[ConfigEntry]:
     """Return the core ``onkyo`` entries that use ``host``."""
     return [
         entry
-        for entry in hass.config_entries.async_entries(CORE_DOMAIN)
+        for entry in hass.config_entries.async_entries(
+            CORE_DOMAIN, include_ignore=False, include_disabled=False
+        )
         if _same_host(entry.data.get(CONF_HOST, ""), host)
     ]
 

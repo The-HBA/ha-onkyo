@@ -4,10 +4,16 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, patch
 
+from homeassistant.config_entries import (
+    SIGNAL_CONFIG_ENTRY_CHANGED,
+    ConfigEntryChange,
+    ConfigEntryDisabler,
+)
 from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers import issue_registry as ir
+from homeassistant.helpers.dispatcher import async_dispatcher_send
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.onkyo_eiscp.const import CORE_DOMAIN, DOMAIN, ISSUE_CORE_CONFLICT
@@ -84,4 +90,32 @@ async def test_removing_our_entry_clears_the_repair(
     await setup(hass, entry)
     assert _issue(hass, entry) is not None
     await hass.config_entries.async_remove(entry.entry_id)
+    assert _issue(hass, entry) is None
+
+
+async def test_core_entry_added_after_ours_raises_and_removal_clears(
+    hass: HomeAssistant, entry: MockConfigEntry
+) -> None:
+    await setup(hass, entry)
+    assert _issue(hass, entry) is None
+    core = MockConfigEntry(domain=CORE_DOMAIN, data={CONF_HOST: "127.0.0.1"})
+    core.add_to_hass(hass)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_ENTRY_CHANGED, ConfigEntryChange.ADDED, core)
+    await hass.async_block_till_done()
+    assert _issue(hass, entry) is not None
+    with patch("custom_components.onkyo_eiscp.repairs.core_entries_on", return_value=[]):
+        async_dispatcher_send(hass, SIGNAL_CONFIG_ENTRY_CHANGED, ConfigEntryChange.REMOVED, core)
+        await hass.async_block_till_done()
+    assert _issue(hass, entry) is None
+
+
+async def test_disabled_core_entry_is_no_conflict(
+    hass: HomeAssistant, entry: MockConfigEntry
+) -> None:
+    MockConfigEntry(
+        domain=CORE_DOMAIN,
+        data={CONF_HOST: "127.0.0.1"},
+        disabled_by=ConfigEntryDisabler.USER,
+    ).add_to_hass(hass)
+    await setup(hass, entry)
     assert _issue(hass, entry) is None

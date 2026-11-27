@@ -111,7 +111,9 @@ class OnkyoConfigFlow(ConfigFlow, domain=DOMAIN):
         """Return True when the core Onkyo integration already uses this host."""
         return any(
             entry.data.get(CONF_HOST) == host
-            for entry in self.hass.config_entries.async_entries(CORE_DOMAIN)
+            for entry in self.hass.config_entries.async_entries(
+                CORE_DOMAIN, include_ignore=False, include_disabled=False
+            )
         )
 
     async def _interview(self, host: str, port: int) -> tuple[DeviceInfo | None, str | None]:
