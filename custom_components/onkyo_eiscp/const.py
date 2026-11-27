@@ -1,7 +1,5 @@
 """Constants for the Onkyo eISCP integration (shared file: changes go through Lead)."""
 
-# ruff: noqa: INP001  (the package __init__.py arrives with P2.S3; remove this line then)
-
 from __future__ import annotations
 
 from datetime import timedelta
@@ -37,6 +35,8 @@ CONF_HIDDEN: Final = "hidden"
 CONF_MAX_VOLUME: Final = "max_volume"
 #: Put the volume back after power-on (the TX-RZ50 jumps to -20 dB).
 CONF_RESTORE_VOLUME: Final = "restore_volume"
+#: Input codes in the order the source list shows them (drag to reorder).
+CONF_INPUT_ORDER: Final = "input_order"
 DEFAULT_RESTORE_VOLUME: Final = True
 
 #: The temperature is not pushed; poll it while its sensor is enabled and the receiver is on.
