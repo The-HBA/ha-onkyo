@@ -52,6 +52,7 @@ class OnkyoCoordinator(DataUpdateCoordinator[ReceiverData]):
         super().__init__(hass, _LOGGER, config_entry=entry, name=DOMAIN, update_interval=None)
         self.receiver = receiver
         self._supported: frozenset[str] = frozenset()
+        self._reloaded = False
         self._remove_listener: Callable[[], None] = _nothing
 
     async def async_start(self) -> None:
@@ -83,8 +84,9 @@ class OnkyoCoordinator(DataUpdateCoordinator[ReceiverData]):
     def _on_change(self, changed: frozenset[str]) -> None:
         data = self._snapshot(changed)
         self.async_set_updated_data(data)
-        if data.connected and data.capabilities.supported != self._supported:
+        grown = data.capabilities.supported - self._supported
+        if data.connected and grown and not self._reloaded:
             # The first probe ran in standby; entities must follow what the receiver really has.
-            self._supported = data.capabilities.supported
+            self._reloaded = True
             _LOGGER.debug("Supported codes changed; reloading the entry once")
             self.hass.config_entries.async_schedule_reload(self.config_entry.entry_id)

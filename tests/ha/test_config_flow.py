@@ -120,11 +120,10 @@ async def test_ssdp_known_receiver_updates_host(
     hass: HomeAssistant, entry: MockConfigEntry
 ) -> None:
     entry.add_to_hass(hass)
-    with patch(READ, AsyncMock()) as read:
+    with patch(READ, AsyncMock(return_value=parse_device_info(NRI))):
         result = await hass.config_entries.flow.async_init(
             DOMAIN, context={"source": config_entries.SOURCE_SSDP}, data=_ssdp("10.0.0.6")
         )
-    read.assert_not_called()
     assert result["type"] is FlowResultType.ABORT
     assert entry.data[CONF_HOST] == "10.0.0.6"
 

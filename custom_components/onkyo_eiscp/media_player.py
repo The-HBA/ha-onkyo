@@ -80,7 +80,7 @@ class OnkyoMainPlayer(OnkyoEntity, MediaPlayerEntity):
         zone = self.coordinator.data.capabilities.zone(ZONE_MAIN)
         top = zone.volume_max if zone else 100
         chosen = self._options.get(CONF_MAX_VOLUME)
-        return min(int(chosen), top) if chosen else top
+        return min(int(chosen), top) if chosen is not None else top
 
     def _raw_volume(self) -> int | None:
         param = self._values.get("MVL", "")

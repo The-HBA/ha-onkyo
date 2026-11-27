@@ -123,3 +123,22 @@ async def test_mode_name_must_be_unique(hass: HomeAssistant, entry: MockConfigEn
         flow_id, {"name": "Direct", "hidden": False}
     )
     assert result["errors"] == {"name": "name_in_use"}
+
+
+async def test_options_need_a_loaded_entry(hass: HomeAssistant, entry: MockConfigEntry) -> None:
+    entry.add_to_hass(hass)  # never set up: not loaded
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "not_loaded"
+
+
+async def test_lowest_maximum_volume_is_kept(hass: HomeAssistant, entry: MockConfigEntry) -> None:
+    await setup(hass, entry)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    flow_id = result["flow_id"]
+    await _menu(hass, flow_id, "volume")
+    await hass.config_entries.options.async_configure(
+        flow_id, {CONF_MAX_VOLUME: -81.5, CONF_RESTORE_VOLUME: True}
+    )
+    result = await _menu(hass, flow_id, "save")
+    assert result["data"][CONF_MAX_VOLUME] == 1

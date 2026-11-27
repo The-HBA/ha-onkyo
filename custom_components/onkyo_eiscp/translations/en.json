@@ -30,16 +30,21 @@
       "cannot_connect": "Cannot reach the receiver. Check the address and that network control is on.",
       "no_identity": "The receiver did not report its identity.",
       "wrong_device": "That address belongs to a different receiver.",
+      "already_configured": "Another entry already uses that address.",
       "unknown": "Unexpected error."
     },
     "abort": {
       "already_configured": "This receiver is already set up.",
+      "core_conflict": "The core Onkyo integration already uses this receiver. The receiver allows one connection per computer, so remove that entry first.",
       "cannot_connect": "Cannot reach the receiver.",
       "reconfigure_successful": "The receiver address was changed.",
       "unique_id_mismatch": "That address belongs to a different receiver."
     }
   },
   "options": {
+    "abort": {
+      "not_loaded": "The receiver is not connected right now. Try again when it is."
+    },
     "step": {
       "init": {
         "title": "Receiver options",

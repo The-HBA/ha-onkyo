@@ -32,7 +32,7 @@ def _enable_custom_integrations(enable_custom_integrations: None) -> None:
 @pytest.fixture(autouse=True)
 def _fast_receiver() -> Iterator[None]:
     """Run the integration's receiver with the short test timings."""
-    with patch("custom_components.onkyo_eiscp.Receiver", partial(Receiver, timing=FAST)):
+    with patch("custom_components.onkyo_eiscp.lib.Receiver", partial(Receiver, timing=FAST)):
         yield
 
 

@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-from unittest.mock import patch
-
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.const import STATE_ON, STATE_UNAVAILABLE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -15,7 +13,7 @@ from pytest_homeassistant_custom_component.components.diagnostics import (
 from pytest_homeassistant_custom_component.typing import ClientSessionGenerator
 
 from custom_components.onkyo_eiscp.const import DOMAIN
-from tests.ha.conftest import MAC, setup
+from tests.ha.conftest import MAC, poll_state, setup
 from tools.eiscp_sim import SimServer
 
 ENTITY = "media_player.onkyo_tx_rz50"
@@ -51,14 +49,14 @@ async def test_unreachable_receiver_retries_later(
     assert dead.state is ConfigEntryState.SETUP_RETRY
 
 
-async def test_entity_unavailable_when_connection_drops(
+async def test_entity_goes_unavailable_and_comes_back(
     hass: HomeAssistant, entry: MockConfigEntry, sim: SimServer
 ) -> None:
     await setup(hass, entry)
-    with patch.object(type(entry.runtime_data.receiver), "connected", False):  # noqa: FBT003
-        entry.runtime_data.async_set_updated_data(entry.runtime_data._snapshot(frozenset({"*"})))
-        await hass.async_block_till_done()
-        assert hass.states.get(ENTITY).state == STATE_UNAVAILABLE  # type: ignore[union-attr]
+    for writer in list(sim._connections):
+        writer.close()
+    await poll_state(hass, None, STATE_UNAVAILABLE)
+    await poll_state(hass, None, STATE_ON)
 
 
 async def test_diagnostics_hide_the_address(

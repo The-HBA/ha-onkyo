@@ -9,6 +9,7 @@ import probatio
 from homeassistant.config_entries import (
     SOURCE_RECONFIGURE,
     ConfigEntry,
+    ConfigEntryState,
     ConfigFlow,
     ConfigFlowResult,
     OptionsFlowWithReload,
@@ -35,6 +36,7 @@ from .const import (
     CONF_MAX_VOLUME,
     CONF_NAME,
     CONF_RESTORE_VOLUME,
+    CORE_DOMAIN,
     DEFAULT_PORT,
     DEFAULT_RESTORE_VOLUME,
     DOMAIN,
@@ -105,6 +107,13 @@ class OnkyoConfigFlow(ConfigFlow, domain=DOMAIN):
             for entry in self._async_current_entries(include_ignore=False)
         )
 
+    def _core_uses(self, host: str) -> bool:
+        """Return True when the core Onkyo integration already uses this host."""
+        return any(
+            entry.data.get(CONF_HOST) == host
+            for entry in self.hass.config_entries.async_entries(CORE_DOMAIN)
+        )
+
     async def _interview(self, host: str, port: int) -> tuple[DeviceInfo | None, str | None]:
         """Read NRI; return the info or an error key."""
         try:
@@ -120,6 +129,8 @@ class OnkyoConfigFlow(ConfigFlow, domain=DOMAIN):
             port = user_input[CONF_PORT]
             if self._host_in_use(host):
                 return self.async_abort(reason="already_configured")
+            if self._core_uses(host):
+                return self.async_abort(reason="core_conflict")
             info, error = await self._interview(host, port)
             if info is not None and not info.mac:
                 error = "no_identity"
@@ -138,12 +149,10 @@ class OnkyoConfigFlow(ConfigFlow, domain=DOMAIN):
         host = urlparse(discovery_info.ssdp_location or "").hostname
         if not host:
             return self.async_abort(reason="cannot_connect")
-        udn = discovery_info.ssdp_udn or ""
-        if ":" in udn and (tail := udn.rsplit("-", 1)[-1]):
-            await self.async_set_unique_id(tail.lower())
-            self._abort_if_unique_id_configured(updates={CONF_HOST: host})
         if self._host_in_use(host):
             return self.async_abort(reason="already_configured")
+        if self._core_uses(host):
+            return self.async_abort(reason="core_conflict")
         info, error = await self._interview(host, DEFAULT_PORT)
         if info is None or not info.mac:
             return self.async_abort(reason=error or "cannot_connect")
@@ -182,7 +191,9 @@ class OnkyoConfigFlow(ConfigFlow, domain=DOMAIN):
             unchanged = (host, port) == (entry.data[CONF_HOST], entry.data.get(CONF_PORT))
             info: DeviceInfo | None = None
             error: str | None = None
-            if not unchanged:
+            if not unchanged and self._host_in_use(host):
+                error = "already_configured"
+            elif not unchanged:
                 # The entry's own connection goes to the old host, so probing a new one is safe.
                 info, error = await self._interview(host, port)
             if error:
@@ -262,7 +273,9 @@ class OnkyoOptionsFlow(OptionsFlowWithReload):
         return str(custom) if custom else table_mode_name(code)
 
     async def async_step_init(self, _user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Show the menu."""
+        """Show the menu (the entry must be loaded: the lists come from the receiver)."""
+        if self.config_entry.state is not ConfigEntryState.LOADED:
+            return self.async_abort(reason="not_loaded")
         return self.async_show_menu(
             step_id="init",
             menu_options=["inputs", "input_order", "listening_modes", "volume", "save"],
@@ -435,7 +448,7 @@ class OnkyoOptionsFlow(OptionsFlowWithReload):
         half_db = bool(zone and zone.half_db)
         if user_input is not None:
             raw = _to_raw(float(user_input[CONF_MAX_VOLUME]), half_db=half_db)
-            raw = min(max(raw, 0), top)
+            raw = min(max(raw, 1), top)
             if raw >= top:
                 self._options.pop(CONF_MAX_VOLUME, None)
             else:
@@ -446,7 +459,7 @@ class OnkyoOptionsFlow(OptionsFlowWithReload):
         shown = _from_raw(current, half_db=half_db)
         selector = NumberSelector(
             NumberSelectorConfig(
-                min=_from_raw(0, half_db=half_db),
+                min=_from_raw(1, half_db=half_db),
                 max=_from_raw(top, half_db=half_db),
                 step=0.5 if half_db else 1,
                 mode=NumberSelectorMode.BOX,

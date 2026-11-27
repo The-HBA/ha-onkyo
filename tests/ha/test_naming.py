@@ -78,7 +78,7 @@ def test_errors_get_translation_keys(error: Exception, key: str) -> None:
     assert raised.value.translation_key == key
 
 
-async def test_supported_change_reloads_once(hass: HomeAssistant, entry: MockConfigEntry) -> None:
+async def test_supported_growth_reloads_once(hass: HomeAssistant, entry: MockConfigEntry) -> None:
     await setup(hass, entry)
     coordinator = entry.runtime_data
     coordinator._supported = frozenset({"PWR"})
@@ -86,3 +86,14 @@ async def test_supported_change_reloads_once(hass: HomeAssistant, entry: MockCon
         coordinator._on_change(frozenset({"PWR"}))
         coordinator._on_change(frozenset({"PWR"}))
     reload.assert_called_once_with(entry.entry_id)
+
+
+async def test_smaller_supported_set_does_not_reload(
+    hass: HomeAssistant, entry: MockConfigEntry
+) -> None:
+    await setup(hass, entry)
+    coordinator = entry.runtime_data
+    coordinator._supported = frozenset(coordinator.data.capabilities.supported | {"ZZZ"})
+    with patch.object(hass.config_entries, "async_schedule_reload") as reload:
+        coordinator._on_change(frozenset({"PWR"}))
+    reload.assert_not_called()
