@@ -117,6 +117,7 @@ class Receiver:
         self._keepalive: asyncio.Task[None] | None = None
         self._reread_task: asyncio.Task[None] | None = None
         self._power_tasks: list[asyncio.Task[None]] = []
+        self._reread_wanted = False
 
     # ----- state ----------------------------------------------------------------------------
 
@@ -396,6 +397,7 @@ class Receiver:
         for task in self._power_tasks:
             task.cancel()
         self._power_tasks.clear()
+        self._reread_wanted = False
 
     def _remember_standby_volume(self) -> None:
         if self._values.get(POWER) == STANDBY:
@@ -443,7 +445,11 @@ class Receiver:
 
     def _schedule_reread(self) -> None:
         if any(not task.done() for task in self._power_tasks):
-            return  # the power-on work does its own, later re-read
+            self._reread_wanted = True  # the power-on work ends with one more re-read
+            return
+        self._start_reread()
+
+    def _start_reread(self) -> None:
         if self._reread_task is not None:
             self._reread_task.cancel()
         self._reread_task = self._spawn(self._reread())
@@ -495,6 +501,9 @@ class Receiver:
             elapsed = max(at, elapsed)
             silent = await self._read(silent)
         await self._read_everything()
+        if self._reread_wanted:  # the input or mode changed while this ran
+            self._reread_wanted = False
+            self._start_reread()  # this task is still in _power_tasks, so no check
 
     async def _read_everything(self) -> None:
         client = self._client

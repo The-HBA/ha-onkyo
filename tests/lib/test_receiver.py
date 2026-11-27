@@ -667,3 +667,22 @@ async def test_a_power_on_does_not_start_the_ordinary_re_read(receiver: Receiver
     receiver._schedule_reread()
     assert receiver._reread_task is None  # power-on work pending: no second re-read
     receiver._power_tasks.pop().cancel()
+
+
+async def test_a_change_during_the_power_on_work_is_read_again_at_its_end(
+    sim: SimServer,
+) -> None:
+    sim.receiver.input_swl["22"] = "-1E"
+    library = Receiver("127.0.0.1", sim.port, timing=FAST)
+    await library.start()
+    try:
+        await library.set("PWR", "00")
+        await poll(lambda: library.values["PWR"] == "00")
+        await library.set("PWR", "01")
+        await poll(lambda: library._reread_wanted is False and bool(library._power_tasks))
+        await library.set("SLI", "22")  # while the power-on work is still pending
+        await poll(lambda: library._reread_wanted)
+        await poll(lambda: not library._reread_wanted, seconds=8)  # the power-on work ended
+        await poll(lambda: library.values.get("SWL") == "-1E")
+    finally:
+        await library.stop()
