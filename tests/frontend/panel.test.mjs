@@ -110,4 +110,19 @@ describe("sidebar page", () => {
       const right = await page.locator("onkyo-panel .right").boundingBox();
       assert.ok(right.x >= left.x + left.width - 1, "settings sit to the right of the card");
     }));
+
+  test("holding a stepper counts from the last value sent", () =>
+    using({}, async (page) => {
+      await page.evaluate(() => { window.hass.callService = async (d, s, data) => { window.hass.calls.push({ d, s, data }); await new Promise((r) => setTimeout(r, 400)); }; });
+      const up = page.locator("onkyo-panel [aria-label='Bass up']");
+      const box = await up.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(900);
+      await page.mouse.up();
+      const values = (await calls(page)).map((c) => c.data.value);
+      assert.ok(values.length >= 3, `${values}`);
+      assert.deepEqual(values, [...values].sort((a, b) => a - b));
+      assert.equal(new Set(values).size, values.length, `repeats: ${values}`);
+    }));
 });

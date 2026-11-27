@@ -12,6 +12,7 @@ const { Remote, esc, icon, optionLabel, pickDevice, receivers, segmented } = sha
 
 const HOLD_DELAY = 450;
 const HOLD_REPEAT = 120;
+const PENDING_MS = 1500;
 
 /** What the page shows, in order. Kinds: number, select, switch, text (a sensor). */
 const SECTIONS = [
@@ -61,6 +62,8 @@ class OnkyoPanel extends HTMLElement {
     this._deviceId = null;
     this._info = null;
     this._seen = [];
+    this._pending = {};
+    this._pendingTimers = {};
   }
 
   set hass(hass) {
@@ -300,8 +303,17 @@ class OnkyoPanel extends HTMLElement {
         const state = this._hass.states[new Remote(this._hass, this._deviceId).entityId(key)];
         if (!state || Number.isNaN(Number(state.state))) return;
         const { min, max, step = 1 } = state.attributes;
-        const next = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, Number(state.state) + Number(value) * step));
-        await this._call("number", "set_value", key, { value: Number(next.toFixed(decimals(step))) });
+        // While a button is held the entity has not answered yet: count from the last value sent.
+        const base = this._pending[key] ?? Number(state.state);
+        const next = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, base + Number(value) * step));
+        const rounded = Number(next.toFixed(decimals(step)));
+        if (rounded === base) return;
+        this._pending[key] = rounded;
+        clearTimeout(this._pendingTimers[key]);
+        this._pendingTimers[key] = setTimeout(() => delete this._pending[key], PENDING_MS);
+        const shown = this._right.querySelector(`[data-value="${key}"]`);
+        if (shown) shown.textContent = `${rounded}${state.attributes.unit_of_measurement ? ` ${state.attributes.unit_of_measurement}` : ""}`;
+        await this._call("number", "set_value", key, { value: rounded });
         return;
       }
       case "sel":

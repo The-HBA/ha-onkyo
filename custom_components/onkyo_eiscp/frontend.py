@@ -37,6 +37,7 @@ from homeassistant.loader import async_get_integration
 from homeassistant.util.hass_dict import HassKey
 
 from .const import DOMAIN
+from .websocket import async_register_commands
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
@@ -96,6 +97,7 @@ async def async_setup_frontend(hass: HomeAssistant) -> None:
             await hass.http.async_register_static_paths(
                 [StaticPathConfig(URL_BASE, str(WWW_DIR), cache_headers=False)]
             )
+            async_register_commands(hass)
             data.static_path_registered = True
         if data.card_url is None:
             integration = await async_get_integration(hass, DOMAIN)
@@ -108,7 +110,7 @@ async def async_update_panel(hass: HomeAssistant, entry_id: str, *, show: bool) 
     """Note whether a receiver wants the sidebar page, then add or remove the page.
 
     Called with ``show=True`` when a receiver is set up and with ``show=False`` when it is
-    unloaded (also before a reload and a removal).
+    removed; a reload keeps the page.
     """
     data = _data(hass)
     async with data.lock:

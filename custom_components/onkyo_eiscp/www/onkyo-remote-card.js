@@ -227,7 +227,11 @@ class OnkyoRemoteCard extends HTMLElement {
     }
     const remote = new Remote(this._hass, deviceId, this._info);
     const unavailable = remote.power === "unavailable";
-    if (this._wasUnavailable && !unavailable) this._infoAt = 0;
+    if (this._wasUnavailable && !unavailable) {
+      // The entry may have reloaded with other options (maximum volume, names).
+      this._info = null;
+      this._infoAt = 0;
+    }
     this._wasUnavailable = unavailable;
     if (deviceId && !this._info && Date.now() - this._infoAt > INFO_RETRY_MS) this._fetchInfo();
     const seen = [this._hass.devices?.[deviceId], this._hass.user?.is_admin, ...Object.values(remote.ids).map((id) => this._hass.states?.[id])];

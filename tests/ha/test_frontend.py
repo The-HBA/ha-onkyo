@@ -186,11 +186,15 @@ async def test_sidebar_page_is_registered_and_follows_the_entry(
     assert custom["module_url"] == PANEL_URL
     assert custom["embed_iframe"] is False
 
+    # A reload (a name change reloads the entry) keeps the page without a gap.
+    assert await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    assert _has_panel(hass)
+
     assert await hass.config_entries.async_unload(entry.entry_id)
+    assert _has_panel(hass)
+
+    await hass.config_entries.async_remove(entry.entry_id)
     await hass.async_block_till_done()
     assert not _has_panel(hass)
     assert hass.data[DATA_FRONTEND].panel_url is None
-
-    assert await hass.config_entries.async_setup(entry.entry_id)
-    await hass.async_block_till_done()
-    assert _has_panel(hass)
