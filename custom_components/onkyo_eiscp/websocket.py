@@ -65,6 +65,8 @@ KIND_MODES: Final = "modes"
 ERR_RECEIVER_NOT_FOUND: Final = "receiver_not_found"
 ERR_INVALID_NAMES: Final = "invalid_names"
 ERR_NAME_IN_USE: Final = "name_in_use"
+#: Longer names do not fit the card's buttons.
+MAX_NAME_LENGTH: Final = 32
 
 _TARGET: Final = {
     probatio.Exclusive(ATTR_ENTRY_ID, "receiver"): str,
@@ -266,6 +268,8 @@ def _new_options(entry: OnkyoConfigEntry, msg: dict[str, Any]) -> dict[str, Any]
     for code, default in defaults.items():
         item = sent.get(code, {})
         name = str(item.get(CONF_NAME, "")).strip()
+        if len(name) > MAX_NAME_LENGTH:
+            raise NamesError(ERR_INVALID_NAMES, f"Names are at most {MAX_NAME_LENGTH} characters")
         hidden = bool(item.get(CONF_HIDDEN, False))
         shown[code] = name or default
         if name == default:

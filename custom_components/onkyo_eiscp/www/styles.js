@@ -46,7 +46,8 @@ export const STYLE = `
 /* segmented grids (ha-control-select style) */
 .seg{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:4px;padding:4px;border-radius:var(--r);background:var(--ctl)}
 .opt{min-height:40px;border-radius:var(--ir);background-color:transparent;padding:3px 6px;font-size:14px;line-height:1.15;text-align:center;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-wrap:normal;hyphens:manual;color:var(--primary-text-color)}
+  display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-wrap:anywhere;overflow:hidden;min-width:0;hyphens:manual;color:var(--primary-text-color)}
+.opt .t{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;max-width:100%}
 .opt small{font-size:11px;color:var(--secondary-text-color);line-height:1.15}
 .opt.sel{background-color:var(--sel);box-shadow:inset 0 0 0 2px var(--primary-color);font-weight:500}
 .opt.pend{box-shadow:inset 0 0 0 2px var(--primary-color);animation:pulse 1s ease-in-out infinite}

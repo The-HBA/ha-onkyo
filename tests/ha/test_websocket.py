@@ -323,3 +323,21 @@ async def test_set_names_needs_an_administrator(
     # Reading is open to every logged-in user.
     await client.send_json_auto_id({"type": "onkyo_eiscp/card_info", "entry_id": entry.entry_id})
     assert (await client.receive_json())["success"]
+
+
+async def test_a_name_too_long_for_the_buttons_is_refused(
+    hass: HomeAssistant, entry: MockConfigEntry, hass_ws_client: WebSocketGenerator
+) -> None:
+    await setup(hass, entry)
+    reply = await _ask(
+        hass,
+        hass_ws_client,
+        {
+            "type": "onkyo_eiscp/set_names",
+            "entry_id": entry.entry_id,
+            "kind": "inputs",
+            "names": {"11": {"name": "x" * 33}},
+        },
+    )
+    assert reply["success"] is False
+    assert reply["error"]["code"] == "invalid_names"

@@ -131,20 +131,32 @@ class OnkyoRemoteCard extends HTMLElement {
 
   _onKeyDown(event) {
     const tab = event.target.closest?.("[role=tab]");
-    if (tab && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
+    if (tab && ["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) {
       const tabs = this._tabs();
       const index = tabs.findIndex((t) => t.id === this._ui.tab);
-      const next = tabs[(index + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      const step = { ArrowRight: 1, ArrowLeft: tabs.length - 1 }[event.key];
+      const next = event.key === "Home" ? tabs[0] : event.key === "End" ? tabs.at(-1) : tabs[(index + step) % tabs.length];
       this._ui.tab = next.id;
       this._render();
       this._in.querySelector("[role=tab][aria-selected=true]")?.focus();
       event.preventDefault();
       return;
     }
-    if (event.target.closest?.("[data-slider]") && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
-      this._act("vol", event.key === "ArrowLeft" || event.key === "ArrowDown" ? "-1" : "1");
-      event.preventDefault();
+    if (event.target.closest?.("[data-slider]")) this._sliderKey(event);
+  }
+
+  _sliderKey(event) {
+    const max = this._info?.volume_max ?? 100;
+    const jumps = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageUp: 10, PageDown: -10 };
+    if (event.key === "Home" || event.key === "End") {
+      this._setVolume(event.key === "Home" ? 0 : 1, true);
+    } else if (jumps[event.key]) {
+      const level = this._ctx.remote.volume(this._ui.volLocal?.level).level ?? 0;
+      this._setVolume(clamp01(Math.round(level * max + jumps[event.key]) / max), true);
+    } else {
+      return;
     }
+    event.preventDefault();
   }
 
   _onPointerDown(event) {

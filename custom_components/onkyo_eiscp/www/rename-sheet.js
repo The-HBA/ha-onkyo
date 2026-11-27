@@ -15,6 +15,7 @@ const GROUPS = [
   ["other", "Other"],
 ];
 const WIDE_PX = 600;
+const MAX_NAME = 24;
 
 /**
  * Open the sheet. `host` is the shadow root (or element) the dialog is added to; `kind` is
@@ -45,7 +46,7 @@ export async function openRenameSheet({ hass, deviceId, host, kind, currentInput
   const shown = (row) => (row.custom.trim() || row.name).trim();
   const rowHtml = (row) => `<div class="rrow ${row.hidden ? "hid" : ""}" data-c="${esc(row.code)}">
       ${isInputs ? `<span class="hnd" aria-label="Drag to reorder" role="img">${icon("drag", 22)}</span>` : ""}
-      <div class="rf"><input value="${esc(row.custom)}" placeholder="${esc(row.name)}" aria-label="Name for ${esc(row.name)}" data-c="${esc(row.code)}">
+      <div class="rf"><input maxlength="${MAX_NAME}" value="${esc(row.custom)}" placeholder="${esc(row.name)}" aria-label="Name for ${esc(row.name)}" data-c="${esc(row.code)}">
       ${row.code === current ? `<div class="cur">Current ${isInputs ? "input" : "mode"}, always shown</div>` : ""}<div class="err" hidden></div></div>
       <button class="rshow pr" role="switch" aria-checked="${!row.hidden}" data-c="${esc(row.code)}"><span class="sw"></span>${row.hidden ? "Hidden" : "Shown"}</button></div>`;
   const body = isInputs

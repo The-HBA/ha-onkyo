@@ -261,7 +261,7 @@ export function segmented(options, { action, key = "", cols = 4, dense = false, 
   return `<div class="seg ${dense ? "dense " : ""}${extra}" style="--cols:${cols}">${options
     .map(
       (o) =>
-        `<button class="opt pr ${o.pending ? "pend" : o.selected ? "sel" : ""}" data-a="${action}"${keyAttr} data-v="${esc(o.value)}">${o.html ?? esc(o.label)}</button>`,
+        `<button class="opt pr ${o.pending ? "pend" : o.selected ? "sel" : ""}" data-a="${action}"${keyAttr} data-v="${esc(o.value)}">${o.html ?? `<span class="t">${esc(o.label)}</span>`}</button>`,
     )
     .join("")}</div>`;
 }

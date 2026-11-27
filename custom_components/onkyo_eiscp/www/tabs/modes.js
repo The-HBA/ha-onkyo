@@ -44,7 +44,7 @@ export default {
   action(ctx, action, value) {
     if (action !== "mode") return false;
     const { remote } = ctx;
-    if (value === remote.modeCode && !ctx.ui.pendingMode) return true;
+    if (ctx.ui.pendingMode || value === remote.modeCode) return true;
     const mode = remote.modes.find((m) => m.code === value);
     if (!mode) return true;
     ctx.ui.pendingMode = { code: value, name: mode.name };
@@ -62,7 +62,9 @@ export default {
 /** "THX Cinema (Neural:X)" shows "(Neural:X)" as a small second line. */
 function modeLabel(h, name) {
   const match = name.match(/^(.*) \((.*)\)$/);
-  return match ? `${h.esc(match[1])}<small>${h.esc(match[2])}</small>` : h.esc(name);
+  return match
+    ? `<span class="t">${h.esc(match[1])}</span><small>${h.esc(match[2])}</small>`
+    : `<span class="t">${h.esc(name)}</span>`;
 }
 
 function signalLabel(ctx) {

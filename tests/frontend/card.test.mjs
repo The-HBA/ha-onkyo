@@ -445,3 +445,43 @@ describe("fit (DESIGN.md Review)", () => {
     }
   });
 });
+
+describe("long names and keys", () => {
+  test("a long unbroken name keeps Main and Modes inside the card", async () => {
+    for (const viewport of [PHONE, SMALL_PHONE]) {
+      const { page } = await open({ viewport, signal: "pcm" });
+      try {
+        await page.evaluate(() => window.hass.set({ inputNames: { "02": { name: "ABCDEFGHIJKLMNOPQRSTUVWX" } }, modeNames: { "08": { name: "ABCDEFGHIJKLMNOPQRSTUVWX" } } }));
+        assert.deepEqual(await fitProblems(page), []);
+        await page.locator("onkyo-remote-card [role=tab]", { hasText: "Modes" }).click();
+        assert.deepEqual(await fitProblems(page), []);
+      } finally {
+        await page.close();
+      }
+    }
+  });
+
+  test("Home and End work on the tab row and the slider", () =>
+    using({}, async (page) => {
+      await page.locator("onkyo-remote-card [role=tab]").first().focus();
+      await page.keyboard.press("End");
+      assert.equal(await page.locator("onkyo-remote-card .p-modes").count(), 1);
+      await page.keyboard.press("Home");
+      assert.equal(await page.locator("onkyo-remote-card .p-main").count(), 1);
+      await page.locator("onkyo-remote-card [data-slider]").focus();
+      await page.keyboard.press("End");
+      await page.keyboard.press("Home");
+      const levels = (await calls(page)).filter((c) => c.service === "volume_set").map((c) => c.data.volume_level);
+      assert.deepEqual(levels, [1, 0]);
+    }));
+
+  test("a second tap on a pending mode sends nothing", () =>
+    using({ signal: "pcm" }, async (page) => {
+      await page.locator("onkyo-remote-card [role=tab]", { hasText: "Modes" }).click();
+      const mode = page.locator("onkyo-remote-card .p-modes .opt", { hasText: "Orchestra" });
+      await mode.click();
+      await mode.click();
+      await page.waitForSelector("onkyo-remote-card .p-modes .opt.sel:has-text('Orchestra')");
+      assert.equal((await calls(page)).filter((c) => c.service === "select_sound_mode").length, 1);
+    }));
+});
