@@ -53,6 +53,8 @@ class Receiver:
         self.powered = self.values.get("PWR", "01") == "01"
         self.signal: str = behavior["start_signal"]
         self.input_modes: dict[str, str] = {self.values["SLI"]: self.values["LMD"]}
+        # SWL (subwoofer level) is stored per input; behavior.json may seed ``input_swl``.
+        self.input_swl: dict[str, str] = dict(behavior.get("input_swl", {}))
         self.last_mode_change: float | None = None
 
     @classmethod
@@ -65,6 +67,11 @@ class Receiver:
     def connect_messages(self) -> list[str]:
         """Pushed to a new connection before any reply (the TX-RZ50 sends ``NJA``)."""
         return list(self.fixture.profile.get("connect_push", []))
+
+    def discovery_answer(self, port: int) -> str:
+        """The answer to ``!xECNQSTN`` over UDP: ``ECN<model>/<port>/XX/<MAC>``."""
+        profile = self.fixture.profile
+        return f"ECN{profile['model']}/{port}/XX/{profile['mac']}"
 
     # ----- entry point ----------------------------------------------------------------------
 
@@ -153,6 +160,9 @@ class Receiver:
             self.values["PWR"] = "00"
             pushes = list(profile.get("power_off_pushes", []))
             self._apply(pushes)
+            if self.values.get("AMT", "00") != "00":  # power-off clears mute
+                self.values["AMT"] = "00"
+                pushes.append("AMT00")
             return Result(broadcast=["PWR00", *pushes])
         self.values["PWR"] = "01"
         for code, value in self.fixture.on.items():
@@ -243,7 +253,10 @@ class Receiver:
             return Result(broadcast=["SLI" + sid])
         behavior = self.fixture.behavior
         pushes = [p for p in (record.pushes if record else ()) if not p.startswith("FLD")]
+        self.input_swl[self.values["SLI"]] = self.values.get("SWL", NA)
         self.values["SLI"] = sid
+        if sid in self.input_swl and self.input_swl[sid] != NA:
+            self.values["SWL"] = self.input_swl[sid]  # not pushed: the client must read it again
         self._apply(pushes)
         self.values.update(behavior.get("input_effects", {}).get(sid, {}))
         old_signal = self.signal

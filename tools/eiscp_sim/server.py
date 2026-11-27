@@ -13,6 +13,7 @@ import contextlib
 import logging
 import struct
 from pathlib import Path
+from typing import Any
 
 from custom_components.onkyo_eiscp.lib.exceptions import EiscpError
 from custom_components.onkyo_eiscp.lib.frame import (
@@ -21,12 +22,47 @@ from custom_components.onkyo_eiscp.lib.frame import (
     MAGIC,
     VERSION,
     FrameParser,
+    parse_data,
 )
 
 from .receiver import Receiver, Result
 
 _LOGGER = logging.getLogger(__name__)
 _HEADER = struct.Struct(">4sIIB3x")
+UDP_END = "\x19\r\n"
+UDP_SIZE = 64  # the real receiver pads the discovery answer with NUL bytes to a fixed size
+
+
+def discovery_packet(message: str) -> bytes:
+    """The UDP answer to ``!xECNQSTN``: ends ``0x19 CR LF`` and is padded with NUL bytes."""
+    data = f"!1{message}{UDP_END}".encode("latin-1")
+    packet = _HEADER.pack(MAGIC, HEADER_SIZE, len(data), VERSION) + data
+    return packet.ljust(UDP_SIZE, b"\x00")
+
+
+class _Discovery(asyncio.DatagramProtocol):
+    """Answers ``!xECNQSTN`` over UDP like the receiver does; anything else gets no answer."""
+
+    def __init__(self, receiver: Receiver, port: int) -> None:
+        self.receiver = receiver
+        self.port = port
+        self.transport: asyncio.DatagramTransport | None = None
+
+    def connection_made(self, transport: asyncio.BaseTransport) -> None:
+        self.transport = transport  # type: ignore[assignment]
+
+    def datagram_received(self, data: bytes, addr: tuple[str | Any, int]) -> None:
+        try:
+            message = parse_data(data[HEADER_SIZE:].decode("latin-1").rstrip("\x00"))
+        except EiscpError:
+            return
+        if (
+            message.unit == "x"
+            and message.code == "ECN"
+            and message.param == "QSTN"
+            and self.transport is not None
+        ):
+            self.transport.sendto(discovery_packet(self.receiver.discovery_answer(self.port)), addr)
 
 
 def reply_packet(message: str) -> bytes:
@@ -45,24 +81,50 @@ class SimServer:
         port: int = 0,
         *,
         one_per_host: bool = True,
+        udp: bool = False,
+        power_on_delay: float = 0.0,
+        power_on_quiet: float = 0.0,
     ) -> None:
-        """Remember the address; call ``start`` to listen (port 0 picks a free port)."""
+        """Remember the address; call ``start`` to listen (port 0 picks a free port).
+
+        ``udp`` also answers discovery (``!xECNQSTN``) on the same port number. The real
+        TX-RZ50 pushes ``PWR01`` about 7.6 s after a power-on set and answers no query for about
+        20 s: ``power_on_delay`` holds the power-on pushes back that many seconds and
+        ``power_on_quiet`` leaves queries unanswered that many seconds after the set.
+        """
         self.receiver = receiver
         self.host = host
         self.port = port
         self.one_per_host = one_per_host
+        self.udp = udp
+        self.power_on_delay = power_on_delay
+        self.power_on_quiet = power_on_quiet
         self._server: asyncio.Server | None = None
+        self._transport: asyncio.DatagramTransport | None = None
         self._connections: dict[asyncio.StreamWriter, str] = {}
+        self._quiet_until = 0.0
+        self._tasks: set[asyncio.Task[None]] = set()
 
     async def start(self) -> None:
         """Start listening."""
         self._server = await asyncio.start_server(self._handle, self.host, self.port)
         self.port = self._server.sockets[0].getsockname()[1]
+        if self.udp:
+            loop = asyncio.get_running_loop()
+            transport, _ = await loop.create_datagram_endpoint(
+                lambda: _Discovery(self.receiver, self.port), local_addr=(self.host, self.port)
+            )
+            self._transport = transport
 
     async def stop(self) -> None:
         """Close every connection and stop listening."""
         for writer in list(self._connections):
             self._drop(writer)
+        for task in list(self._tasks):
+            task.cancel()
+        if self._transport is not None:
+            self._transport.close()
+            self._transport = None
         if self._server is not None:
             self._server.close()
             await self._server.wait_closed()
@@ -97,6 +159,25 @@ class SimServer:
         except OSError, RuntimeError:
             self._drop(writer)
 
+    def _answer(self, code: str, param: str, writer: asyncio.StreamWriter) -> None:
+        loop = asyncio.get_running_loop()
+        if param == "QSTN" and loop.time() < self._quiet_until:
+            return  # right after a power-on the receiver answers no query (pushes still come)
+        was_on = self.receiver.powered
+        result = self.receiver.handle(code, param)
+        if code == "PWR" and not was_on and self.receiver.powered:
+            self._quiet_until = loop.time() + self.power_on_quiet
+            if self.power_on_delay > 0:
+                task = loop.create_task(self._later(result, self.power_on_delay))
+                self._tasks.add(task)
+                task.add_done_callback(self._tasks.discard)
+                return
+        self._send(result, to=writer)
+
+    async def _later(self, result: Result, delay: float) -> None:
+        await asyncio.sleep(delay)
+        self._send(result)
+
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         peer = str(writer.get_extra_info("peername")[0])
         if self.one_per_host:
@@ -110,8 +191,7 @@ class SimServer:
         try:
             while data := await reader.read(4096):
                 for incoming in parser.feed(data):
-                    result = self.receiver.handle(incoming.code, incoming.param)
-                    self._send(result, to=writer)
+                    self._answer(incoming.code, incoming.param, writer)
                 await writer.drain()
         except OSError, EiscpError:
             _LOGGER.debug("connection from %s ended", peer)
@@ -119,9 +199,13 @@ class SimServer:
             self._drop(writer)
 
 
-async def serve(fixture: Path, host: str, port: int, *, one_per_host: bool) -> None:
+async def serve(
+    fixture: Path, host: str, port: int, *, one_per_host: bool, udp: bool = False
+) -> None:
     """Run until interrupted."""
-    server = SimServer(Receiver.from_folder(fixture), host, port, one_per_host=one_per_host)
+    server = SimServer(
+        Receiver.from_folder(fixture), host, port, one_per_host=one_per_host, udp=udp
+    )
     await server.start()
     print(f"simulated receiver on {host}:{server.port} ({fixture.name})")
     with contextlib.suppress(asyncio.CancelledError):
@@ -135,6 +219,9 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=60128)
     parser.add_argument("--many", action="store_true", help="allow several connections per host")
+    parser.add_argument("--udp", action="store_true", help="answer UDP discovery (!xECNQSTN)")
     args = parser.parse_args(argv)
     with contextlib.suppress(KeyboardInterrupt):
-        asyncio.run(serve(args.fixture, args.host, args.port, one_per_host=not args.many))
+        asyncio.run(
+            serve(args.fixture, args.host, args.port, one_per_host=not args.many, udp=args.udp)
+        )
