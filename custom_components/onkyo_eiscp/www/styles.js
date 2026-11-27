@@ -153,6 +153,7 @@ export const STYLE = `
 
 /* zones */
 .zhead{display:flex;align-items:center;gap:12px;min-height:44px;width:100%;text-align:left;background-color:transparent;border-radius:var(--ir);padding:0}
+.zv{flex:1;justify-content:center;margin:0}
 .zhead .n{flex:1}.zhead .n small{display:block;font-size:12px;color:var(--secondary-text-color)}
 
 /* wider layouts */

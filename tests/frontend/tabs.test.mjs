@@ -38,14 +38,14 @@ async function using(options, tab, body) {
 }
 
 describe("tab row", () => {
-  test("a full model has Main, Modes, Remote and Playing, in that order", () =>
+  test("a model with zones has Main, Modes, Remote, Playing and Zones, in that order", () =>
     using({}, null, async (page) => {
-      assert.deepEqual(await card(page, "[role=tab]").allInnerTexts(), ["Main", "Modes", "Remote", "Playing"]);
+      assert.deepEqual(await card(page, "[role=tab]").allInnerTexts(), ["Main", "Modes", "Remote", "Playing", "Zones"]);
     }));
 
-  test("Zones is not built here: no Zones tab even on a model with zones", () =>
-    using({}, null, async (page) => {
-      assert.equal(await card(page, "[role=tab]").filter({ hasText: "Zones" }).count(), 0);
+  test("a model without zones has no Zones tab (RULES.md 4)", () =>
+    using({ model: "small" }, null, async (page) => {
+      assert.deepEqual(await card(page, "[role=tab]").allInnerTexts(), ["Main", "Modes", "Remote", "Playing"]);
     }));
 });
 
@@ -251,11 +251,97 @@ describe("playing tab", () => {
     }));
 });
 
+describe("zones tab", () => {
+  const zoneGroup = (page, label) => card(page, ".p-zones .grp").filter({ hasText: label });
+  const zoneOn = (page, zone) => page.evaluate((id) => { window.hass.rx.zones[id].power = "on"; window.hass.set({}); }, zone);
+
+  test("one group per zone, both off, with a switch row", () =>
+    using({}, "Zones", async (page) => {
+      assert.equal(await card(page, ".p-zones .grp").count(), 2);
+      const two = zoneGroup(page, "Zone 2").locator(".zhead");
+      assert.equal(await two.getAttribute("aria-checked"), "false");
+      assert.match(await two.innerText(), /Zone 2\s+Off/);
+      assert.equal(await card(page, ".p-zones .seg").count(), 0);
+    }));
+
+  test("switching zone 2 on shows its sources, 'Same as main' first selected, and no volume", () =>
+    using({}, "Zones", async (page) => {
+      await zoneGroup(page, "Zone 2").locator(".zhead").click();
+      const [call] = await calls(page);
+      assert.deepEqual([call.service, call.data.entity_id], ["turn_on", "media_player.onkyo_tx_rz50_zone2"]);
+      const group = zoneGroup(page, "Zone 2");
+      assert.match(await group.locator(".zhead").innerText(), /On, Same as main/);
+      assert.equal(await group.locator(".opt.sel").innerText(), "Same as main");
+      assert.ok((await group.locator(".opt").count()) >= 5);
+      assert.equal(await group.locator(".srow").count(), 0);
+      assert.match(await group.locator(".qnote").innerText(), /Volume is fixed on this receiver's zone 2 output/);
+    }));
+
+  test("a source tap selects it for that zone only", () =>
+    using({}, "Zones", async (page) => {
+      await zoneOn(page, "zone2");
+      await zoneGroup(page, "Zone 2").locator(".opt").filter({ hasText: "PS5" }).click();
+      const [call] = await calls(page);
+      assert.deepEqual([call.service, call.data.source, call.data.entity_id], ["select_source", "PS5", "media_player.onkyo_tx_rz50_zone2"]);
+      assert.equal(await zoneGroup(page, "Zone 2").locator(".opt.sel").innerText(), "PS5");
+      assert.match(await zoneGroup(page, "Zone 2").locator(".zhead").innerText(), /On, PS5/);
+    }));
+
+  test("zone 3 refusing power on shows a calm note and a toast, no error dialog", () =>
+    using({}, "Zones", async (page) => {
+      const toasts = [];
+      await page.exposeFunction("onToast", (message) => toasts.push(message));
+      await page.evaluate(() => window.card.addEventListener("hass-notification", (e) => window.onToast(e.detail.message)));
+      await zoneGroup(page, "Zone 3").locator(".zhead").click();
+      await page.waitForTimeout(100);
+      assert.match(await zoneGroup(page, "Zone 3").locator(".qnote").innerText(), /The receiver refused to switch zone 3 on/);
+      assert.equal(await zoneGroup(page, "Zone 3").locator(".zhead").getAttribute("aria-checked"), "false");
+      assert.equal(toasts.length, 1);
+      assert.equal(await card(page, "dialog").count(), 0);
+    }));
+
+  test("a zone with a volume shows mute, minus, the readout in dB and percent, and plus", () =>
+    using({}, "Zones", async (page) => {
+      await page.evaluate(() => { window.hass.rx.zones.zone2.volume = true; });
+      await zoneOn(page, "zone2");
+      const group = zoneGroup(page, "Zone 2");
+      assert.equal(await group.locator(".qnote").count(), 0);
+      assert.match(await group.locator(".zv").innerText(), /−40\.0 dB\s+50 %/);
+      await group.locator("[data-a=zvol][data-v='1']").click();
+      await group.locator("[data-a=zmute]").click();
+      const sent = (await calls(page)).map((c) => c.service);
+      assert.deepEqual(sent.slice(-2), ["volume_up", "volume_mute"]);
+      assert.match(await zoneGroup(page, "Zone 2").locator(".zv").innerText(), /Muted/);
+    }));
+
+  test("turning a zone off hides its sources", () =>
+    using({}, "Zones", async (page) => {
+      await zoneOn(page, "zone2");
+      await zoneGroup(page, "Zone 2").locator(".zhead").click();
+      assert.equal(await zoneGroup(page, "Zone 2").locator(".seg").count(), 0);
+      assert.equal((await calls(page)).at(-1).service, "turn_off");
+    }));
+
+  test("the Zones tab works while the main zone is in standby", () =>
+    using({ power: "standby" }, "Zones", async (page) => {
+      await zoneGroup(page, "Zone 2").locator(".zhead").click();
+      assert.equal((await calls(page))[0].service, "turn_on");
+    }));
+
+  test("an unavailable receiver greys the zones out", () =>
+    using({ power: "unavailable" }, null, async (page) => {
+      assert.equal(await card(page, "[role=tab]").filter({ hasText: "Zones" }).count(), 1);
+      await goTo(page, "Zones");
+      assert.match(await zoneGroup(page, "Zone 2").locator(".zhead").innerText(), /Unavailable/);
+      assert.equal(await zoneGroup(page, "Zone 2").evaluate((el) => getComputedStyle(el).pointerEvents), "none");
+    }));
+});
+
 describe("fit and layout", () => {
   test("the new tabs on a tablet use two columns and fit", async () => {
     const { page, errors } = await openCard(browser, server.url, { viewport: TABLET, wide: true });
     try {
-      for (const label of ["Remote", "Playing"]) {
+      for (const label of ["Remote", "Playing", "Zones"]) {
         await goTo(page, label);
         assert.deepEqual(await fitProblems(page), [], label);
       }
@@ -266,11 +352,28 @@ describe("fit and layout", () => {
   });
 
   for (const viewport of [PHONE, SMALL_PHONE]) {
+    test(`${viewport.width}px: Zones with both zones on and volume shown fits`, async () => {
+      const { page, errors } = await openCard(browser, server.url, { viewport, theme: "dark" });
+      try {
+        await page.evaluate(() => {
+          for (const z of Object.values(window.hass.rx.zones)) { z.power = "on"; z.volume = true; }
+          window.hass.set({});
+        });
+        await goTo(page, "Zones");
+        assert.deepEqual(await fitProblems(page), []);
+        assert.deepEqual(errors, []);
+      } finally {
+        await page.close();
+      }
+    });
+  }
+
+  for (const viewport of [PHONE, SMALL_PHONE]) {
     test(`${viewport.width}px: Remote and Playing stay inside the tab area, light and dark`, async () => {
       for (const theme of ["light", "dark"]) {
         const { page, errors } = await openCard(browser, server.url, { viewport, theme, signal: "dtsx" });
         try {
-          for (const label of ["Remote", "Playing"]) {
+          for (const label of ["Remote", "Playing", "Zones"]) {
             await goTo(page, label);
             assert.deepEqual(await fitProblems(page), [], `${label} ${theme}`);
           }

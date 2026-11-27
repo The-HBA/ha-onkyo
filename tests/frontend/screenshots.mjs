@@ -65,6 +65,35 @@ for (const [theme, signal] of [["dark", "atmos"], ["light", "pcm"]]) {
   await page.close();
 }
 
+{
+  const { page } = await openCard(browser, server.url, { theme: "dark" });
+  await tab(page, "Zones");
+  await shot(page, "card-zones-off");
+  await page.locator("onkyo-remote-card .zhead").nth(1).click();
+  await page.waitForTimeout(150);
+  await shot(page, "card-zones-zone3-refused");
+  await page.evaluate(() => {
+    window.hass.rx.zones.zone2.power = "on";
+    window.hass.rx.zones.zone2.volume = true;
+    window.hass.set({});
+  });
+  await shot(page, "card-zones-zone2-on");
+  await page.close();
+}
+
+{
+  const { page } = await openCard(browser, server.url, { theme: "light", viewport: SMALL_PHONE });
+  await page.evaluate(() => {
+    window.hass.rx.zones.zone2.power = "on";
+    window.hass.rx.zones.zone2.volume = true;
+    window.hass.rx.zones.zone3.power = "on";
+    window.hass.set({});
+  });
+  await tab(page, "Zones");
+  await shot(page, "card-zones-360-both-on");
+  await page.close();
+}
+
 let { page } = await openCard(browser, server.url, { theme: "dark", power: "standby" });
 await shot(page, "card-main-standby");
 await page.close();

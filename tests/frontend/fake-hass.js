@@ -87,6 +87,8 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     selects: { equalizer: "off", dimmer: "bright", digital_filter: "auto", hdmi_output: "main", late_night: "off" },
     switches: { cinema_filter: false, music_optimizer: false },
     keys: [],
+    // Zone 2 powers on with a fixed output level (no volume); zone 3 refuses power on (TX-RZ50).
+    zones: { zone2: { power: "off", source: "80", raw: 40, muted: false, volume: false }, zone3: { power: "off", source: "10", raw: 30, muted: false, volume: false, refuses: true } },
   };
   const calls = [];
   const wsCalls = [];
@@ -126,6 +128,7 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     entities.push(reg("sensor.onkyo_tx_rz50_video_input", "video_input"));
   }
   entities.push(reg("remote.onkyo_tx_rz50_remote", "remote"));
+  for (const zone of spec.zones.slice(1)) entities.push(reg(`media_player.onkyo_tx_rz50_${zone}`, zone));
   entities.push(reg("sensor.onkyo_tx_rz50_temperature", "temperature"));
   for (const item of entities) hass.entities[item.entity_id] = item;
   hass.entities["light.ceiling"] = { entity_id: "light.ceiling", device_id: "device_light", platform: "hue" };
@@ -192,6 +195,20 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
         ? { input_port: video.port, input_resolution: video.res, input_color_format: video.color, input_depth: video.depth, output: "Main", output_resolution: video.outRes, output_color_format: video.color, output_depth: video.depth, hdr: video.hdr }
         : {},
     );
+    for (const zone of spec.zones.slice(1)) {
+      const z = rx.zones[zone];
+      const zid = `media_player.onkyo_tx_rz50_${zone}`;
+      const zonOn = z.power === "on";
+      const zcodes = ["80", ...spec.inputs.map(([c]) => c).slice(0, 8)];
+      const names = zcodes.map((c) => (c === "80" ? "Source" : inputName(c)));
+      states[zid] = mkState(zid, unavailable ? "unavailable" : z.power, unavailable ? {} : {
+        friendly_name: `${spec.label} ${zone}`,
+        source_list: names.slice(1).concat(["Source"]),
+        source_code: z.source,
+        ...(zonOn ? { source: names[zcodes.indexOf(z.source)] ?? "Source", is_volume_muted: z.muted } : {}),
+        ...(zonOn && z.volume ? { volume_level: z.raw / 80, volume_db: z.raw - 80 } : {}),
+      });
+    }
     const mot = "switch.onkyo_tx_rz50_music_optimizer";
     states[mot] = mkState(mot, !on || rx.mode !== "00" ? "unavailable" : rx.switches.music_optimizer ? "on" : "off");
     states["remote.onkyo_tx_rz50_remote"] = mkState("remote.onkyo_tx_rz50_remote", unavailable ? "unavailable" : on ? "on" : "off");
@@ -245,6 +262,23 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     hass.onChange?.();
   };
 
+  const mainPlayerCall = (service, data) => {
+    switch (service) {
+      case "turn_on": rx.power = "on"; break;
+      case "turn_off": rx.power = "standby"; break;
+      case "volume_set": rx.raw = Math.round(data.volume_level * spec.volumeMax); break;
+      case "volume_up": rx.raw = Math.min(spec.volumeMax, rx.raw + 2); break;
+      case "volume_down": rx.raw = Math.max(0, rx.raw - 2); break;
+      case "volume_mute": rx.muted = data.is_volume_muted; break;
+      case "select_source": {
+        const code = spec.inputs.find(([c]) => inputName(c) === data.source)?.[0];
+        if (code) rx.input = code;
+        break;
+      }
+      default:
+    }
+  };
+
   hass.callService = async (domain, service, data = {}) => {
     calls.push({ domain, service, data });
     if (hass.failNext) {
@@ -254,15 +288,29 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     }
     const key = `${domain}.${service}`;
     switch (key) {
-      case "media_player.turn_on": rx.power = "on"; break;
-      case "media_player.turn_off": rx.power = "standby"; break;
-      case "media_player.volume_set": rx.raw = Math.round(data.volume_level * spec.volumeMax); break;
-      case "media_player.volume_up": rx.raw = Math.min(spec.volumeMax, rx.raw + 2); break;
-      case "media_player.volume_down": rx.raw = Math.max(0, rx.raw - 2); break;
-      case "media_player.volume_mute": rx.muted = data.is_volume_muted; break;
-      case "media_player.select_source": {
-        const code = spec.inputs.find(([c]) => inputName(c) === data.source)?.[0];
-        if (code) rx.input = code;
+      case "media_player.turn_on":
+      case "media_player.turn_off":
+      case "media_player.select_source":
+      case "media_player.volume_up":
+      case "media_player.volume_down":
+      case "media_player.volume_mute":
+      case "media_player.volume_set": {
+        const zone = Object.keys(rx.zones).find((id) => data.entity_id.endsWith(`_${id}`));
+        if (zone) {
+          const z = rx.zones[zone];
+          if (service === "turn_on") {
+            if (z.refuses) throw new Error("The receiver refused to switch this zone on. Some models cannot power this zone from the network.");
+            z.power = "on";
+          } else if (service === "turn_off") z.power = "off";
+          else if (service === "select_source") {
+            const names = { Source: "80" };
+            z.source = names[data.source] ?? spec.inputs.find(([c]) => inputName(c) === data.source)?.[0] ?? z.source;
+          } else if (service === "volume_up") z.raw = Math.min(80, z.raw + 1);
+          else if (service === "volume_down") z.raw = Math.max(0, z.raw - 1);
+          else if (service === "volume_mute") z.muted = data.is_volume_muted;
+          break;
+        }
+        mainPlayerCall(service, data);
         break;
       }
       case "media_player.select_sound_mode": {
