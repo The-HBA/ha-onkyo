@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onkyo card test</title>
+<style>
+/* Default Home Assistant theme colours, light and dark. */
+:root.light {
+  --primary-color: #009ac7; --text-primary-color: #ffffff; --primary-background-color: #fafafa;
+  --secondary-background-color: #e5e5e5; --card-background-color: #ffffff; --primary-text-color: #212121;
+  --secondary-text-color: #727272; --disabled-color: #bdbdbd; --divider-color: rgba(0, 0, 0, 0.12);
+  --app-header-text-color: #212121; --error-color: #db4437;
+  --switch-unchecked-track-color: #000; --switch-unchecked-button-color: #fafafa; color-scheme: light;
+}
+:root.dark {
+  --primary-color: #009ac7; --text-primary-color: #ffffff; --primary-background-color: #111111;
+  --secondary-background-color: #282828; --card-background-color: #1c1c1c; --primary-text-color: #e1e1e1;
+  --secondary-text-color: #9b9b9b; --disabled-color: #6f6f6f; --divider-color: rgba(225, 225, 225, 0.12);
+  --app-header-text-color: #e1e1e1; --error-color: #ef5350;
+  --switch-unchecked-track-color: #9b9b9b; --switch-unchecked-button-color: #999999; color-scheme: dark;
+}
+html, body { margin: 0; }
+body { background: var(--primary-background-color); color: var(--primary-text-color); font-family: Roboto, system-ui, sans-serif; }
+/* The dashboard's top bar and a masonry column, as on a phone. */
+.toolbar { height: 56px; display: flex; align-items: center; padding: 0 16px; font-size: 20px; }
+.view { padding: 4px 12px 12px; max-width: var(--view-w, 390px); margin: 0 auto; }
+</style>
+<script>
+  // Stand-ins for Home Assistant's ha-card and ha-form.
+  customElements.define("ha-card", class extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: "open" }).innerHTML = `<style>:host{display:block;
+        background:var(--ha-card-background,var(--card-background-color,#fff));
+        border:1px solid var(--ha-card-border-color,var(--divider-color,#e0e0e0));
+        border-radius:var(--ha-card-border-radius,12px);color:var(--primary-text-color)}</style><slot></slot>`;
+    }
+  });
+  customElements.define("ha-form", class extends HTMLElement {});
+</script>
+</head>
+<body>
+<div class="toolbar">Dark Chamber</div>
+<div class="view" id="view"></div>
+<script type="module">
+  import { DEVICE_ID, makeHass } from "/fake-hass.js";
+  import "/onkyo_eiscp_static/onkyo-remote-card.js?v=test";
+
+  const params = new URLSearchParams(location.search);
+  document.documentElement.className = params.get("theme") || "light";
+  if (params.get("wide")) document.documentElement.style.setProperty("--view-w", "820px");
+
+  window.fake = { DEVICE_ID, makeHass };
+  window.toasts = [];
+  document.addEventListener("hass-notification", (event) => window.toasts.push(event.detail.message));
+  window.mountCard = (options = {}, config = {}) => {
+    const card = document.createElement("onkyo-remote-card");
+    card.setConfig({ type: "custom:onkyo-remote-card", device_id: DEVICE_ID, ...config });
+    const hass = makeHass(options);
+    hass.onChange = () => { card.hass = { ...hass }; };
+    card.hass = { ...hass };
+    document.getElementById("view").replaceChildren(card);
+    window.card = card;
+    window.hass = hass;
+  };
+  window.cardReady = true;
+</script>
+</body>
+</html>

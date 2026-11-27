@@ -11,10 +11,19 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.typing import ConfigType
 
     from .coordinator import OnkyoCoordinator
 
     type OnkyoConfigEntry = ConfigEntry[OnkyoCoordinator]
+
+
+async def async_setup(hass: HomeAssistant, _config: ConfigType) -> bool:
+    """Register the card's websocket commands."""
+    from .websocket import async_register_commands  # noqa: PLC0415
+
+    async_register_commands(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> bool:
@@ -28,8 +37,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> boo
         PLATFORMS,
     )
     from .coordinator import OnkyoCoordinator  # noqa: PLC0415
+    from .frontend import async_setup_frontend, async_update_panel  # noqa: PLC0415
     from .lib import Receiver  # noqa: PLC0415
 
+    # The card and the sidebar page; the receiver is not needed to serve them.
+    await async_setup_frontend(hass)
+    await async_update_panel(hass, entry.entry_id, show=True)
     receiver = Receiver(
         entry.data[CONF_HOST],
         entry.data.get(CONF_PORT, DEFAULT_PORT),
@@ -47,4 +60,16 @@ async def async_unload_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> bo
     """Unload the entities and close the connection."""
     from .const import PLATFORMS  # noqa: PLC0415
 
-    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    from .frontend import async_update_panel  # noqa: PLC0415
+
+    unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unloaded:
+        await async_update_panel(hass, entry.entry_id, show=False)
+    return unloaded
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> None:
+    """Remove the card from the dashboards when the last receiver goes."""
+    from .frontend import async_remove_frontend  # noqa: PLC0415
+
+    await async_remove_frontend(hass, entry)

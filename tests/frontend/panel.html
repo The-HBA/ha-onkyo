@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onkyo panel test</title>
+<style>
+:root.light {
+  --primary-color: #009ac7; --text-primary-color: #ffffff; --primary-background-color: #fafafa;
+  --card-background-color: #ffffff; --primary-text-color: #212121; --secondary-text-color: #727272;
+  --disabled-color: #bdbdbd; --divider-color: rgba(0, 0, 0, 0.12); --error-color: #db4437;
+  --switch-unchecked-track-color: #000; --switch-unchecked-button-color: #fafafa; color-scheme: light;
+}
+:root.dark {
+  --primary-color: #009ac7; --text-primary-color: #ffffff; --primary-background-color: #111111;
+  --card-background-color: #1c1c1c; --primary-text-color: #e1e1e1; --secondary-text-color: #9b9b9b;
+  --disabled-color: #6f6f6f; --divider-color: rgba(225, 225, 225, 0.12); --error-color: #ef5350;
+  --switch-unchecked-track-color: #9b9b9b; --switch-unchecked-button-color: #999999; color-scheme: dark;
+}
+html, body { margin: 0; height: 100%; }
+body { display: flex; background: var(--primary-background-color); color: var(--primary-text-color); font-family: Roboto, system-ui, sans-serif; }
+.sidebar { width: 256px; flex: none; border-right: 1px solid var(--divider-color); }
+body.narrow .sidebar { display: none; }
+#main { flex: 1; min-width: 0; height: 100%; }
+</style>
+<script>
+  customElements.define("ha-card", class extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: "open" }).innerHTML = `<style>:host{display:block;
+        background:var(--ha-card-background,var(--card-background-color,#fff));
+        border:1px solid var(--ha-card-border-color,var(--divider-color,#e0e0e0));
+        border-radius:var(--ha-card-border-radius,12px);color:var(--primary-text-color)}</style><slot></slot>`;
+    }
+  });
+</script>
+</head>
+<body>
+<nav class="sidebar"></nav>
+<div id="main"></div>
+<script type="module">
+  import { DEVICE_ID, makeHass } from "/fake-hass.js";
+  import "/onkyo_eiscp_static/onkyo-panel.js?v=test";
+
+  const params = new URLSearchParams(location.search);
+  document.documentElement.className = params.get("theme") || "light";
+  window.menuToggles = 0;
+  document.addEventListener("hass-toggle-menu", () => window.menuToggles++);
+  window.toasts = [];
+  document.addEventListener("hass-notification", (event) => window.toasts.push(event.detail.message));
+  window.fake = { DEVICE_ID, makeHass };
+  // As Home Assistant's ha-panel-custom does: create the element, set its properties.
+  window.mountPanel = ({ narrow = false, ...options } = {}) => {
+    document.body.classList.toggle("narrow", narrow);
+    const panel = document.createElement("onkyo-panel");
+    const hass = makeHass(options);
+    hass.onChange = () => { panel.hass = { ...hass }; };
+    panel.hass = { ...hass };
+    panel.narrow = narrow;
+    panel.panel = { url_path: "onkyo", title: "Onkyo", icon: "mdi:audio-video", config: {} };
+    document.getElementById("main").replaceChildren(panel);
+    window.panel = panel;
+    window.hass = hass;
+  };
+  window.panelReady = true;
+</script>
+</body>
+</html>
