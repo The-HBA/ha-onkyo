@@ -185,6 +185,11 @@ class Receiver:
         lock = float(self.fixture.profile["mode_lock_seconds"])
         if self.last_mode_change is not None and self.clock() - self.last_mode_change < lock:
             return silent()  # a mode set right after a mode change is ignored, no reply
+        behavior = self.fixture.behavior
+        if param in behavior.get("mode_silent", []):
+            return silent()  # LMD02 gets no reply and no change
+        if param in behavior.get("mode_special", []):
+            return self._whole_house(param)
         if param in {"UP", "DOWN"}:
             step = 1 if param == "UP" else -1
             index = modes.index(current) if current in modes else -step
@@ -192,11 +197,12 @@ class Receiver:
         elif param == "MUSIC":
             target = "0C"
         else:
-            target = param.upper()
+            target = behavior.get("mode_aliases", {}).get(param.upper(), param.upper())
         if target not in modes:
             return refuse("LMD")
         if target == current:
             return Result(broadcast=["LMD" + target])
+        leaving = current == NA and self.values.get("ZPW") == "01"
         self._mark_mode(target)
         names = self.fixture.behavior["mode_names"]
         name = spec["names"].get(target) or names.get(target, target)
@@ -204,6 +210,9 @@ class Receiver:
         record = self._pick("LMD", target)
         extra = [p for p in record.pushes if not p.startswith("FLD")] if record else []
         self._apply(extra)
+        if leaving:  # leaving Whole House Mode switches zone 2 off again
+            self.values["ZPW"] = "00"
+            extra.append("ZPW00")
         return Result(
             broadcast=[
                 "LMD" + target,
@@ -213,6 +222,15 @@ class Receiver:
                 "IFV" + self._ifv(),
             ]
         )
+
+    def _whole_house(self, param: str) -> Result:
+        """``LMD1F`` (Whole House) switches zone 2 on and the main mode reads ``N/A``."""
+        record = self._pick("LMD", param)
+        pushes = list(record.pushes) if record else []
+        self.values["LMD"] = NA
+        self.last_mode_change = self.clock()
+        self._apply(pushes)
+        return Result(broadcast=["LMD" + param, *pushes])
 
     def _sli(self, param: str) -> Result:
         record = self._pick("SLI", param)
@@ -265,10 +283,14 @@ class Receiver:
         rule = self.fixture.behavior["ranges"][code]
         step = int(rule.get("step", 1))
         current = self.values[code]
+        if self.values["LMD"] in rule.get("refuse_modes", []):
+            return refuse(code)
         if code == "TFR":
             return self._tone(param, rule)
-        parse: Callable[[str], int | None] = _hex if code == "MVL" else _signed
-        fmt: Callable[[int], str] = _fmt_hex if code == "MVL" else _fmt_signed(code)
+        parse: Callable[[str], int | None] = {"MVL": _hex, "VOC": _decimal}.get(code, _signed)
+        fmt: Callable[[int], str] = {"MVL": _fmt_hex, "VOC": _fmt_decimal}.get(code) or _fmt_signed(
+            code
+        )
         value = parse(current)
         if param in {"UP", "UP1"}:
             new = None if value is None else value + step
@@ -389,6 +411,14 @@ def _hex(text: str) -> int | None:
         return int(text, 16) if len(text) == 2 else None  # noqa: PLR2004
     except ValueError:
         return None
+
+
+def _decimal(text: str) -> int | None:
+    return int(text) if len(text) == 2 and text.isdigit() else None  # noqa: PLR2004
+
+
+def _fmt_decimal(value: int) -> str:
+    return f"{value:02d}"
 
 
 def _fmt_hex(value: int) -> str:

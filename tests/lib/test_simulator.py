@@ -598,3 +598,54 @@ def test_sanitizer_stops_when_a_private_value_survives(
     with pytest.raises(SystemExit, match="private values"):
         sanitize_capture.sanitize(capture, out)
     assert not out.exists()
+
+
+# ----- what P1.S3b added (2026-11-27) ----------------------------------------------------------
+
+
+def test_digital_filter_accepts_00_and_01(receiver: Receiver) -> None:
+    assert receiver.handle("DGF", "00").broadcast[0] == "DGF00"
+    assert receiver.handle("DGF", "01").broadcast[0] == "DGF01"
+    assert receiver.handle("DGF", "03").broadcast[0] == "DGF03"
+    assert receiver.handle("DGF", "02").broadcast == ["DGF03"]  # still ignored
+
+
+def test_av_sync_range_is_minus_100_to_plus_500(receiver: Receiver) -> None:
+    assert receiver.handle("AVS", "+500").broadcast == ["AVS+500"]
+    assert receiver.handle("AVS", "+505").replies == ["AVSN/A"]
+    assert receiver.handle("AVS", "-100").broadcast == ["AVS-100"]
+    assert receiver.handle("AVS", "-105").replies == ["AVSN/A"]
+
+
+def test_vocal_enhancer_goes_to_5_and_is_refused_in_all_ch_stereo(
+    receiver: Receiver, clock: Clock
+) -> None:
+    assert receiver.handle("VOC", "05").broadcast == ["VOC05"]
+    assert receiver.handle("VOC", "06").replies == ["VOCN/A"]
+    clock.now += 60
+    receiver.handle("LMD", "0C")
+    assert receiver.handle("VOC", "01").replies == ["VOCN/A"]
+
+
+def test_lmd04_becomes_thx_cinema_and_lmd02_gets_no_reply(receiver: Receiver, clock: Clock) -> None:
+    clock.now += 60
+    assert receiver.handle("LMD", "02").broadcast == []
+    assert receiver.handle("LMD", "02").replies == []
+    assert receiver.handle("LMD", "04").broadcast[0] == "LMD84"
+    assert value(receiver, "LMD") == "84"
+    clock.now += 4
+    assert receiver.handle("LMD", "07").replies == ["LMDN/A"]
+
+
+def test_whole_house_mode_switches_zone_2_on_until_the_mode_changes_back(
+    receiver: Receiver, clock: Clock
+) -> None:
+    clock.now += 60
+    pushed = receiver.handle("LMD", "1F").broadcast
+    assert pushed[0] == "LMD1F"
+    assert "ZPW01" in pushed
+    assert value(receiver, "ZPW") == "01"
+    clock.now += 4
+    back = receiver.handle("LMD", "82").broadcast
+    assert "ZPW00" in back
+    assert value(receiver, "ZPW") == "00"
