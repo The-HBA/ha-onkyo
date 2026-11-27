@@ -141,3 +141,19 @@ async def test_garbage_from_the_receiver_closes_the_connection() -> None:
     await client.close()
     server.close()
     await server.wait_closed()
+
+
+async def test_a_socket_error_on_send_is_a_closed_connection(client: EiscpClient) -> None:
+    class Broken:
+        def write(self, _: bytes) -> None:
+            raise BrokenPipeError
+
+        def close(self) -> None:
+            pass
+
+        async def wait_closed(self) -> None:
+            pass
+
+    client._writer = Broken()  # type: ignore[assignment]
+    with pytest.raises(ConnectionClosedError, match="connection lost"):
+        await client.send("PWRQSTN")

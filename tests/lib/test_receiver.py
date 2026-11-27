@@ -312,13 +312,17 @@ async def test_a_successful_set_clears_an_old_refusal(receiver: Receiver) -> Non
     await poll(lambda: "TFR" in changes.codes())
 
 
-async def test_a_refused_set_does_not_mark_the_code_na_for_every_mode(receiver: Receiver) -> None:
+async def test_a_refused_set_is_remembered_for_that_mode_only(receiver: Receiver) -> None:
     with pytest.raises(NotAvailableError):
         await receiver.set("DIM", "03")
-    assert "DIM" in receiver.unavailable
+    assert receiver.refused_options == {"DIM": frozenset({"03"})}
     await receiver.set("LMD", "84")
-    await poll(lambda: "DIM" not in receiver.unavailable)
+    await poll(lambda: receiver.refused_options == {})
     assert await receiver.query("DIM") == "00"
+
+
+def test_unknown_codes_are_not_option_level() -> None:
+    assert not receiver_module()._option_level("ZZZ")
 
 
 async def test_a_query_that_answers_na_is_unavailable_until_it_answers_a_value(
@@ -598,3 +602,68 @@ async def test_stopping_drops_a_report_that_was_about_to_go_out(receiver: Receiv
     await receiver.stop()
     await asyncio.sleep(0.05)
     assert changes.sets == []
+
+
+# ----- review findings -------------------------------------------------------------------------
+
+
+async def test_a_refused_option_does_not_make_the_whole_code_unavailable(
+    receiver: Receiver,
+) -> None:
+    changes = Changes(receiver)
+    with pytest.raises(NotAvailableError):
+        await receiver.set("LTN", "02")  # High is refused with PCM
+    assert "LTN" not in receiver.unavailable
+    assert receiver.refused_options == {"LTN": frozenset({"02"})}
+    await poll(lambda: "LTN" in changes.codes())
+    assert await receiver.set("LTN", "01") == "01"  # Low still works
+    await receiver.set("LMD", "00")
+    await poll(lambda: receiver.refused_options == {})  # another mode, nothing remembered there
+    await receiver.set("LMD", "82")
+    await poll(lambda: receiver.refused_options == {"LTN": frozenset({"02"})})
+    receiver._refused_options.add(("LTN", "03", "82"))
+    assert await receiver.set("LTN", "03") == "03"  # a later success clears it
+    assert "03" not in receiver.refused_options["LTN"]
+
+
+async def test_a_switch_refusal_is_still_code_level(receiver: Receiver) -> None:
+    with pytest.raises(NotAvailableError):
+        await receiver.set("MOT", "01")
+    assert "MOT" in receiver.unavailable
+    assert "MOT" not in receiver.refused_options
+
+
+async def test_stopping_during_a_reconnect_probe_closes_the_new_connection(
+    sim: SimServer, receiver: Receiver
+) -> None:
+    for writer in list(sim._connections):
+        sim._drop(writer)
+    await poll(lambda: not receiver.connected)
+    await poll(lambda: sim.connection_count == 1, seconds=5)  # the new client is probing
+    assert not receiver.connected
+    await receiver.stop()
+    await poll(lambda: sim.connection_count == 0)
+
+
+async def test_codes_that_stay_silent_after_a_reconnect_are_forgotten(
+    sim: SimServer, receiver: Receiver
+) -> None:
+    assert "DLC" in receiver.values
+    sim.receiver.handle("PWR", "00")  # standby while we were away: DLC is silent now
+    for writer in list(sim._connections):
+        sim._drop(writer)
+    await poll(lambda: "DLC" not in receiver.values, seconds=5)
+    assert receiver.values["PWR"] == "00"
+
+
+async def test_a_power_on_does_not_start_the_ordinary_re_read(receiver: Receiver) -> None:
+    await receiver.set("PWR", "00")
+    await poll(lambda: receiver.values["PWR"] == "00")
+    await asyncio.sleep(0.2)
+    receiver._schedule_reread()
+    await asyncio.sleep(0.1)
+    receiver._power_tasks.append(asyncio.create_task(asyncio.sleep(1)))
+    receiver._reread_task = None
+    receiver._schedule_reread()
+    assert receiver._reread_task is None  # power-on work pending: no second re-read
+    receiver._power_tasks.pop().cancel()

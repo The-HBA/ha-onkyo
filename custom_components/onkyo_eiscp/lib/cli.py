@@ -50,7 +50,7 @@ async def _discover(args: argparse.Namespace) -> int:
 
 
 async def _info(args: argparse.Namespace) -> int:
-    receiver = Receiver(args.host, args.port)
+    receiver = Receiver(args.host, args.port, restore_volume=False)
     capabilities = await receiver.start()
     try:
         print(f"{capabilities.brand} {capabilities.model}  firmware {capabilities.firmware}")
@@ -66,7 +66,7 @@ async def _info(args: argparse.Namespace) -> int:
 
 
 async def _read(args: argparse.Namespace) -> int:
-    receiver = Receiver(args.host, args.port)
+    receiver = Receiver(args.host, args.port, restore_volume=False)
     await receiver.start()
     try:
         for code in args.codes or DEFAULT_CODES:
@@ -80,7 +80,7 @@ async def _read(args: argparse.Namespace) -> int:
 
 
 async def _listen(args: argparse.Namespace) -> int:
-    receiver = Receiver(args.host, args.port)
+    receiver = Receiver(args.host, args.port, restore_volume=False)
     await receiver.start()
     try:
         seen: set[str] = set()

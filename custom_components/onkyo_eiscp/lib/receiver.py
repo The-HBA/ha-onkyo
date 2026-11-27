@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING, Any, Final
 
 from .capabilities import Capabilities, probe, queryable_codes, read_codes, supported_codes
 from .client import DEFAULT_PORT, NOT_AVAILABLE, EiscpClient
-from .commands import COMMANDS, Reply
+from .commands import COMMANDS, Reply, Value
 from .exceptions import (
     ConnectionClosedError,
     EiscpError,
@@ -99,11 +99,13 @@ class Receiver:
         self._values: dict[str, str] = {}
         self._na: set[str] = set()
         self._refused: set[tuple[str, str]] = set()
+        self._refused_options: set[tuple[str, str, str]] = set()
         self._sets_in_flight: Counter[str] = Counter()
         self._listeners: list[Callable[[frozenset[str]], None]] = []
         self._pending: set[str] = set()
         self._flush_handle: asyncio.Handle | None = None
         self._last_unavailable: frozenset[str] = frozenset()
+        self._last_options: Mapping[str, frozenset[str]] = {}
         self._connected = False
         self._probing = False
         self._stopping = False
@@ -141,6 +143,21 @@ class Receiver:
         """Codes that answered ``N/A``, and codes refused under the current listening mode."""
         mode = self._values.get(MODE)
         return frozenset(self._na | {code for code, at in self._refused if at == mode})
+
+    @property
+    def refused_options(self) -> Mapping[str, frozenset[str]]:
+        """Parameters of multi-option codes (``LTN``, ``DIM``) refused under the current mode.
+
+        A refused option does not make the whole code unavailable: ``LTN02`` is refused with PCM
+        while ``LTN01`` works. Switches and numbers (two options or none) are reported through
+        ``unavailable`` instead.
+        """
+        mode = self._values.get(MODE)
+        found: dict[str, set[str]] = {}
+        for code, param, at in self._refused_options:
+            if at == mode:
+                found.setdefault(code, set()).add(param)
+        return {code: frozenset(params) for code, params in found.items()}
 
     def add_listener(self, callback: Callable[[frozenset[str]], None]) -> Callable[[], None]:
         """Call ``callback(changed)`` after each batch of messages that changed something.
@@ -209,6 +226,7 @@ class Receiver:
         """Open the connection and read what it supports; one failure type for callers."""
         self._na.clear()
         self._refused.clear()
+        self._refused_options.clear()
         try:
             await client.connect(CONNECT_TIMEOUT)
             self._capabilities = await probe(
@@ -251,13 +269,19 @@ class Receiver:
                 await asyncio.sleep(self.timing.mode_spacing)  # the receiver was still busy
                 reply = await self._send_set(client, code, param)
         except NotAvailableError:
-            self._refused.add((code, self._values.get(MODE, "")))
+            mode = self._values.get(MODE, "")
+            if _option_level(code):
+                self._refused_options.add((code, param, mode))
+            else:
+                self._refused.add((code, mode))
             self._mark(code)
             raise
         finally:
             self._sets_in_flight[code] -= 1
-        if (code, self._values.get(MODE, "")) in self._refused:
-            self._refused.discard((code, self._values.get(MODE, "")))
+        mode = self._values.get(MODE, "")
+        if (code, mode) in self._refused or (code, param, mode) in self._refused_options:
+            self._refused.discard((code, mode))
+            self._refused_options.discard((code, param, mode))
             self._mark(code)
         if code in AUDIO_CODES:
             self._last_audio = asyncio.get_running_loop().time()
@@ -391,6 +415,13 @@ class Receiver:
         unavailable = self.unavailable
         changed |= unavailable ^ self._last_unavailable
         self._last_unavailable = unavailable
+        options = self.refused_options
+        changed |= {
+            code
+            for code in options.keys() | self._last_options.keys()
+            if options.get(code) != self._last_options.get(code)
+        }
+        self._last_options = options
         for callback in list(self._listeners):
             try:
                 callback(frozenset(changed))
@@ -411,6 +442,8 @@ class Receiver:
             _LOGGER.error("background task failed", exc_info=error)
 
     def _schedule_reread(self) -> None:
+        if any(not task.done() for task in self._power_tasks):
+            return  # the power-on work does its own, later re-read
         if self._reread_task is not None:
             self._reread_task.cancel()
         self._reread_task = self._spawn(self._reread())
@@ -503,6 +536,13 @@ class Receiver:
             return
         _LOGGER.warning("could not put the volume back to %s after power-on", volume)
 
+    def _drop_stale_values(self) -> None:
+        """After a reconnect, forget known codes that did not answer the new probe."""
+        answered = self.capabilities.values
+        for code in [c for c in self._values if c in COMMANDS and c not in answered]:
+            del self._values[code]
+            self._mark(code)
+
     # ----- connection supervision -----------------------------------------------------------
 
     async def _keep_alive(self, client: EiscpClient) -> None:
@@ -549,11 +589,27 @@ class Receiver:
                 _LOGGER.debug("reconnect to %s failed: %s", self.host, err)
                 await client.close()
                 continue
+            except BaseException:  # stop() cancels this task: do not leave the connection open
+                await client.close()
+                raise
             finally:
                 self._probing = False
+            self._drop_stale_values()
             self._client = client
             self._connected = True
             self._remember_standby_volume()
             self._keepalive = asyncio.create_task(self._keep_alive(client))
             self._mark(ALL_CHANGED)
             return
+
+
+def _option_level(code: str) -> bool:
+    """Say whether a refusal means one parameter is refused, not the whole code.
+
+    That is every code that is not a plain switch or a number: enums with more than two options
+    (``LTN``, ``DIM``) and enums without a list (``SLI``, ``LMD``).
+    """
+    command = COMMANDS.get(code)
+    if command is None or command.value is not Value.ENUM:
+        return False
+    return len(command.options) != 2  # noqa: PLR2004

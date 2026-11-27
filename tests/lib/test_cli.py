@@ -146,3 +146,25 @@ def test_the_command_line_has_no_way_to_write() -> None:
 def test_a_value_that_cannot_be_decoded_is_shown_as_it_came() -> None:
     assert cli._show("MVL", "ZZ") == "MVL ZZ"
     assert cli._show("QQQ", "01") == "QQQ 01"
+
+
+async def test_the_command_line_never_puts_the_volume_back(
+    sim: SimServer, capsys: pytest.CaptureFixture[str]
+) -> None:
+    sim.receiver.handle("PWR", "00")
+    listening = asyncio.create_task(
+        run("listen", "--host", "127.0.0.1", "--port", str(sim.port), "--seconds", "1.6")
+    )
+    await asyncio.sleep(0.6)
+    await other_host_sends(sim, "PWR01")  # the receiver comes up at 7C
+    assert await listening == 0
+    assert sim.receiver.values["MVL"] == "7C"  # a library set would have put 4C back
+    assert "MVL 7C" in capsys.readouterr().out
+
+
+async def other_host_sends(sim: SimServer, message: str) -> None:
+    _, writer = await asyncio.open_connection("127.0.0.1", sim.port, local_addr=("127.0.0.2", 0))
+    writer.write(encode(message))
+    await writer.drain()
+    await asyncio.sleep(0.05)
+    writer.close()

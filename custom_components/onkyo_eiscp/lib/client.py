@@ -91,8 +91,12 @@ class EiscpClient:
         if self._writer is None or self._closed.is_set():
             msg = self.close_reason or "not connected"
             raise ConnectionClosedError(msg)
-        self._writer.write(encode(message))
-        await self._writer.drain()
+        try:
+            self._writer.write(encode(message))
+            await self._writer.drain()
+        except OSError as err:
+            msg = f"connection lost: {err}"
+            raise ConnectionClosedError(msg) from err
 
     async def query(self, code: str, timeout: float = 2.0) -> str:  # noqa: ASYNC109
         """Ask for ``code`` and return its parameter (``N/A`` included).
