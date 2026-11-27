@@ -27,6 +27,8 @@ if TYPE_CHECKING:
 MODE: Final = "LMD"
 AUDIO_INFO: Final = "IFA"
 INPUT: Final = "SLI"
+#: Zone 2 and 3 source code that makes the zone follow the main zone ("Source").
+ZONE_FOLLOWS_MAIN: Final = "80"
 PCM: Final = "pcm"
 ATMOS: Final = "atmos"
 

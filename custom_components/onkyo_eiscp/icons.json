@@ -30,6 +30,14 @@
     },
     "remote": {
       "remote": { "default": "mdi:remote" }
+    },
+    "media_player": {
+      "zone2": { "default": "mdi:speaker-multiple" },
+      "zone3": { "default": "mdi:speaker-multiple" }
     }
+  },
+  "services": {
+    "send_raw": { "service": "mdi:console" },
+    "survey": { "service": "mdi:clipboard-list-outline" }
   }
 }

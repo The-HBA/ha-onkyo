@@ -11,10 +11,19 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.typing import ConfigType
 
     from .coordinator import OnkyoCoordinator
 
     type OnkyoConfigEntry = ConfigEntry[OnkyoCoordinator]
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: ARG001
+    """Register the actions once for the whole integration."""
+    from .services import async_setup_services  # noqa: PLC0415
+
+    async_setup_services(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> bool:
@@ -30,7 +39,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> boo
     from .coordinator import OnkyoCoordinator  # noqa: PLC0415
     from .frontend import async_setup_frontend, async_update_panel  # noqa: PLC0415
     from .lib import Receiver  # noqa: PLC0415
+    from .repairs import async_check_core_conflict  # noqa: PLC0415
 
+    # Core `onkyo` on the same host would push this connection off (one per host).
+    async_check_core_conflict(hass, entry)
     # The card and the sidebar page; the receiver is not needed to serve them.
     await async_setup_frontend(hass)
     await async_update_panel(hass, entry.entry_id, show=True)
@@ -59,6 +71,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> bo
 async def async_remove_entry(hass: HomeAssistant, entry: OnkyoConfigEntry) -> None:
     """Remove the card from the dashboards when the last receiver goes."""
     from .frontend import async_remove_frontend, async_update_panel  # noqa: PLC0415
+    from .repairs import async_clear_core_conflict  # noqa: PLC0415
 
+    async_clear_core_conflict(hass, entry)
     await async_update_panel(hass, entry.entry_id, show=False)
     await async_remove_frontend(hass, entry)

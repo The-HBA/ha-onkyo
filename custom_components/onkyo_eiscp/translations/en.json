@@ -113,6 +113,12 @@
     "media_player": {
       "main": {
         "name": "Main zone"
+      },
+      "zone2": {
+        "name": "Zone 2"
+      },
+      "zone3": {
+        "name": "Zone 3"
       }
     },
     "select": {
@@ -242,7 +248,7 @@
       "message": "The receiver is not connected."
     },
     "zone_power_refused": {
-      "message": "The receiver refused to switch this zone on."
+      "message": "The receiver refused to switch this zone on. Some models cannot power this zone from the network."
     },
     "unknown_source": {
       "message": "Unknown source: {name}."
@@ -255,6 +261,48 @@
     },
     "unknown_remote_key": {
       "message": "Unknown remote key: {name}."
+    },
+    "unknown_entry": {
+      "message": "{entry} is not a receiver of this integration."
+    }
+  },
+  "issues": {
+    "core_conflict": {
+      "title": "The core Onkyo integration uses the same receiver",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Remove the core Onkyo entry",
+            "description": "{title} at {host} is also set up in the core Onkyo integration. The receiver allows one connection per computer, so the two push each other off. Submit to remove the core Onkyo entry; automations and dashboards that use its entities must be pointed at this integration's entities."
+          }
+        }
+      }
+    }
+  },
+  "services": {
+    "send_raw": {
+      "name": "Send raw message",
+      "description": "Send one eISCP message (for example PWRQSTN) to the receiver and return the messages it sends back in the next second. For administrators.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Receiver",
+          "description": "The receiver to send to."
+        },
+        "message": {
+          "name": "Message",
+          "description": "The command and parameter, without the leading !1."
+        }
+      }
+    },
+    "survey": {
+      "name": "Survey receiver",
+      "description": "Ask the receiver for every known code (read only) and return the answers as a capture. Share it to help support another model. For administrators.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Receiver",
+          "description": "The receiver to survey."
+        }
+      }
     }
   }
 }
