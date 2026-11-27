@@ -1,0 +1,20 @@
+send_raw:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: onkyo_eiscp
+    message:
+      required: true
+      example: "PWRQSTN"
+      selector:
+        text:
+
+survey:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: onkyo_eiscp
