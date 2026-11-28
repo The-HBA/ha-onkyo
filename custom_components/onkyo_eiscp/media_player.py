@@ -352,15 +352,23 @@ class OnkyoZonePlayer(OnkyoEntity, MediaPlayerEntity):
     @property
     def source_list(self) -> list[str]:
         """Return the zone's inputs by their clean names, then ``Source``."""
-        names = [self._source_name(code) for code in self._source_codes()]
-        if (current := self.source) and current not in names:
-            names.append(current)
-        return names
+        return [self._source_name(code) for code in self._listed_codes()]
+
+    def _listed_codes(self) -> list[str]:
+        """Return the codes behind ``source_list``, in the same order."""
+        codes = self._source_codes()
+        current = self._values.get(self._source)
+        if current and current != "N/A" and current not in codes:
+            codes.append(current)
+        return codes
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
-        """Return the dB volume and the source code (for the card)."""
-        attributes: dict[str, Any] = {"source_code": self._values.get(self._source)}
+        """Return the dB volume and the source codes (for the card)."""
+        attributes: dict[str, Any] = {
+            "source_code": self._values.get(self._source),
+            "source_codes": self._listed_codes(),
+        }
         raw = self._raw_volume()
         zone = self.coordinator.data.capabilities.zone(self._zone)
         if raw is not None and zone is not None and self._has_volume:

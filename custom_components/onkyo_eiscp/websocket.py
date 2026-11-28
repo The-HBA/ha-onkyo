@@ -42,7 +42,7 @@ from .const import (
 )
 from .lib import CodecError
 from .lib.codecs import decode_slots
-from .lib.commands import LISTENING_MODES
+from .lib.commands import COMMANDS, LISTENING_MODES
 from .naming import ordered_input_codes, table_mode_name
 
 if TYPE_CHECKING:
@@ -164,6 +164,11 @@ def card_info(hass: HomeAssistant, entry: OnkyoConfigEntry, version: str | None)
         "volume_max": _volume_max(entry, caps),
         "volume_db_step": 0.5 if zone and zone.half_db else None,
         "dirac_slots": _filled_slots(dict(data.values)),
+        "remote_keys": [
+            COMMANDS["OSD"].options[param]
+            for param in caps.options.get("OSD", ())
+            if param in COMMANDS["OSD"].options
+        ],
         "listening_mode_groups": {
             code: LISTENING_MODES[code].group.value
             for code in caps.listening_modes

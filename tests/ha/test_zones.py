@@ -53,6 +53,10 @@ async def test_zone_sources_follow_the_zone_mask(
     assert "Source" in zone_sources
     assert "Source" not in main_sources
     assert len(zone_sources) == len(set(zone_sources))
+    # The codes run parallel to the names, so the card finds "follow the main zone" by code 80.
+    attrs = hass.states.get(ZONE2).attributes  # type: ignore[union-attr]
+    assert len(attrs["source_codes"]) == len(zone_sources)
+    assert attrs["source_codes"][zone_sources.index("Source")] == "80"
     assert set(zone_sources[:-1]) <= set(main_sources)
 
 

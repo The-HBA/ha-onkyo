@@ -5,12 +5,13 @@ const ZONES = [
   ["zone2", "Zone 2"],
   ["zone3", "Zone 3"],
 ];
-const FOLLOWS_MAIN = "Source";
+// Source code 80 is the receiver's "follow the main zone" input; its name is not shown as is.
+const FOLLOWS_MAIN = "80";
 
 const key = (zone) => `media_player.${zone}`;
 const usable = (state) => Boolean(state) && !["unavailable", "unknown"].includes(state.state);
 const present = (ctx) => ZONES.filter(([zone]) => ctx.remote.entityId(key(zone)));
-const sourceLabel = (name) => (name === FOLLOWS_MAIN ? "Same as main" : name);
+const sourceLabel = (code, name) => (code === FOLLOWS_MAIN ? "Same as main" : name);
 
 export default {
   id: "zones",
@@ -76,16 +77,17 @@ function zoneGroup(ctx, zone, label) {
   const attrs = player?.attributes ?? {};
   const known = usable(player);
   const on = player?.state === "on";
-  const source = on && attrs.source ? sourceLabel(attrs.source) : "";
+  const source = on && attrs.source ? sourceLabel(attrs.source_code, attrs.source) : "";
   const sub = !known ? "Unavailable" : on ? (source ? `On, ${source}` : "On") : "Off";
   const head = `<button class="zhead pr" role="switch" aria-checked="${on}" data-a="zpower" data-k="${zone}" data-v="${on ? "off" : "on"}">
       <span class="n"><b>${label}</b><small>${h.esc(sub)}</small></span><span class="sw"></span></button>`;
   const parts = [head];
 
   if (on) {
-    const options = (attrs.source_list ?? []).map((name) => ({
+    const codes = attrs.source_codes ?? [];
+    const options = (attrs.source_list ?? []).map((name, index) => ({
       value: name,
-      label: sourceLabel(name),
+      label: sourceLabel(codes[index], name),
       selected: name === attrs.source,
     }));
     if (options.length) parts.push(h.segmented(options, { action: "zsource", key: zone, cols: 3, dense: true, extra: "zs" }));
