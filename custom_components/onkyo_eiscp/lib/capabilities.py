@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from .codecs import DeviceInfo, parse_device_info
 from .commands import COMMANDS, LISTENING_MODES, NEVER_OFFER_MODES, Kind, Value
@@ -140,6 +140,30 @@ def supported_codes(answers: Mapping[str, str]) -> frozenset[str]:
     return frozenset(supported)
 
 
+#: OSD keys that NRI switches off with a control of value "0" (a missing control keeps the key).
+_OSD_CONTROLS: Final = {
+    "HOME": ("Home",),
+    "QUICK": ("Quick",),
+    "UP": ("Cursor",),
+    "DOWN": ("Cursor",),
+    "LEFT": ("Cursor",),
+    "RIGHT": ("Cursor",),
+    "ENTER": ("Cursor",),
+    # MENU is the Setup key; the Menu control alone does not turn it off (survey session 21).
+    "MENU": ("Setup", "Menu"),
+}
+
+
+def _osd_keys(keys: tuple[str, ...], controls: Mapping[str, str]) -> tuple[str, ...]:
+    """Drop the remote keys NRI says the model does not have."""
+
+    def kept(key: str) -> bool:
+        names = [name for name in _OSD_CONTROLS.get(key, ()) if name in controls]
+        return not names or any(controls[name] != "0" for name in names)
+
+    return tuple(key for key in keys if kept(key))
+
+
 def build(info: DeviceInfo, answers: Mapping[str, str]) -> Capabilities:
     """Combine NRI and the probe's answers into ``Capabilities``."""
     profile = find_profile(info.model)
@@ -151,6 +175,8 @@ def build(info: DeviceInfo, answers: Mapping[str, str]) -> Capabilities:
     }
     if profile is not None:
         options.update(profile.options)
+    if "OSD" in options:
+        options["OSD"] = _osd_keys(options["OSD"], info.controls)
     return Capabilities(
         model=info.model,
         brand=info.brand,

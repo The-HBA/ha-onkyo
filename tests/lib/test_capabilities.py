@@ -132,3 +132,30 @@ def test_tx_rz50_profile_matches_the_fixture() -> None:
     assert list(profile.listening_modes) == [
         c for c in LISTENING_MODES if c in profile.listening_modes
     ]
+
+
+def _osd_keys(nri: str) -> tuple[str, ...]:
+    return capabilities.build(parse_device_info(nri), {}).options["OSD"]
+
+
+def test_remote_keys_follow_the_nri_controls() -> None:
+    keys = _osd_keys(NRI)
+    # The TX-RZ50 says Home is 0; Menu is 0 too, but Setup (also the MENU key) is 1.
+    assert "HOME" not in keys
+    assert {"UP", "ENTER", "EXIT", "MENU", "QUICK", "AUDIO", "VIDEO"} <= set(keys)
+
+
+def test_remote_keys_keep_home_when_nri_allows_it_or_says_nothing() -> None:
+    assert "HOME" in _osd_keys(NRI.replace('id="Home" value="0"', 'id="Home" value="1"'))
+    assert "HOME" in _osd_keys(
+        NRI.replace('<control id="Home" value="0" code="HOME" position="2" />', "")
+    )
+
+
+def test_remote_keys_drop_what_nri_switches_off() -> None:
+    off = NRI.replace('id="Cursor" value="1"', 'id="Cursor" value="0"').replace(
+        'id="Setup" value="1"', 'id="Setup" value="0"'
+    )
+    keys = _osd_keys(off)
+    assert not {"UP", "DOWN", "LEFT", "RIGHT", "ENTER", "MENU"} & set(keys)
+    assert {"EXIT", "AUDIO", "VIDEO", "QUICK"} <= set(keys)

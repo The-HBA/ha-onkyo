@@ -16,7 +16,7 @@ export default {
 
   render(ctx) {
     const { h } = ctx;
-    // The sidebar page needs an administrator (DESIGN.md), so the link shows only to one.
+    // DESIGN.md makes the settings link an administrator row.
     const link = ctx.admin
       ? `<button class="setlink pr wide" data-a="settings">${h.icon("cog", 22)}<span class="n">Receiver settings<small>Tone, levels, setup and names</small></span>${h.icon("right", 22)}</button>`
       : "";

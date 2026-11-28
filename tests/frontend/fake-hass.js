@@ -236,7 +236,7 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     entry_id: "entry1",
     device_id: DEVICE_ID,
     model: spec.label.replace("Onkyo ", ""),
-    version: "0.0.3",
+    version: "0.1.0-beta",
     zones: spec.zones,
     volume_max: spec.volumeMax,
     volume_db_step: spec.dbStep,

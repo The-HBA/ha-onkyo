@@ -418,7 +418,7 @@ class OnkyoZonePlayer(OnkyoEntity, MediaPlayerEntity):
 
     async def async_select_source(self, source: str) -> None:
         """Select an input by its clean name."""
-        for code in self._source_codes():
+        for code in self._listed_codes():
             if self._source_name(code) == source:
                 await self._set(self._source, code)
                 return

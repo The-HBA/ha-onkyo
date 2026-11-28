@@ -34,10 +34,6 @@ TX_RZ50: Final = Profile(
     model="TX-RZ50",
     listening_modes=_ordered(_PCM | {_DTS_HD_96K}),
     signal_modes={"pcm": _ordered(_PCM), "atmos": _ordered(_ATMOS)},
-    options={
-        "DIM": ("00", "01", "02"),
-        "DGF": ("00", "01", "03"),
-        "OSD": ("UP", "DOWN", "LEFT", "RIGHT", "ENTER", "EXIT", "MENU", "QUICK", "AUDIO", "VIDEO"),
-    },
+    options={"DIM": ("00", "01", "02"), "DGF": ("00", "01", "03")},
     notes="No centre speaker, one subwoofer; DGF02 is ignored, DIM03 and DIM08 answer N/A.",
 )
