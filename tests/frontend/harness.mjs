@@ -18,6 +18,7 @@ const TEST_FILES = {
   "/": path.join(HERE, "page.html"),
   "/panel.html": path.join(HERE, "panel.html"),
   "/fake-hass.js": path.join(HERE, "fake-hass.js"),
+  "/ci-ws.json": path.join(HERE, "ci-ws.json"),
 };
 
 /** Start a web server on 127.0.0.1; returns its base URL and a close function. */
@@ -39,7 +40,7 @@ export async function startServer() {
       response.writeHead(404).end();
       return;
     }
-    const type = file.endsWith(".html") ? "text/html" : "text/javascript";
+    const type = file.endsWith(".html") ? "text/html" : file.endsWith(".json") ? "application/json" : "text/javascript";
     response.writeHead(200, { "content-type": `${type}; charset=utf-8` });
     response.end(body);
   });

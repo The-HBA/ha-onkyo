@@ -30,7 +30,7 @@ async function using(options, body) {
   }
 }
 
-const titles = (page) => page.locator("onkyo-panel .right .gt").allInnerTexts();
+const titles = (page) => page.locator("onkyo-panel .right .rs .gt").allInnerTexts();
 const leftTitles = (page) => page.locator("onkyo-panel .leftx .gt").allInnerTexts();
 const calls = (page) => page.evaluate(() => window.hass.calls);
 
@@ -146,5 +146,184 @@ describe("sidebar page", () => {
       assert.ok(values.length >= 3, `${values}`);
       assert.deepEqual(values, [...values].sort((a, b) => a - b));
       assert.equal(new Set(values).size, values.length, `repeats: ${values}`);
+    }));
+});
+
+// ---------------------------------------------------------------------------------------
+// Advanced settings (CI): onkyo_eiscp/ci_info, ci_read, ci_set, ci_restore
+
+const ci = (page) => page.locator("onkyo-panel .cig");
+const group = (page, title) => ci(page).locator(".cigroup", { hasText: title });
+const openGroup = async (page, title) => {
+  await group(page, title).locator("[data-ci=group]").click();
+  await group(page, title).locator(".cibody").waitFor();
+  await page.waitForFunction(() => !document.querySelector("onkyo-panel").shadowRoot.querySelector(".cibody .empty"));
+};
+const row = (scope, label) => scope.locator(".cirow").filter({ has: scope.page().locator(".n", { hasText: new RegExp(`^${label}$`) }) });
+const ciWrites = (page) => page.evaluate(() => window.hass.ciWrites);
+
+describe("advanced settings", () => {
+  test("a receiver that answers shows the groups; every one is closed at first", () =>
+    using({}, async (page) => {
+      await ci(page).waitFor();
+      const titles = await ci(page).locator(".cigroup > .cih .n").evaluateAll((nodes) => nodes.map((node) => node.firstChild.textContent));
+      assert.deepEqual(titles, [
+        "Input assign",
+        "Input names and volume",
+        "Per-input audio and HDMI",
+        "TV out and HDMI",
+        "Speaker levels, distances and crossover",
+        "Equalizer",
+        "Power and volume",
+        "Multi-zone",
+        "Other options",
+        "Read only",
+      ]);
+      assert.equal(await ci(page).locator(".cibody").count(), 0);
+    }));
+
+  test("a model that does not answer shows no advanced settings (RULES.md 4)", () =>
+    using({ model: "small" }, async (page) => {
+      await page.waitForTimeout(100);
+      assert.equal(await page.locator("onkyo-panel .cig").count(), 0);
+    }));
+
+  test("input assign shows the jacks with names and sets one", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Input assign");
+      const hdmi = group(page, "Input assign").locator(".cifamily", { hasText: "HDMI input assign" });
+      // The names are the receiver's input names from card_info; the CD row is None.
+      const cd = row(hdmi, "CD");
+      assert.equal(await cd.locator("select").inputValue(), "NON");
+      await cd.locator("select").selectOption("HI6");
+      await page.waitForFunction(() => window.hass.ciWrites.length === 1);
+      assert.deepEqual((await ciWrites(page))[0], { code: "HIC", key: {}, changes: { CD: "HI6" } });
+      assert.equal(await row(hdmi, "CD").locator("select").inputValue(), "HI6");
+      // Video assign is all None on this model, so it does not show at all.
+      assert.equal(await group(page, "Input assign").locator(".cifamily", { hasText: "Video input assign" }).count(), 0);
+    }));
+
+  test("a bit is a switch; a skipped input says on", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Input assign");
+      const skip = group(page, "Input assign").locator(".cifamily", { hasText: "Input skip" });
+      const aux = row(skip, "AUX").locator("[role=switch]");
+      assert.equal(await aux.getAttribute("aria-checked"), "false");
+      await aux.click();
+      await page.waitForFunction(() => window.hass.ciWrites.length === 1);
+      assert.deepEqual((await ciWrites(page))[0].changes, { AX: "001" });
+      assert.equal(await row(skip, "AUX").locator("[role=switch]").getAttribute("aria-checked"), "true");
+    }));
+
+  test("speaker levels show tenths of a dB, set one and restore", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Speaker levels");
+      assert.match(await group(page, "Speaker levels").locator(".notice").innerText(), /calibration/);
+      const levels = group(page, "Speaker levels").locator(".cifamily", { hasText: "Channel levels" });
+      await levels.locator(".ciblock", { hasText: "Dirac slot 1" }).locator("[data-ci=block]").click();
+      const block = () => levels.locator(".ciblock", { hasText: "Dirac slot 1" });
+      const sub = () => row(block(), "Subwoofer").locator("input");
+      assert.equal(await sub().inputValue(), "-3.0");
+      await sub().fill("-2.9");
+      await sub().blur();
+      await page.waitForFunction(() => window.hass.ciWrites.length === 1);
+      assert.deepEqual((await ciWrites(page))[0], { code: "LCC", key: { MM: "MM1" }, changes: { SW: "-29" } });
+      assert.equal(await sub().inputValue(), "-2.9");
+      assert.match(await block().locator(".ciact").innerText(), /1 changed/);
+      await block().locator("[data-ci=restore]").click();
+      await page.waitForFunction(() => document.querySelector("onkyo-panel").shadowRoot.querySelector(".ciact") === null);
+      assert.equal(await sub().inputValue(), "-3.0");
+      // Only the calibration families offer it.
+      assert.equal(await group(page, "Power and volume").count(), 1);
+    }));
+
+  test("Keep forgets the saved values and leaves the new ones", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Speaker levels");
+      const dist = group(page, "Speaker levels").locator(".cifamily", { hasText: "Speaker distances" });
+      await dist.locator(".ciblock", { hasText: "Dirac slot 2" }).locator("[data-ci=block]").click();
+      const fr = row(dist.locator(".ciblock", { hasText: "Dirac slot 2" }), "Front right").locator("input");
+      await fr.fill("4");
+      await fr.blur();
+      await page.waitForFunction(() => window.hass.ciWrites.length === 1);
+      assert.deepEqual((await ciWrites(page))[0].changes, { FR: "004" });
+      await dist.locator("[data-ci=keep]").click();
+      await page.waitForFunction(() => document.querySelector("onkyo-panel").shadowRoot.querySelector(".ciact") === null);
+      assert.equal(await row(dist.locator(".ciblock", { hasText: "Dirac slot 2" }), "Front right").locator("input").inputValue(), "4");
+    }));
+
+  test("the unit of distance is read only", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Speaker levels");
+      const dist = group(page, "Speaker levels").locator(".cifamily", { hasText: "Speaker distances" });
+      const unit = row(dist.locator(".ciblock", { hasText: "All records" }), "Unit").locator("select");
+      assert.equal(await unit.isDisabled(), true);
+    }));
+
+  test("the layout and the network are shown and never writable", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Read only");
+      const body = group(page, "Read only");
+      assert.match(await body.innerText(), /Speaker layout/);
+      assert.match(await body.innerText(), /Network/);
+      const enabled = await body.locator("input:not([disabled]), select:not([disabled]), [role=switch]:not([disabled])").count();
+      assert.equal(enabled, 0);
+    }));
+
+  test("a volume that is a word or a level", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Power and volume");
+      const vol = group(page, "Power and volume").locator(".cifamily", { hasText: "Volume" });
+      const power = () => row(vol, "Power-on volume");
+      assert.equal(await power().locator("select").inputValue(), "#");
+      assert.equal(await power().locator("input").inputValue(), "124");
+      await power().locator("input").fill("90");
+      await power().locator("input").blur();
+      await page.waitForFunction(() => window.hass.ciWrites.length === 1);
+      assert.deepEqual((await ciWrites(page))[0].changes, { PV: "090" });
+      await power().locator("select").selectOption("LST");
+      await page.waitForFunction(() => window.hass.ciWrites.length === 2);
+      assert.deepEqual((await ciWrites(page))[1].changes, { PV: "LST" });
+    }));
+
+  test("a non administrator reads the settings but cannot change them", () =>
+    using({ admin: false }, async (page) => {
+      await ci(page).waitFor();
+      assert.match(await ci(page).innerText(), /Only an administrator/);
+      await openGroup(page, "Input assign");
+      const enabled = await group(page, "Input assign").locator("select:not([disabled]), [role=switch]:not([disabled])").count();
+      assert.equal(enabled, 0);
+    }));
+
+  test("an equalizer band has plain steps; zones follow the model", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Equalizer");
+      const eq = group(page, "Equalizer").locator(".cifamily", { hasText: "Manual equalizer" });
+      await eq.locator(".ciblock", { hasText: "Preset 1, Front" }).locator("[data-ci=block]").click();
+      const band = row(eq.locator(".ciblock", { hasText: "Preset 1, Front" }), "Band 1").locator("input");
+      await band.fill("2");
+      await band.blur();
+      await page.waitForFunction(() => window.hass.ciWrites.length === 1);
+      assert.deepEqual((await ciWrites(page))[0], { code: "EQC", key: { PS: "001", CH: "FRT" }, changes: { B1: "+02" } });
+    }));
+
+  test("nothing writes until a value changes, and a refused value shows a message", () =>
+    using({}, async (page) => {
+      await openGroup(page, "Power and volume");
+      assert.deepEqual(await ciWrites(page), []);
+      const apc = group(page, "Power and volume").locator(".cifamily", { hasText: "Auto standby" });
+      const field = row(apc, "Option ST").locator("input");
+      await field.fill("1000");
+      await field.blur();
+      await page.waitForFunction(() => window.toasts.length === 1);
+      assert.deepEqual(await ciWrites(page), []);
+    }));
+
+  test("the phone shows the groups in one column", () =>
+    using({ viewport: PHONE }, async (page) => {
+      await openGroup(page, "Input assign");
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
+      const box = await ci(page).boundingBox();
+      assert.ok(box.width <= PHONE.width);
     }));
 });

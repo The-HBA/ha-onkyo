@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Final
@@ -19,6 +20,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
     from .lib import Capabilities, Receiver
+    from .lib.ci import CiRecord
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -54,6 +56,12 @@ class OnkyoCoordinator(DataUpdateCoordinator[ReceiverData]):
         self._supported: frozenset[str] = frozenset()
         self._reloaded = False
         self._remove_listener: Callable[[], None] = _nothing
+        # CI settings (sidebar page): one operation at a time, whether the receiver answers
+        # them (``None`` until probed), and the values a calibration record held before the
+        # first change of this session, so the page can offer "restore".
+        self.ci_lock = asyncio.Lock()
+        self.ci_supported: bool | None = None
+        self.ci_baseline: dict[tuple[str, tuple[tuple[str, str], ...]], CiRecord] = {}
 
     async def async_start(self) -> None:
         """Connect, probe and publish the first snapshot."""

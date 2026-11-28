@@ -80,6 +80,7 @@ async def test_card_files_are_served(
         ("onkyo-panel.js", "onkyo-panel"),
         ("shared.js", "onkyo_eiscp/card_info"),
         ("rename-sheet.js", "Rename listening modes"),
+        ("ci-settings.js", "onkyo_eiscp/ci_set"),
         ("tabs/main.js", 'id: "main"'),
         ("tabs/modes.js", 'id: "modes"'),
     ):

@@ -1,0 +1,4508 @@
+{
+ "families": [
+  {
+   "code": "NMC",
+   "title": "Input names",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "SL",
+     "values": [
+      "BD",
+      "GAM",
+      "CBL",
+      "STB",
+      "PC",
+      "AUX",
+      "CD",
+      "TV",
+      "PHO",
+      "TUN"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "SL": "BD"
+    },
+    {
+     "SL": "GAM"
+    },
+    {
+     "SL": "CBL"
+    },
+    {
+     "SL": "STB"
+    },
+    {
+     "SL": "PC"
+    },
+    {
+     "SL": "AUX"
+    },
+    {
+     "SL": "CD"
+    },
+    {
+     "SL": "TV"
+    },
+    {
+     "SL": "PHO"
+    },
+    {
+     "SL": "TUN"
+    }
+   ],
+   "shared": [],
+   "fields": {
+    "NM": {
+     "width": 13,
+     "pattern": "[ -~]*",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "SLC",
+   "title": "Audio source per input",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "SL",
+     "values": [
+      "BD",
+      "GAM",
+      "CBL",
+      "STB",
+      "PC",
+      "AUX",
+      "CD",
+      "TV",
+      "PHO",
+      "TUN",
+      "NET",
+      "BLT"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "SL": "BD"
+    },
+    {
+     "SL": "GAM"
+    },
+    {
+     "SL": "CBL"
+    },
+    {
+     "SL": "STB"
+    },
+    {
+     "SL": "PC"
+    },
+    {
+     "SL": "AUX"
+    },
+    {
+     "SL": "CD"
+    },
+    {
+     "SL": "TV"
+    },
+    {
+     "SL": "PHO"
+    },
+    {
+     "SL": "TUN"
+    },
+    {
+     "SL": "NET"
+    },
+    {
+     "SL": "BLT"
+    }
+   ],
+   "shared": [],
+   "fields": {
+    "AS": {
+     "width": 3,
+     "pattern": "HDM|ANA|ARC|DIG",
+     "writable": true
+    },
+    "FX": {
+     "width": 3,
+     "pattern": "[A-Z]{3}",
+     "writable": false
+    },
+    "VS": {
+     "width": 3,
+     "pattern": "[A-Z]{3}",
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "HIC",
+   "title": "HDMI input assign",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "BD": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    },
+    "CB": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    },
+    "GM": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    },
+    "ST": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    },
+    "PC": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    },
+    "CD": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    },
+    "TV": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    },
+    "PH": {
+     "width": 3,
+     "pattern": "NON|HI\\d",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "VIC",
+   "title": "Video input assign",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "BD": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    },
+    "CB": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    },
+    "GM": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    },
+    "ST": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    },
+    "PC": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    },
+    "CD": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    },
+    "TV": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    },
+    "PH": {
+     "width": 3,
+     "pattern": "NON|[A-Z]{2}\\d|[A-Z]\\dN",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "DIC",
+   "title": "Digital audio input assign",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "BD": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    },
+    "CB": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    },
+    "GM": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    },
+    "ST": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    },
+    "PC": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    },
+    "CD": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    },
+    "TV": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    },
+    "PH": {
+     "width": 3,
+     "pattern": "NON|[CO]\\dN",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "AAC",
+   "title": "Analog audio input assign",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "BD": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    },
+    "CB": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    },
+    "GM": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    },
+    "ST": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    },
+    "PC": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    },
+    "CD": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    },
+    "TV": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    },
+    "PH": {
+     "width": 3,
+     "pattern": "NON|AI\\d|PHO",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "ISC",
+   "title": "Input skip",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "BD": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "CB": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "GM": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "ST": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "PC": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "AX": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "CD": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "TV": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "PH": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "TN": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "NT": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    },
+    "BT": {
+     "width": 3,
+     "pattern": "00[01]",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "TOC",
+   "title": "TV out and OSD",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "SL",
+     "values": [
+      "BD",
+      "GAM",
+      "CBL",
+      "STB",
+      "PC",
+      "AUX",
+      "CD",
+      "TV",
+      "PHO",
+      "TUN",
+      "NET",
+      "BLT"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "SL": "BD"
+    },
+    {
+     "SL": "GAM"
+    },
+    {
+     "SL": "CBL"
+    },
+    {
+     "SL": "STB"
+    },
+    {
+     "SL": "PC"
+    },
+    {
+     "SL": "AUX"
+    },
+    {
+     "SL": "CD"
+    },
+    {
+     "SL": "TV"
+    },
+    {
+     "SL": "PHO"
+    },
+    {
+     "SL": "TUN"
+    },
+    {
+     "SL": "NET"
+    },
+    {
+     "SL": "BLT"
+    }
+   ],
+   "shared": [
+    "DV",
+    "HO",
+    "LG",
+    "MO",
+    "OD",
+    "SR",
+    "SS",
+    "US",
+    "ZH"
+   ],
+   "fields": {
+    "HO": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DV": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "US": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "ZH": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "OD": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "MO": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "HS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "LG": {
+     "width": 3,
+     "pattern": "[A-Z]{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "IVC",
+   "title": "Per-input volume",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "SL",
+     "values": [
+      "BD",
+      "GAM",
+      "CBL",
+      "STB",
+      "PC",
+      "AUX",
+      "CD",
+      "TV",
+      "PHO",
+      "TUN",
+      "NET",
+      "BLT"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "SL": "BD"
+    },
+    {
+     "SL": "GAM"
+    },
+    {
+     "SL": "CBL"
+    },
+    {
+     "SL": "STB"
+    },
+    {
+     "SL": "PC"
+    },
+    {
+     "SL": "AUX"
+    },
+    {
+     "SL": "CD"
+    },
+    {
+     "SL": "TV"
+    },
+    {
+     "SL": "PHO"
+    },
+    {
+     "SL": "TUN"
+    },
+    {
+     "SL": "NET"
+    },
+    {
+     "SL": "BLT"
+    }
+   ],
+   "shared": [],
+   "fields": {
+    "IV": {
+     "width": 3,
+     "pattern": "LST|\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "AKC",
+   "title": "Per-input audio",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "SL",
+     "values": [
+      "BD",
+      "GAM",
+      "CBL",
+      "STB",
+      "PC",
+      "AUX",
+      "CD",
+      "TV",
+      "PHO",
+      "TUN",
+      "NET",
+      "BLT"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "SL": "BD"
+    },
+    {
+     "SL": "GAM"
+    },
+    {
+     "SL": "CBL"
+    },
+    {
+     "SL": "STB"
+    },
+    {
+     "SL": "PC"
+    },
+    {
+     "SL": "AUX"
+    },
+    {
+     "SL": "CD"
+    },
+    {
+     "SL": "TV"
+    },
+    {
+     "SL": "PHO"
+    },
+    {
+     "SL": "TUN"
+    },
+    {
+     "SL": "NET"
+    },
+    {
+     "SL": "BLT"
+    }
+   ],
+   "shared": [
+    "BF",
+    "E1",
+    "IM",
+    "LN",
+    "RE",
+    "RT",
+    "S1",
+    "S2",
+    "S3",
+    "SA",
+    "TF",
+    "VC"
+   ],
+   "fields": {
+    "BF": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "VC": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "TF": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "S1": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "S2": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "S3": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "RE": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "RT": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "LN": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "E1": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "IM": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AE": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "EQ": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "MO": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DF": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SA": {
+     "width": 3,
+     "pattern": "[A-Z]{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "HLC",
+   "title": "Per-input HDMI",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "SL",
+     "values": [
+      "BD",
+      "GAM",
+      "CBL",
+      "STB",
+      "PC",
+      "AUX",
+      "CD",
+      "TV",
+      "PHO",
+      "TUN",
+      "NET",
+      "BLT"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "SL": "BD"
+    },
+    {
+     "SL": "GAM"
+    },
+    {
+     "SL": "CBL"
+    },
+    {
+     "SL": "STB"
+    },
+    {
+     "SL": "PC"
+    },
+    {
+     "SL": "AUX"
+    },
+    {
+     "SL": "CD"
+    },
+    {
+     "SL": "TV"
+    },
+    {
+     "SL": "PHO"
+    },
+    {
+     "SL": "TUN"
+    },
+    {
+     "SL": "NET"
+    },
+    {
+     "SL": "BLT"
+    }
+   ],
+   "shared": [
+    "EA"
+   ],
+   "fields": {
+    "EA": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "HD": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "HP": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DV": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DC": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "3D": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "VR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "FV": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AM": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "FR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SB": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "VLC",
+   "title": "Volume",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "VD": {
+     "width": 3,
+     "pattern": "REL|ABS",
+     "writable": true
+    },
+    "MV": {
+     "width": 3,
+     "pattern": "OFF|LST|\\d{3}",
+     "writable": true
+    },
+    "PV": {
+     "width": 3,
+     "pattern": "OFF|LST|\\d{3}",
+     "writable": true
+    },
+    "HP": {
+     "width": 3,
+     "pattern": "OFF|LST|\\d{3}",
+     "writable": true
+    },
+    "ML": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "APC",
+   "title": "Auto standby and power",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "ST": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AP": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "HT": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "PO": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "WU": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "NS": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "HDC",
+   "title": "HDMI (CEC, ARC, standby through)",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "CE": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AO": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "PQ": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "LS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "HT": {
+     "width": 3,
+     "pattern": "AUT|\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "EQC",
+   "title": "Manual equalizer",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "PS",
+     "values": [
+      "001",
+      "002",
+      "003"
+     ]
+    },
+    {
+     "name": "CH",
+     "values": [
+      "FRT",
+      "CTR",
+      "HI1",
+      "HI2",
+      "SUR",
+      "SBK",
+      "SWF"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "PS": "001",
+     "CH": "FRT"
+    },
+    {
+     "PS": "001",
+     "CH": "CTR"
+    },
+    {
+     "PS": "001",
+     "CH": "HI1"
+    },
+    {
+     "PS": "001",
+     "CH": "HI2"
+    },
+    {
+     "PS": "001",
+     "CH": "SUR"
+    },
+    {
+     "PS": "001",
+     "CH": "SBK"
+    },
+    {
+     "PS": "001",
+     "CH": "SWF"
+    },
+    {
+     "PS": "002",
+     "CH": "FRT"
+    },
+    {
+     "PS": "002",
+     "CH": "CTR"
+    },
+    {
+     "PS": "002",
+     "CH": "HI1"
+    },
+    {
+     "PS": "002",
+     "CH": "HI2"
+    },
+    {
+     "PS": "002",
+     "CH": "SUR"
+    },
+    {
+     "PS": "002",
+     "CH": "SBK"
+    },
+    {
+     "PS": "002",
+     "CH": "SWF"
+    },
+    {
+     "PS": "003",
+     "CH": "FRT"
+    },
+    {
+     "PS": "003",
+     "CH": "CTR"
+    },
+    {
+     "PS": "003",
+     "CH": "HI1"
+    },
+    {
+     "PS": "003",
+     "CH": "HI2"
+    },
+    {
+     "PS": "003",
+     "CH": "SUR"
+    },
+    {
+     "PS": "003",
+     "CH": "SBK"
+    },
+    {
+     "PS": "003",
+     "CH": "SWF"
+    }
+   ],
+   "shared": [],
+   "fields": {
+    "B1": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B2": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B3": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B4": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B5": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B6": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B7": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B8": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "B9": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BA": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BB": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BC": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BD": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BE": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BF": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "SWC",
+   "title": "Subwoofer equalizer",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "F1": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "F2": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "F3": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "L1": {
+     "width": 3,
+     "pattern": "000|-\\d{2}",
+     "writable": true
+    },
+    "L2": {
+     "width": 3,
+     "pattern": "000|-\\d{2}",
+     "writable": true
+    },
+    "L3": {
+     "width": 3,
+     "pattern": "000|-\\d{2}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "SCC",
+   "title": "Speaker connection",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "BR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "FR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "CT": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "H1": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "H2": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SB": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SW": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "MZC",
+   "title": "Multi-zone",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "ZN",
+     "values": [
+      "002",
+      "003"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "ZN": "002"
+    },
+    {
+     "ZN": "003"
+    }
+   ],
+   "shared": [],
+   "fields": {
+    "ZO": {
+     "width": 3,
+     "pattern": "OFF|LST|\\d{3}",
+     "writable": true
+    },
+    "MV": {
+     "width": 3,
+     "pattern": "OFF|LST|\\d{3}",
+     "writable": true
+    },
+    "PV": {
+     "width": 3,
+     "pattern": "OFF|LST|\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "LCC",
+   "title": "Channel levels (0.1 dB)",
+   "calibration": true,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "MM",
+     "values": [
+      "OFF",
+      "MM1",
+      "MM2",
+      "MM3"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "MM": "OFF"
+    },
+    {
+     "MM": "MM1"
+    },
+    {
+     "MM": "MM2"
+    },
+    {
+     "MM": "MM3"
+    }
+   ],
+   "shared": [],
+   "fields": {
+    "FL": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "CT": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "FR": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "HL": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "HR": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "2L": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "2R": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "SR": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BR": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "BL": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "SL": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "SW": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    },
+    "S2": {
+     "width": 3,
+     "pattern": "000|[+-]\\d{2}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "SDC",
+   "title": "Speaker distances",
+   "calibration": true,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "MM",
+     "values": [
+      "OFF",
+      "MM1",
+      "MM2",
+      "MM3"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "MM": "OFF"
+    },
+    {
+     "MM": "MM1"
+    },
+    {
+     "MM": "MM2"
+    },
+    {
+     "MM": "MM3"
+    }
+   ],
+   "shared": [
+    "UN"
+   ],
+   "fields": {
+    "FL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "CT": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "FR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "HL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "HR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "2L": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "2R": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "BR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "BL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "SW": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "S2": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "UN": {
+     "width": 3,
+     "pattern": "MTR|FTS",
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "COC",
+   "title": "Crossover",
+   "calibration": true,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "MM",
+     "values": [
+      "OFF",
+      "MM1",
+      "MM2",
+      "MM3"
+     ]
+    },
+    {
+     "name": "XM",
+     "values": [
+      "IND",
+      "DBC"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "MM": "OFF",
+     "XM": "IND"
+    },
+    {
+     "MM": "OFF",
+     "XM": "DBC"
+    },
+    {
+     "MM": "MM1",
+     "XM": "IND"
+    },
+    {
+     "MM": "MM1",
+     "XM": "DBC"
+    },
+    {
+     "MM": "MM2",
+     "XM": "IND"
+    },
+    {
+     "MM": "MM2",
+     "XM": "DBC"
+    },
+    {
+     "MM": "MM3",
+     "XM": "IND"
+    },
+    {
+     "MM": "MM3",
+     "XM": "DBC"
+    }
+   ],
+   "shared": [
+    "DB"
+   ],
+   "fields": {
+    "FR": {
+     "width": 3,
+     "pattern": "NON|OFF|\\d{3}",
+     "writable": true
+    },
+    "CT": {
+     "width": 3,
+     "pattern": "NON|OFF|\\d{3}",
+     "writable": true
+    },
+    "H1": {
+     "width": 3,
+     "pattern": "NON|OFF|\\d{3}",
+     "writable": true
+    },
+    "H2": {
+     "width": 3,
+     "pattern": "NON|OFF|\\d{3}",
+     "writable": true
+    },
+    "SR": {
+     "width": 3,
+     "pattern": "NON|OFF|\\d{3}",
+     "writable": true
+    },
+    "SB": {
+     "width": 3,
+     "pattern": "NON|OFF|\\d{3}",
+     "writable": true
+    },
+    "LF": {
+     "width": 3,
+     "pattern": "NON|OFF|\\d{3}",
+     "writable": true
+    },
+    "DB": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "XT": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "DL": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "DSC",
+   "title": "Dirac and audio options",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "DC": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "TXC",
+   "title": "Text and display options",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "SS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "TS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "BG": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "LP": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "SVC",
+   "title": "Service option",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "SV": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "MMC",
+   "title": "Music Optimizer options",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "MI": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "XI": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "MO": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "DLC",
+   "title": "Display and lock options",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "LM": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "CS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "DTC",
+   "title": "Digital options",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "AS": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "IM": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "IU": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "IB": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DC": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "IV": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "BTC",
+   "title": "Bluetooth",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "BR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DC": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AR": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "BT": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "UA": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "LL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "OL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "TGC",
+   "title": "12 V triggers",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "ZN": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "DL": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "BD": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "CB": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "GM": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "ST": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "PC": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "AX": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "CD": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "TV": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "PH": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "TN": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "NT": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "BT": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "PZC",
+   "title": "Power zone option",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "PZ": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "RMC",
+   "title": "Remote ID",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "ID": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "UDC",
+   "title": "Option UD",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "UN": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    }
+   }
+  },
+  {
+   "code": "WSC",
+   "title": "Option WS",
+   "calibration": false,
+   "writable": true,
+   "reason": "",
+   "key": [
+    {
+     "name": "SO",
+     "values": [
+      "000",
+      "001",
+      "002"
+     ]
+    }
+   ],
+   "keys": [
+    {
+     "SO": "000"
+    },
+    {
+     "SO": "001"
+    },
+    {
+     "SO": "002"
+    }
+   ],
+   "shared": [],
+   "fields": {
+    "OZ": {
+     "width": 3,
+     "pattern": "\\d{3}",
+     "writable": true
+    },
+    "IS": {
+     "width": 3,
+     "pattern": "[A-Z]{3}|\\d{3}",
+     "writable": false
+    },
+    "V2": {
+     "width": 3,
+     "pattern": "[A-Z]{3}|\\d{3}",
+     "writable": false
+    },
+    "V3": {
+     "width": 3,
+     "pattern": "[A-Z]{3}|\\d{3}",
+     "writable": false
+    },
+    "VM": {
+     "width": 3,
+     "pattern": "[A-Z]{3}",
+     "writable": false
+    },
+    "CD": {
+     "width": 68,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "CFC",
+   "title": "Speaker layout",
+   "calibration": false,
+   "writable": false,
+   "reason": "the receiver ignores layout writes and a wrong layout breaks the calibration",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "SC": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "SW": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "H1": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "H2": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "ZS": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "ZP": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "SB": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "BA": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "IM": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "LLC",
+   "title": "Option LL",
+   "calibration": false,
+   "writable": false,
+   "reason": "the receiver ignores writes",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "LL": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "TNC",
+   "title": "Tuner step",
+   "calibration": false,
+   "writable": false,
+   "reason": "the receiver ignores writes",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "FS": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "LKC",
+   "title": "Lock",
+   "calibration": false,
+   "writable": false,
+   "reason": "a lock could block the restore (never tested on purpose)",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "LK": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "KY": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "IR": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "NTC",
+   "title": "Network",
+   "calibration": false,
+   "writable": false,
+   "reason": "a wrong network setting could cut the receiver off (DECISIONS 14)",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "NT": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "DH": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    },
+    "MA": {
+     "width": 13,
+     "pattern": null,
+     "writable": false
+    },
+    "IP": {
+     "width": 8,
+     "pattern": null,
+     "writable": false
+    },
+    "SN": {
+     "width": 8,
+     "pattern": null,
+     "writable": false
+    },
+    "GW": {
+     "width": 8,
+     "pattern": null,
+     "writable": false
+    },
+    "DS": {
+     "width": 8,
+     "pattern": null,
+     "writable": false
+    },
+    "PU": {
+     "width": 128,
+     "pattern": null,
+     "writable": false
+    },
+    "PP": {
+     "width": 8,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  },
+  {
+   "code": "N2C",
+   "title": "Network name",
+   "calibration": false,
+   "writable": false,
+   "reason": "network names are read-only (DECISIONS 14)",
+   "key": [],
+   "keys": [
+    {}
+   ],
+   "shared": [],
+   "fields": {
+    "FN": {
+     "width": 33,
+     "pattern": null,
+     "writable": false
+    },
+    "AP": {
+     "width": 33,
+     "pattern": null,
+     "writable": false
+    },
+    "AN": {
+     "width": 33,
+     "pattern": null,
+     "writable": false
+    },
+    "AS": {
+     "width": 3,
+     "pattern": null,
+     "writable": false
+    }
+   }
+  }
+ ],
+ "records": {
+  "HIC": [
+   {
+    "key": {},
+    "fields": {
+     "BD": "HI1",
+     "CB": "HI3",
+     "GM": "HI5",
+     "ST": "HI4",
+     "PC": "HI2",
+     "CD": "NON",
+     "TV": "NON",
+     "PH": "NON"
+    }
+   }
+  ],
+  "VIC": [
+   {
+    "key": {},
+    "fields": {
+     "BD": "NON",
+     "CB": "NON",
+     "GM": "NON",
+     "ST": "NON",
+     "PC": "NON",
+     "CD": "NON",
+     "TV": "NON",
+     "PH": "NON"
+    }
+   }
+  ],
+  "DIC": [
+   {
+    "key": {},
+    "fields": {
+     "BD": "C1N",
+     "CB": "NON",
+     "GM": "NON",
+     "ST": "NON",
+     "PC": "NON",
+     "CD": "NON",
+     "TV": "O1N",
+     "PH": "NON"
+    }
+   }
+  ],
+  "AAC": [
+   {
+    "key": {},
+    "fields": {
+     "BD": "AI1",
+     "CB": "AI3",
+     "GM": "AI2",
+     "ST": "AI4",
+     "PC": "NON",
+     "CD": "AI5",
+     "TV": "AI6",
+     "PH": "PHO"
+    }
+   }
+  ],
+  "ISC": [
+   {
+    "key": {},
+    "fields": {
+     "BD": "000",
+     "CB": "000",
+     "GM": "000",
+     "ST": "000",
+     "PC": "000",
+     "AX": "000",
+     "CD": "000",
+     "TV": "000",
+     "PH": "000",
+     "TN": "000",
+     "NT": "000",
+     "BT": "000"
+    }
+   }
+  ],
+  "CFC": [
+   {
+    "key": {},
+    "fields": {
+     "SC": "610",
+     "SW": "001",
+     "H1": "TMD",
+     "H2": "RHI",
+     "ZS": "000",
+     "ZP": "000",
+     "SB": "000",
+     "BA": "000",
+     "IM": "006"
+    }
+   }
+  ],
+  "DSC": [
+   {
+    "key": {},
+    "fields": {
+     "DC": "180",
+     "AR": "000"
+    }
+   }
+  ],
+  "TXC": [
+   {
+    "key": {},
+    "fields": {
+     "SS": "002",
+     "TS": "000",
+     "BG": "000",
+     "LP": "001"
+    }
+   }
+  ],
+  "SVC": [
+   {
+    "key": {},
+    "fields": {
+     "SV": "001"
+    }
+   }
+  ],
+  "SCC": [
+   {
+    "key": {},
+    "fields": {
+     "BR": "000",
+     "FR": "000",
+     "CT": "000",
+     "H1": "000",
+     "H2": "000",
+     "SR": "000",
+     "SB": "000",
+     "SW": "000"
+    }
+   }
+  ],
+  "MMC": [
+   {
+    "key": {},
+    "fields": {
+     "XI": "001",
+     "MI": "011",
+     "MO": "101"
+    }
+   }
+  ],
+  "DLC": [
+   {
+    "key": {},
+    "fields": {
+     "LM": "001",
+     "CS": "000"
+    }
+   }
+  ],
+  "DTC": [
+   {
+    "key": {},
+    "fields": {
+     "AS": "001",
+     "DC": "000",
+     "IM": "002",
+     "IU": "001",
+     "IB": "001",
+     "IV": "000"
+    }
+   }
+  ],
+  "LLC": [
+   {
+    "key": {},
+    "fields": {
+     "LL": "000"
+    }
+   }
+  ],
+  "VLC": [
+   {
+    "key": {},
+    "fields": {
+     "VD": "REL",
+     "ML": "-oo",
+     "MV": "154",
+     "PV": "124",
+     "HP": "000"
+    }
+   }
+  ],
+  "HDC": [
+   {
+    "key": {},
+    "fields": {
+     "CE": "001",
+     "HT": "AUT",
+     "AO": "000",
+     "AR": "000",
+     "PQ": "000",
+     "LS": "001"
+    }
+   }
+  ],
+  "NTC": [
+   {
+    "key": {},
+    "fields": {
+     "NT": "000",
+     "MA": "0009B0000001 ",
+     "DH": "001",
+     "IP": "00000000",
+     "SN": "FFFFFF00",
+     "GW": "00000000",
+     "DS": "00000000",
+     "PU": "                                                                                                                                ",
+     "PP": "1F90    "
+    }
+   }
+  ],
+  "N2C": [
+   {
+    "key": {},
+    "fields": {
+     "FN": "Onkyo Receiver             AS001A",
+     "P ": "   ",
+     "  ": " ",
+     "NO": "nky",
+     "o ": "Rec",
+     "ei": "ver"
+    }
+   }
+  ],
+  "BTC": [
+   {
+    "key": {},
+    "fields": {
+     "BR": "001",
+     "DC": "001",
+     "AR": "001",
+     "BT": "000",
+     "UA": "000",
+     "LL": "000",
+     "OL": "001"
+    }
+   }
+  ],
+  "APC": [
+   {
+    "key": {},
+    "fields": {
+     "ST": "000",
+     "AP": "000",
+     "HT": "000",
+     "PO": "001",
+     "NS": "001",
+     "WU": "000"
+    }
+   }
+  ],
+  "TGC": [
+   {
+    "key": {},
+    "fields": {
+     "ZN": "100",
+     "DL": "000",
+     "BD": "100",
+     "CB": "100",
+     "GM": "100",
+     "ST": "100",
+     "PC": "100",
+     "AX": "100",
+     "CD": "100",
+     "TV": "100",
+     "PH": "100",
+     "TN": "100",
+     "NT": "100",
+     "BT": "100"
+    }
+   }
+  ],
+  "PZC": [
+   {
+    "key": {},
+    "fields": {
+     "PZ": "000"
+    }
+   }
+  ],
+  "TNC": [
+   {
+    "key": {},
+    "fields": {
+     "FS": "009"
+    }
+   }
+  ],
+  "RMC": [
+   {
+    "key": {},
+    "fields": {
+     "ID": "001"
+    }
+   }
+  ],
+  "UDC": [
+   {
+    "key": {},
+    "fields": {
+     "UN": "001"
+    }
+   }
+  ],
+  "LKC": [
+   {
+    "key": {},
+    "fields": {
+     "LK": "000",
+     "KY": "000",
+     "IR": "000"
+    }
+   }
+  ],
+  "TOC": [
+   {
+    "key": {
+     "SL": "BD"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "GAM"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "CBL"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "STB"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "PC"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "AUX"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000"
+    }
+   },
+   {
+    "key": {
+     "SL": "CD"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "TV"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "PHO"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000",
+     "HS": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "TUN"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000"
+    }
+   },
+   {
+    "key": {
+     "SL": "NET"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000"
+    }
+   },
+   {
+    "key": {
+     "SL": "BLT"
+    },
+    "fields": {
+     "HO": "001",
+     "DV": "001",
+     "US": "000",
+     "SR": "002",
+     "ZH": "000",
+     "LG": "ENG",
+     "OD": "001",
+     "MO": "001",
+     "SS": "000"
+    }
+   }
+  ],
+  "IVC": [
+   {
+    "key": {
+     "SL": "BD"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "GAM"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "CBL"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "STB"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "PC"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "AUX"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "CD"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "TV"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "PHO"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "TUN"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "NET"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   },
+   {
+    "key": {
+     "SL": "BLT"
+    },
+    "fields": {
+     "IV": "LST"
+    }
+   }
+  ],
+  "NMC": [
+   {
+    "key": {
+     "SL": "BD"
+    },
+    "fields": {
+     "NM": "Movie        "
+    }
+   },
+   {
+    "key": {
+     "SL": "GAM"
+    },
+    "fields": {
+     "NM": "PS5          "
+    }
+   },
+   {
+    "key": {
+     "SL": "CBL"
+    },
+    "fields": {
+     "NM": "Wii U        "
+    }
+   },
+   {
+    "key": {
+     "SL": "STB"
+    },
+    "fields": {
+     "NM": "Streaming    "
+    }
+   },
+   {
+    "key": {
+     "SL": "PC"
+    },
+    "fields": {
+     "NM": "HTPC         "
+    }
+   },
+   {
+    "key": {
+     "SL": "AUX"
+    },
+    "fields": {
+     "NM": "AUX          "
+    }
+   },
+   {
+    "key": {
+     "SL": "CD"
+    },
+    "fields": {
+     "NM": "CD           "
+    }
+   },
+   {
+    "key": {
+     "SL": "TV"
+    },
+    "fields": {
+     "NM": "Projector    "
+    }
+   },
+   {
+    "key": {
+     "SL": "PHO"
+    },
+    "fields": {
+     "NM": "PHONO        "
+    }
+   },
+   {
+    "key": {
+     "SL": "TUN"
+    },
+    "fields": {
+     "NM": "TUNER        "
+    }
+   }
+  ],
+  "SLC": [
+   {
+    "key": {
+     "SL": "BD"
+    },
+    "fields": {
+     "AS": "HDM",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "GAM"
+    },
+    "fields": {
+     "AS": "HDM",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "CBL"
+    },
+    "fields": {
+     "AS": "HDM",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "STB"
+    },
+    "fields": {
+     "AS": "HDM",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "PC"
+    },
+    "fields": {
+     "AS": "HDM",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "AUX"
+    },
+    "fields": {
+     "AS": "HDM",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "CD"
+    },
+    "fields": {
+     "AS": "ANA",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "TV"
+    },
+    "fields": {
+     "AS": "DIG",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "PHO"
+    },
+    "fields": {
+     "AS": "ANA",
+     "FX": "OFF"
+    }
+   },
+   {
+    "key": {
+     "SL": "TUN"
+    },
+    "fields": {
+     "VS": "LAS"
+    }
+   },
+   {
+    "key": {
+     "SL": "NET"
+    },
+    "fields": {
+     "VS": "LAS"
+    }
+   },
+   {
+    "key": {
+     "SL": "BLT"
+    },
+    "fields": {
+     "VS": "LAS"
+    }
+   }
+  ],
+  "AKC": [
+   {
+    "key": {
+     "SL": "BD"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "004",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "GAM"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "CBL"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "STB"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "004",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "PC"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "004",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "AUX"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "CD"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "TV"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "PHO"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "TUN"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "NET"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "004",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   },
+   {
+    "key": {
+     "SL": "BLT"
+    },
+    "fields": {
+     "BF": "000",
+     "VC": "000",
+     "TF": "000",
+     "S1": "000",
+     "S2": "000",
+     "S3": "000",
+     "RE": "000",
+     "RT": "000",
+     "LN": "000",
+     "SA": "FRT",
+     "E1": "001",
+     "IM": "002",
+     "DL": "000",
+     "AE": "000",
+     "EQ": "000",
+     "AS": "000",
+     "MO": "000",
+     "DF": "003"
+    }
+   }
+  ],
+  "HLC": [
+   {
+    "key": {
+     "SL": "BD"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "GAM"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "CBL"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "STB"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "PC"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "AUX"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "CD"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "TV"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   },
+   {
+    "key": {
+     "SL": "PHO"
+    },
+    "fields": {
+     "EA": "001",
+     "HD": "001",
+     "HP": "001",
+     "DV": "001",
+     "DC": "001",
+     "3D": "001",
+     "DS": "001",
+     "VR": "001",
+     "FV": "001",
+     "AM": "001",
+     "AL": "000",
+     "FR": "001",
+     "SB": "001"
+    }
+   }
+  ],
+  "SDC": [
+   {
+    "key": {
+     "MM": "OFF"
+    },
+    "fields": {
+     "UN": "MTR",
+     "FL": "003",
+     "CT": "000",
+     "FR": "002",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "012",
+     "BR": "019",
+     "BL": "018",
+     "SL": "013",
+     "SW": "000",
+     "S2": "000"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM1"
+    },
+    "fields": {
+     "UN": "MTR",
+     "FL": "003",
+     "CT": "000",
+     "FR": "002",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "012",
+     "BR": "019",
+     "BL": "018",
+     "SL": "013",
+     "SW": "000",
+     "S2": "000"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM2"
+    },
+    "fields": {
+     "UN": "MTR",
+     "FL": "003",
+     "CT": "000",
+     "FR": "002",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "012",
+     "BR": "019",
+     "BL": "018",
+     "SL": "013",
+     "SW": "000",
+     "S2": "000"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM3"
+    },
+    "fields": {
+     "UN": "MTR",
+     "FL": "003",
+     "CT": "000",
+     "FR": "002",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "012",
+     "BR": "019",
+     "BL": "018",
+     "SL": "013",
+     "SW": "000",
+     "S2": "000"
+    }
+   }
+  ],
+  "LCC": [
+   {
+    "key": {
+     "MM": "OFF"
+    },
+    "fields": {
+     "FL": "+07",
+     "CT": "000",
+     "FR": "+09",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "+07",
+     "BR": "+03",
+     "BL": "+02",
+     "SL": "+06",
+     "SW": "-30",
+     "S2": "000"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM1"
+    },
+    "fields": {
+     "FL": "+07",
+     "CT": "000",
+     "FR": "+09",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "+07",
+     "BR": "+03",
+     "BL": "+02",
+     "SL": "+06",
+     "SW": "-30",
+     "S2": "000"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM2"
+    },
+    "fields": {
+     "FL": "+07",
+     "CT": "000",
+     "FR": "+09",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "+07",
+     "BR": "+03",
+     "BL": "+02",
+     "SL": "+06",
+     "SW": "-30",
+     "S2": "000"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM3"
+    },
+    "fields": {
+     "FL": "+07",
+     "CT": "000",
+     "FR": "+09",
+     "HL": "000",
+     "HR": "000",
+     "2L": "000",
+     "2R": "000",
+     "SR": "+07",
+     "BR": "+03",
+     "BL": "+02",
+     "SL": "+06",
+     "SW": "-10",
+     "S2": "000"
+    }
+   }
+  ],
+  "COC": [
+   {
+    "key": {
+     "MM": "OFF",
+     "XM": "IND"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "FR": "080",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "080",
+     "SB": "080",
+     "LF": "120"
+    }
+   },
+   {
+    "key": {
+     "MM": "OFF",
+     "XM": "DBC"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "FR": "NON",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "NON",
+     "SB": "NON",
+     "LF": "OFF"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM1",
+     "XM": "IND"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "DL": "000",
+     "FR": "070",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "070",
+     "SB": "070",
+     "LF": "120"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM1",
+     "XM": "DBC"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "DL": "000",
+     "FR": "NON",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "NON",
+     "SB": "NON",
+     "LF": "120"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM2",
+     "XM": "IND"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "DL": "000",
+     "FR": "070",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "070",
+     "SB": "070",
+     "LF": "120"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM2",
+     "XM": "DBC"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "DL": "000",
+     "FR": "NON",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "NON",
+     "SB": "NON",
+     "LF": "120"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM3",
+     "XM": "IND"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "DL": "000",
+     "FR": "070",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "070",
+     "SB": "070",
+     "LF": "120"
+    }
+   },
+   {
+    "key": {
+     "MM": "MM3",
+     "XM": "DBC"
+    },
+    "fields": {
+     "DB": "001",
+     "XT": "000",
+     "DL": "000",
+     "FR": "NON",
+     "CT": "NON",
+     "H1": "NON",
+     "H2": "NON",
+     "SR": "NON",
+     "SB": "NON",
+     "LF": "120"
+    }
+   }
+  ],
+  "EQC": [
+   {
+    "key": {
+     "PS": "001",
+     "CH": "FRT"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "001",
+     "CH": "CTR"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "001",
+     "CH": "HI1"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "001",
+     "CH": "HI2"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "001",
+     "CH": "SUR"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "001",
+     "CH": "SBK"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "001",
+     "CH": "SWF"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "002",
+     "CH": "FRT"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "002",
+     "CH": "CTR"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "002",
+     "CH": "HI1"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "002",
+     "CH": "HI2"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "002",
+     "CH": "SUR"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "002",
+     "CH": "SBK"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "002",
+     "CH": "SWF"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "003",
+     "CH": "FRT"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "003",
+     "CH": "CTR"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "003",
+     "CH": "HI1"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "003",
+     "CH": "HI2"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "003",
+     "CH": "SUR"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "003",
+     "CH": "SBK"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000",
+     "B6": "000",
+     "B7": "000",
+     "B8": "000",
+     "B9": "000",
+     "BA": "000",
+     "BB": "000",
+     "BC": "000",
+     "BD": "000",
+     "BE": "000",
+     "BF": "000"
+    }
+   },
+   {
+    "key": {
+     "PS": "003",
+     "CH": "SWF"
+    },
+    "fields": {
+     "B1": "000",
+     "B2": "000",
+     "B3": "000",
+     "B4": "000",
+     "B5": "000"
+    }
+   }
+  ],
+  "WSC": [
+   {
+    "key": {
+     "SO": "000"
+    },
+    "fields": {
+     "IS": "OFF",
+     "OZ": "000",
+     "VM": "LST",
+     "V2": "LST",
+     "V3": "LST",
+     "CD": "                                                                    "
+    }
+   },
+   {
+    "key": {
+     "SO": "001"
+    },
+    "fields": {
+     "IS": "OFF",
+     "OZ": "000",
+     "VM": "LST",
+     "V2": "LST",
+     "V3": "LST",
+     "CD": "                                                                    "
+    }
+   },
+   {
+    "key": {
+     "SO": "002"
+    },
+    "fields": {
+     "IS": "OFF",
+     "OZ": "000",
+     "VM": "LST",
+     "V2": "LST",
+     "V3": "LST",
+     "CD": "                                                                    "
+    }
+   }
+  ],
+  "MZC": [
+   {
+    "key": {
+     "ZN": "002"
+    },
+    "fields": {
+     "ZO": "000",
+     "MV": "OFF",
+     "PV": "LST"
+    }
+   },
+   {
+    "key": {
+     "ZN": "003"
+    },
+    "fields": {
+     "ZO": "000",
+     "MV": "OFF",
+     "PV": "LST"
+    }
+   }
+  ],
+  "SWC": [
+   {
+    "key": {},
+    "fields": {
+     "F1": "063",
+     "L1": "000",
+     "F2": "125",
+     "L2": "000",
+     "F3": "250",
+     "L3": "000"
+    }
+   }
+  ]
+ }
+}
