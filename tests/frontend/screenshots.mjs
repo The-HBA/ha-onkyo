@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import { chromium } from "playwright";
 
-import { DESKTOP, openCard, openPanel, PHONE, startServer, TABLET } from "./harness.mjs";
+import { DESKTOP, openCard, openPanel, PHONE, SMALL_PHONE, startServer, TABLET } from "./harness.mjs";
 
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), "shots");
 await mkdir(OUT, { recursive: true });
@@ -21,6 +21,76 @@ for (const theme of ["dark", "light"]) {
   await shot(page, `card-main-${theme}`);
   await tab(page, "Modes");
   await shot(page, `card-modes-${theme}`);
+  await page.close();
+}
+
+for (const [theme, signal] of [["dark", "atmos"], ["light", "pcm"]]) {
+  const { page } = await openCard(browser, server.url, { theme, signal });
+  await tab(page, "Remote");
+  await shot(page, `card-remote-${theme}`);
+  await tab(page, "Playing");
+  await shot(page, `card-playing-${theme}`);
+  await page.close();
+}
+
+{
+  const { page } = await openCard(browser, server.url, { theme: "dark", power: "standby" });
+  await tab(page, "Playing");
+  await shot(page, "card-playing-standby");
+  await page.close();
+}
+
+{
+  const { page } = await openCard(browser, server.url, { theme: "dark", viewport: SMALL_PHONE, signal: "dtsx" });
+  await tab(page, "Playing");
+  await shot(page, "card-playing-360");
+  await tab(page, "Remote");
+  await shot(page, "card-remote-360");
+  await page.close();
+}
+
+{
+  const { page } = await openCard(browser, server.url, { theme: "dark", model: "small", signal: "pcm" });
+  await tab(page, "Playing");
+  await shot(page, "card-playing-small-model");
+  await page.close();
+}
+
+{
+  const { page } = await openCard(browser, server.url, { theme: "light", viewport: TABLET, wide: true });
+  await tab(page, "Remote");
+  await shot(page, "card-remote-tablet");
+  await tab(page, "Playing");
+  await shot(page, "card-playing-tablet");
+  await page.close();
+}
+
+{
+  const { page } = await openCard(browser, server.url, { theme: "dark" });
+  await tab(page, "Zones");
+  await shot(page, "card-zones-off");
+  await page.locator("onkyo-remote-card .zhead").nth(1).click();
+  await page.waitForTimeout(150);
+  await shot(page, "card-zones-zone3-refused");
+  await page.evaluate(() => {
+    window.hass.rx.zones.zone2.power = "on";
+    window.hass.rx.zones.zone2.volume = true;
+    window.hass.set({});
+  });
+  await shot(page, "card-zones-zone2-on");
+  await page.close();
+}
+
+{
+  const { page } = await openCard(browser, server.url, { theme: "light", viewport: SMALL_PHONE });
+  await page.evaluate(() => {
+    window.hass.rx.zones.zone2.power = "on";
+    window.hass.rx.zones.zone2.volume = true;
+    window.hass.rx.zones.zone3.power = "on";
+    window.hass.set({});
+  });
+  await tab(page, "Zones");
+  await shot(page, "card-zones-360-both-on");
   await page.close();
 }
 

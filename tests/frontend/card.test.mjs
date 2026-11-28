@@ -400,7 +400,7 @@ describe("editor", () => {
 });
 
 describe("fit (DESIGN.md Review)", () => {
-  const tabs = ["Main", "Modes"];
+  const tabs = ["Main", "Modes", "Remote", "Playing", "Zones"];
   for (const viewport of [PHONE, SMALL_PHONE]) {
     for (const model of ["rz50", "small"]) {
       for (const signal of ["pcm", "atmos", "dtsx", "none"]) {
@@ -409,7 +409,12 @@ describe("fit (DESIGN.md Review)", () => {
             const { page, errors } = await open({ viewport, model, signal, power, theme: "dark" });
             try {
               for (const label of tabs) {
-                await page.locator("onkyo-remote-card [role=tab]", { hasText: label }).click();
+                const tab = page.locator("onkyo-remote-card [role=tab]", { hasText: label });
+                if (label === "Zones" && model === "small") {
+                  assert.equal(await tab.count(), 0);
+                  continue;
+                }
+                await tab.click();
                 assert.deepEqual(await fitProblems(page), [], `${label}`);
               }
               assert.deepEqual(errors, []);
@@ -465,7 +470,7 @@ describe("long names and keys", () => {
     using({}, async (page) => {
       await page.locator("onkyo-remote-card [role=tab]").first().focus();
       await page.keyboard.press("End");
-      assert.equal(await page.locator("onkyo-remote-card .p-modes").count(), 1);
+      assert.equal(await page.locator("onkyo-remote-card .p-zones").count(), 1);
       await page.keyboard.press("Home");
       assert.equal(await page.locator("onkyo-remote-card .p-main").count(), 1);
       await page.locator("onkyo-remote-card [data-slider]").focus();
