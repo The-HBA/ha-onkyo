@@ -1,0 +1,24 @@
+name: Model report
+description: Tell us how your receiver works, or what is missing on it.
+labels: [model]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Receiver brand, model and firmware
+      placeholder: Onkyo TX-NR6100, firmware 1.2.3
+    validations:
+      required: true
+  - type: textarea
+    id: works
+    attributes:
+      label: What works
+  - type: textarea
+    id: missing
+    attributes:
+      label: What is missing or wrong
+  - type: textarea
+    id: survey
+    attributes:
+      label: Survey result
+      description: Run the onkyo_eiscp.survey action in Developer tools, Actions, and paste the result. The address and the MAC are removed from it.

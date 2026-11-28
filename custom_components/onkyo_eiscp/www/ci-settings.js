@@ -115,12 +115,13 @@ export class CiSettings {
 
   /** Fetch the family list once; until then (and for a model without CI) nothing shows. */
   async start() {
+    if (this.state === "error" || this.state === "retry") this.state = "idle";
     if (this.state !== "idle") return;
     this.state = "loading";
     try {
       const result = await this.hass.callWS({ type: WS.info, device_id: this.deviceId });
       this.families = Object.fromEntries(result.families.map((family) => [family.code, family]));
-      this.state = result.supported ? "ready" : "none";
+      this.state = result.supported ? "ready" : result.retry ? "retry" : "none";
     } catch (error) {
       console.debug("onkyo-panel: ci_info failed", error);
       this.state = "error";
@@ -190,9 +191,19 @@ export class CiSettings {
       this._store(code, result);
     } catch (error) {
       this.toast(error?.message || String(error));
+      await this._refresh(code, key); // the set may have applied; show what the receiver holds
     }
     this.busy.delete(id);
     this._schedule();
+  }
+
+  async _refresh(code, key) {
+    try {
+      const result = await this.hass.callWS({ type: WS.read, device_id: this.deviceId, code, key });
+      for (const record of result.records) this._store(code, record);
+    } catch (error) {
+      console.debug("onkyo-panel: refresh failed", error);
+    }
   }
 
   _store(code, result) {
@@ -246,6 +257,8 @@ export class CiSettings {
       if (this.openBlocks.has(id)) this.openBlocks.delete(id);
       else this.openBlocks.add(id);
       this._schedule();
+    } else if (ci === "again") {
+      void this.start();
     } else if (ci === "retry") {
       delete this.errors[code];
       void this._load(GROUPS.find((item) => item.id === group));
@@ -318,10 +331,16 @@ export class CiSettings {
   }
 
   render() {
-    if (this.state === "idle" || this.state === "loading" || this.state === "none" || this.state === "error") {
+    if (this.state === "retry" || this.state === "error") {
+      const text = this.state === "retry" ? "The receiver did not answer. It may be in standby." : "The advanced settings could not be loaded.";
+      this.root.innerHTML = `<div class="grp cig"><div class="gh"><span class="gt">Advanced settings</span></div><div class="qnote">${icon("alertO", 18)}<span>${text}</span><button class="pill pr" data-ci="again">Try again</button></div></div>`;
+      return;
+    }
+    if (this.state === "idle" || this.state === "loading" || this.state === "none") {
       this.root.innerHTML = "";
       return;
     }
+    const focus = this._focusInfo();
     const admin = isAdminUser(this.hass);
     const groups = GROUPS.map((group) => this._groupHtml(group, admin)).filter(Boolean);
     if (!groups.length) {
@@ -330,6 +349,27 @@ export class CiSettings {
     }
     const note = admin ? "" : `<div class="qnote">${icon("alertO", 18)}<span>Only an administrator can change these settings.</span></div>`;
     this.root.innerHTML = `<div class="grp cig"><div class="gh"><span class="gt">Advanced settings</span></div>${note}${groups.join("")}</div>`;
+    this._restoreFocus(focus);
+  }
+
+  /** Remember which control has focus (and its text), so a redraw does not drop the user's place. */
+  _focusInfo() {
+    const active = this.root.contains(document.activeElement) ? document.activeElement : null;
+    if (!active) return null;
+    const attrs = ["data-ci", "data-group", "data-code", "data-key", "data-field", "data-part", "data-block"];
+    const selector = attrs.filter((name) => active.hasAttribute(name)).map((name) => `[${name}="${CSS.escape(active.getAttribute(name))}"]`).join("");
+    if (!selector) return null;
+    return { selector: `${active.tagName.toLowerCase()}${selector}`, value: active.value, start: active.selectionStart, end: active.selectionEnd };
+  }
+
+  _restoreFocus(info) {
+    if (!info) return;
+    const target = this.root.querySelector(info.selector);
+    if (!target) return;
+    target.focus();
+    if (target.tagName === "INPUT" && target.type === "text" && info.start !== null && target.value === info.value) {
+      target.setSelectionRange(info.start, info.end);
+    }
   }
 
   _groupHtml(group, admin) {
@@ -402,12 +442,12 @@ export class CiSettings {
     const kind = kindOf(code, name, spec.pattern);
     const busy = this.busy.has(`${code}/${JSON.stringify(key)}/${name}`);
     const keyText = esc(JSON.stringify(key));
-    const data = `data-ci-field data-code="${code}" data-key="${keyText}" data-field="${name}" data-kind="${kind}"`;
+    const data = `data-ci-field data-code="${code}" data-key="${keyText}" data-field="${esc(name)}" data-kind="${kind}"`;
     const disabled = !editable || busy ? "disabled" : "";
     let control;
     if (kind === "bit") {
       const on = value === "001";
-      control = `<button class="tgl pr cit" role="switch" aria-checked="${on}" aria-label="${esc(label)}" data-ci="toggle" data-code="${code}" data-key="${keyText}" data-field="${name}" ${disabled}><span class="n">${on ? "On" : "Off"}</span><span class="sw"></span></button>`;
+      control = `<button class="tgl pr cit" role="switch" aria-checked="${on}" aria-label="${esc(label)}" data-ci="toggle" data-code="${code}" data-key="${keyText}" data-field="${esc(name)}" ${disabled}><span class="n">${on ? "On" : "Off"}</span><span class="sw"></span></button>`;
     } else if (kind === "select") {
       control = `<select ${data} aria-label="${esc(label)}" ${disabled}>${this._options(code, spec, value)}</select>`;
     } else if (kind === "mixed") {

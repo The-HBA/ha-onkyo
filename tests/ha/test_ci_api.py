@@ -219,4 +219,58 @@ async def test_a_receiver_without_ci_settings_reports_none(
     await setup(hass, entry)
     with patch.object(entry.runtime_data.receiver, "ci_read", side_effect=NoReplyError("sAPC")):
         reply = await _ask(hass, hass_ws_client, entry, "ci_info")
-    assert reply["result"] == {"supported": False, "families": []}
+    assert reply["result"] == {"supported": False, "families": [], "retry": False}
+
+
+async def test_silence_in_standby_is_not_remembered(
+    hass: HomeAssistant, entry: MockConfigEntry, hass_ws_client: WebSocketGenerator
+) -> None:
+    from unittest.mock import patch  # noqa: PLC0415
+
+    from custom_components.onkyo_eiscp.lib import NoReplyError  # noqa: PLC0415
+
+    await setup(hass, entry)
+    receiver = entry.runtime_data.receiver
+    with (
+        patch.object(receiver, "ci_read", side_effect=NoReplyError("sAPC")),
+        patch.dict(receiver._values, {"PWR": "00"}),
+    ):
+        reply = await _ask(hass, hass_ws_client, entry, "ci_info")
+    assert reply["result"]["retry"] is True
+    assert entry.runtime_data.ci_supported is None
+    again = await _ask(hass, hass_ws_client, entry, "ci_info")
+    assert again["result"]["supported"] is True
+
+
+async def test_a_failed_read_back_still_offers_restore(
+    hass: HomeAssistant, entry: MockConfigEntry, hass_ws_client: WebSocketGenerator
+) -> None:
+    from unittest.mock import patch  # noqa: PLC0415
+
+    from custom_components.onkyo_eiscp.lib import NoReplyError  # noqa: PLC0415
+
+    await setup(hass, entry)
+    key = {"MM": "MM1"}
+    receiver = entry.runtime_data.receiver
+    with patch.object(receiver, "_ci_read_back", side_effect=NoReplyError("sLCC")):
+        failed = await _ask(
+            hass, hass_ws_client, entry, "ci_set", code="LCC", key=key, changes={"SW": "-29"}
+        )
+    assert failed["error"]["code"] == "ci_no_reply"
+    read = await _ask(hass, hass_ws_client, entry, "ci_read", code="LCC", key=key)
+    assert read["result"]["records"][0]["restorable"] == ["SW"]
+    done = await _ask(hass, hass_ws_client, entry, "ci_restore", code="LCC", key=key)
+    assert done["result"]["fields"]["SW"] == "-30"
+
+
+async def test_network_settings_need_an_administrator(
+    hass: HomeAssistant,
+    entry: MockConfigEntry,
+    hass_ws_client: WebSocketGenerator,
+    hass_read_only_access_token: str,
+) -> None:
+    await setup(hass, entry)
+    reply = await _ask(
+        hass, hass_ws_client, entry, "ci_read", hass_read_only_access_token, code="NTC"
+    )
+    assert reply["error"]["code"] == "ci_refused"

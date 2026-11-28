@@ -64,6 +64,9 @@ STATUS_FAMILIES: Final = frozenset({"MNC", "ST-", "AM-"})
 #: Zone number in the MZC key to the zone ids of the capabilities.
 _ZONE_KEYS: Final = {"002": "zone2", "003": "zone3"}
 
+#: Families that hold addresses (network); diagnostics hide those too.
+_ADMIN_READ: Final = frozenset({"NTC", "N2C"})
+
 _KEY: Final = {str: str}
 
 
@@ -72,6 +75,11 @@ def _family(code: str) -> ci.FamilySpec:
     if spec is None or code in STATUS_FAMILIES:
         raise NamesError(ERR_CI_UNKNOWN, f"Unknown settings family {code!r}")
     return spec
+
+
+def _check_readable(spec: ci.FamilySpec, connection: ActiveConnection) -> None:
+    if spec.code in _ADMIN_READ and not connection.user.is_admin:
+        raise NamesError(ERR_CI_REFUSED, "Only an administrator can read this")
 
 
 def _keys(spec: ci.FamilySpec, caps: Capabilities) -> list[dict[str, str]]:
@@ -150,6 +158,9 @@ async def _probe(coordinator: OnkyoCoordinator) -> bool:
         try:
             await coordinator.receiver.ci_read("APC")
         except NoReplyError:
+            # Silence in standby proves nothing (it may answer once on): ask again later.
+            if coordinator.receiver.values.get("PWR") != "01":
+                return False
             coordinator.ci_supported = False
         except EiscpError as err:
             raise _error(err) from err  # connection trouble: ask again next time
@@ -186,7 +197,11 @@ async def ws_ci_info(
         if supported
         else []
     )
-    connection.send_result(msg["id"], {"supported": supported, "families": families})
+    # ``retry``: silent but maybe not for good (standby): the page offers to ask again.
+    retry = not supported and coordinator.ci_supported is None
+    connection.send_result(
+        msg["id"], {"supported": supported, "families": families, "retry": retry}
+    )
 
 
 @websocket_command(
@@ -206,6 +221,7 @@ async def ws_ci_read(
     try:
         entry = _entry(hass, msg)
         spec = _family(msg[ATTR_CODE])
+        _check_readable(spec, connection)
         coordinator = entry.runtime_data
         asked: dict[str, str] | None = msg.get(ATTR_KEY)
         keys = [asked] if asked is not None else _keys(spec, coordinator.data.capabilities)
@@ -253,17 +269,15 @@ async def ws_ci_set(hass: HomeAssistant, connection: ActiveConnection, msg: dict
                 change = await coordinator.receiver.ci_set(
                     spec.code, msg[ATTR_CHANGES], msg.get(ATTR_KEY)
                 )
-            except CiNotAppliedError as err:
-                _keep_baseline(coordinator, err.change)  # part of it may have applied
+            except EiscpError as err:
+                # The set may have applied, fully or in part: keep the old values.
+                _keep_baseline(coordinator, getattr(err, "change", None))
                 raise
             _keep_baseline(coordinator, change)
     except NamesError as err:
         _send_error(connection, msg["id"], err)
         return
     except EiscpError as err:
-        _send_error(connection, msg["id"], _error(err))
-        return
-    except CodecError as err:
         _send_error(connection, msg["id"], _error(err))
         return
     assert change.after is not None  # noqa: S101
@@ -312,12 +326,12 @@ async def ws_ci_restore(
         coordinator = entry.runtime_data
         key = dict(msg.get(ATTR_KEY) or {})
         slot = _baseline_key(spec.code, key)
-        saved = _saved(coordinator, slot)
-        if msg.get(ATTR_KEEP):
-            del coordinator.ci_baseline[slot]
-            connection.send_result(msg["id"], {"code": spec.code, "key": key, "fields": {}})
-            return
         async with coordinator.ci_lock:
+            saved = _saved(coordinator, slot)
+            if msg.get(ATTR_KEEP):
+                coordinator.ci_baseline.pop(slot, None)
+                connection.send_result(msg["id"], {"code": spec.code, "key": key, "fields": {}})
+                return
             change = ci.CiChange(
                 code=spec.code,
                 key=key,
@@ -328,11 +342,11 @@ async def ws_ci_restore(
                 calibration=True,
             )
             after = await coordinator.receiver.ci_restore(change)
-            del coordinator.ci_baseline[slot]
+            coordinator.ci_baseline.pop(slot, None)
     except NamesError as err:
         _send_error(connection, msg["id"], err)
         return
-    except (EiscpError, CodecError) as err:
+    except EiscpError as err:
         _send_error(connection, msg["id"], _error(err))
         return
     connection.send_result(msg["id"], {"code": spec.code, **_record(coordinator, after)})

@@ -325,7 +325,12 @@ class Receiver:
             before = await self.ci_read(code, key)
             change = ci.plan_set(before, changes, key)
             await client.send(change.set_message)
-            after = await self._ci_read_back(change)
+            try:
+                after = await self._ci_read_back(change)
+            except EiscpError as err:
+                # The set went out: the caller still needs the old values to offer a restore.
+                err.change = change  # type: ignore[attr-defined]
+                raise
             change = replace(change, after=after)
             if not ci.applied(after, change.changes):
                 raise CiNotAppliedError(code, change.set_message, change)
@@ -669,6 +674,7 @@ class Receiver:
             self._connected = True
             self._remember_standby_volume()
             self._keepalive = asyncio.create_task(self._keep_alive(client))
+            _LOGGER.info("connection to %s is back", self.host)
             self._mark(ALL_CHANGED)
             return
 

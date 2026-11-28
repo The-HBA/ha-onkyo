@@ -1,0 +1,32 @@
+name: Bug report
+description: Something does not work as it should.
+labels: [bug]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Receiver model and firmware
+      placeholder: Onkyo TX-RZ50, firmware 1.2.3
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Onkyo Remote and Home Assistant versions
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log lines and diagnostics
+      description: Turn on debug logging for custom_components.onkyo_eiscp. Download the diagnostics from the device page and attach them. Remove anything private.

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- New documentation in `docs/`, a quality scale file, and issue templates.
+- Advanced settings: a calibration value is kept for Restore even when the read-back after a change fails; a silent receiver in standby no longer hides the section for good (Try again); Restore and Keep no longer race with changes; network settings need an administrator to read.
+- The log gets one line when the connection to the receiver is back.
+
 ## 0.1.2-beta
 
 The sidebar page gets the receiver's advanced settings, the ones the removed Web Setup page held.

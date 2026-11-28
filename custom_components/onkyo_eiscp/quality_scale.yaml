@@ -1,0 +1,77 @@
+# Quality scale of Onkyo Remote. Bronze, Silver and Gold are done; Platinum is partly exempt.
+
+rules:
+
+  # Bronze
+  action-setup: done  # `send_raw` and `survey` are registered in `async_setup` (`services.py`).
+  appropriate-polling: done  # No polling: the receiver pushes changes over one open connection (`update_interval=None`).
+  brands: done  # Icons and logos in `brand/`.
+  common-modules: done  # `entity.py`, `coordinator.py`, `setting.py` hold the shared code.
+  config-flow-test-coverage: done  # `tests/ha/test_config_flow.py` and `test_options_flow.py` cover user, SSDP, confirm, reconfigure and options.
+  config-flow: done  # UI setup with `data_description` for every field; connection data lives in the entry.
+  dependency-transparency:
+    status: exempt
+    comment: "No requirements: the eISCP library is part of this repository (`lib/`)."
+  docs-actions: done  # docs/entities-and-actions.md
+  docs-high-level-description: done  # README.md
+  docs-installation-instructions: done  # docs/getting-started.md
+  docs-removal-instructions: done  # docs/getting-started.md, section Remove
+  entity-event-setup: done  # Entities listen through the coordinator; the coordinator removes its receiver listener on stop.
+  entity-unique-id: done  # `<mac>-<zone>-<key>` (`entity.py`).
+  has-entity-name: done  # `_attr_has_entity_name = True` on the base entity.
+  runtime-data: done  # `entry.runtime_data` holds the coordinator.
+  test-before-configure: done  # The flow reads the receiver's identity (NRI) before it creates the entry.
+  test-before-setup: done  # `ConfigEntryNotReady` when the receiver cannot be reached.
+  unique-config-entry: done  # The MAC address is the unique id; a second entry for the same receiver is refused.
+
+  # Silver
+  action-exceptions: done  # Entities and actions raise `HomeAssistantError` or `ServiceValidationError` with translated messages.
+  config-entry-unloading: done  # `async_unload_entry` unloads the platforms; the coordinator closes the connection on unload.
+  docs-configuration-parameters: done  # docs/getting-started.md, section Options
+  docs-installation-parameters: done  # docs/getting-started.md, section Set up
+  entity-unavailable: done  # Entities turn unavailable when the connection drops or the receiver does not support a setting.
+  integration-owner: done  # `codeowners` in the manifest.
+  log-when-unavailable: done  # `lib/receiver.py` logs once when the connection is lost (warning) and once when it is back (info).
+  parallel-updates: done  # `PARALLEL_UPDATES` is set on every platform.
+  reauthentication-flow:
+    status: exempt
+    comment: "The receiver has no login."
+  test-coverage: done  # 98 percent of the integration and library with both test suites (`pytest --cov`).
+
+  # Gold
+  devices: done  # One device per receiver, with manufacturer, model and firmware, identified by the MAC address.
+  diagnostics: done  # `diagnostics.py`, with address and identifiers redacted.
+  discovery-update-info: done  # SSDP discovery updates the host of an existing entry.
+  discovery: done  # SSDP matches Onkyo, Pioneer and Integra renderers.
+  docs-data-update: done  # docs/entities-and-actions.md, section How data updates
+  docs-examples: done  # docs/examples.md
+  docs-known-limitations: done  # docs/troubleshooting.md, section Known limits
+  docs-supported-devices: done  # docs/entities-and-actions.md, section Supported receivers
+  docs-supported-functions: done  # docs/entities-and-actions.md
+  docs-troubleshooting: done  # docs/troubleshooting.md
+  docs-use-cases: done  # docs/examples.md
+  dynamic-devices:
+    status: exempt
+    comment: "One receiver per entry; its zones are read once from what the receiver reports."
+  entity-category: done  # Diagnostic sensors and configuration entities carry a category.
+  entity-device-class: done  # The temperature sensor has its class; the other entities have no matching class.
+  entity-disabled-by-default: done  # The noisy diagnostic sensors start disabled.
+  entity-translations: done  # Every entity name comes from `translations/en.json`.
+  exception-translations: done  # Every raised error has a translation key.
+  icon-translations: done  # `icons.json`.
+  reconfiguration-flow: done  # `async_step_reconfigure` changes host and port and checks the receiver is the same one.
+  repair-issues: done  # A repair when the core Onkyo integration uses the same receiver.
+  stale-devices:
+    status: exempt
+    comment: "One device per entry; removing the entry removes it."
+
+  # Platinum
+  async-dependency:
+    status: exempt
+    comment: "No third-party library."
+  inject-websession:
+    status: exempt
+    comment: "No HTTP: the integration uses its own TCP connection."
+  strict-typing:
+    status: todo
+    comment: "`lib/` and `tools/` pass strict mypy; the Home Assistant layer is not under strict mypy yet."

@@ -25,6 +25,16 @@ Parts of this project were written with AI-assisted tooling.
 
 The tabs a model cannot use are hidden. Controls the model does not support are hidden too.
 
+## Documentation
+
+- [Getting started](docs/getting-started.md): install, set up, options, remove
+- [Entities and actions](docs/entities-and-actions.md): what you get, supported receivers, how data updates
+- [Card and sidebar page](docs/card-and-sidebar.md)
+- [Examples](docs/examples.md)
+- [Troubleshooting](docs/troubleshooting.md): known limits, repairs, what to attach to an issue
+
+![The card](docs/images/card-main-dark.png)
+
 ## The card
 
 Edit a dashboard, add a card, and pick Onkyo Remote. Choose the receiver in the card editor. The sidebar page opens the same card full screen with the rename tools for administrators.
