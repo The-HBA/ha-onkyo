@@ -2,11 +2,11 @@
 
 A Home Assistant integration for Onkyo network receivers (and Pioneer and Integra models that use the same eISCP protocol). It is local only: it talks to the receiver on your network, with no cloud and no accounts.
 
-Status: 0.1.1-beta. Built and checked on an Onkyo TX-RZ50. Other models are meant to work (the integration reads what the receiver supports) and are not tested yet.
+Status: 0.1.2-beta. Built and checked on an Onkyo TX-RZ50. Other models are meant to work (the integration reads what the receiver supports) and are not tested yet.
 
 Parts of this project were written with AI-assisted tooling.
 
-## What works in 0.1.1-beta
+## What works in 0.1.2-beta
 
 | Area | What you get |
 |---|---|
@@ -20,6 +20,7 @@ Parts of this project were written with AI-assisted tooling.
 | Repairs | A notice when the core Onkyo integration uses the same receiver |
 | Names and options | Rename, hide and order inputs and modes in one sheet; maximum volume and restore volume in Configure |
 | Remote card | One card with Main, Modes, Remote, Playing and Zones tabs, and a sidebar page "Onkyo" for the receiver settings |
+| Advanced settings | The sidebar page replaces the receiver's removed Web Setup: input and output assign, speaker levels, distances and crossovers (with restore), equalizer, per-input audio, HDMI, power, volume limits, zones and smaller options. Speaker layout and network are shown, never changed |
 | Diagnostics | Capabilities and values, with address and identifiers hidden |
 
 The tabs a model cannot use are hidden. Controls the model does not support are hidden too.

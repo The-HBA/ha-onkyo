@@ -7,12 +7,13 @@ const load = (path) => import(new URL(`${path}${VERSION}`, import.meta.url).href
 
 // The element is defined at once and loads its parts when it is shown, so a file that fails to
 // load (a stale cache right after an update, a dropped connection) shows a message, not a blank page.
-let shared, STYLE, Remote, esc, icon, optionLabel, pickDevice, receivers, segmented;
+let shared, STYLE, CiSettings, CI_STYLE, Remote, esc, icon, optionLabel, pickDevice, receivers, segmented;
 let ready = null;
 const loadParts = () => {
   ready ??= (async () => {
     shared = await load("./shared.js");
     ({ STYLE } = await load("./styles.js"));
+    ({ CiSettings, CI_STYLE } = await load("./ci-settings.js"));
     await load("./onkyo-remote-card.js");
     ({ Remote, esc, icon, optionLabel, pickDevice, receivers, segmented } = shared);
   })();
@@ -126,19 +127,23 @@ class OnkyoPanel extends HTMLElement {
       .panelwrap .grp{background:var(--card-background-color)}
       .rowsel{display:flex;flex-direction:column;gap:4px}
       .empty{padding:24px;text-align:center;color:var(--secondary-text-color)}
+      .rs{display:flex;flex-direction:column;gap:12px}
+      ${CI_STYLE}
     </style>
-    <div class="panelwrap"><div class="bar"></div><div class="cols"><div class="left"><div class="leftx"></div></div><div class="right"></div></div></div>`;
+    <div class="panelwrap"><div class="bar"></div><div class="cols"><div class="left"><div class="leftx"></div></div><div class="right"><div class="rs"></div><div class="cislot"></div></div></div></div>`;
     this._root = this.shadowRoot.querySelector(".panelwrap");
     this._bar = this._root.querySelector(".bar");
     this._cols = this._root.querySelector(".cols");
     this._left = this._root.querySelector(".left");
-    this._right = this._root.querySelector(".right");
+    this._right = this._root.querySelector(".rs");
+    this._cislot = this._root.querySelector(".cislot");
     this._leftx = this._root.querySelector(".leftx");
     this._root.addEventListener("click", (event) => this._onClick(event));
     this._root.addEventListener("change", (event) => {
       if (event.target.matches("[data-device]")) {
         this._deviceId = event.target.value;
         this._info = null;
+        this._dropCi();
         this._card.setConfig({ type: "custom:onkyo-remote-card", device_id: this._deviceId });
         this._seen = [];
         this._update();
@@ -176,6 +181,7 @@ class OnkyoPanel extends HTMLElement {
     }
     this._card.hass = hass;
     if (!this._info && this._deviceId && !this._fetching) this._fetchInfo();
+    this._updateCi(hass);
     const remote = new Remote(hass, this._deviceId, this._info);
     const seen = [list.length, this._deviceId, hass.user?.is_admin, this._info, ...Object.values(remote.ids).map((id) => hass.states?.[id])];
     if (seen.length === this._seen.length && seen.every((item, index) => item === this._seen[index])) return;
@@ -191,6 +197,31 @@ class OnkyoPanel extends HTMLElement {
     const extra = this._namesHtml() + this._receiverHtml(remote);
     this._right.innerHTML = this._settingsHtml(remote) + (this._narrow ? extra : "");
     this._leftx.innerHTML = this._narrow ? "" : extra;
+  }
+
+  // The advanced settings keep their own state and are not redrawn with the rest of the page.
+  _dropCi() {
+    this._ci = null;
+    this._ciDevice = null;
+    this._cislot.replaceChildren();
+  }
+
+  _updateCi(hass) {
+    if (!this._deviceId || !this._info || this._info.error) {
+      if (!this._deviceId) this._dropCi();
+      return;
+    }
+    if (this._ci && this._ciDevice !== this._deviceId) this._dropCi();
+    if (!this._ci) {
+      this._ci = new CiSettings({ hass, deviceId: this._deviceId, info: this._info, toast: (message) => this._toast(message) });
+      this._ciDevice = this._deviceId;
+      this._cislot.replaceChildren(this._ci.root);
+      void this._ci.start();
+    }
+    const admin = this._ci.hass?.user?.is_admin;
+    this._ci.hass = hass;
+    this._ci.setInfo(this._info);
+    if (admin !== hass.user?.is_admin) this._ci.render();
   }
 
   async _fetchInfo() {

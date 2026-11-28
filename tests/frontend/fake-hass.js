@@ -4,6 +4,9 @@
 // integration would after the receiver confirms. Data follows ARCHITECTURE.md C5 and the
 // design round's data (Hattan's TX-RZ50 and a smaller model).
 
+// What the CI websocket commands answer (tools/build_ci_ws_fixture.py).
+const CI_DATA = await (await fetch("/ci-ws.json")).json();
+
 export const DEVICE_ID = "device_rz50";
 export const OTHER_DEVICE_ID = "device_small";
 export const PLAYER = "media_player.onkyo_tx_rz50_main";
@@ -68,7 +71,7 @@ const mkState = (entity_id, state, attributes = {}) => ({ entity_id, state, attr
  * "unavailable"), signal ("pcm", "atmos", "dtsx", "none"), admin, otherReceiver (adds a second
  * receiver for the panel's picker).
  */
-export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin = true, otherReceiver = false } = {}) {
+export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin = true, otherReceiver = false, ciSilent = false } = {}) {
   const spec = model === "small" ? MODEL_SMALL : MODEL_RZ50;
   const rx = {
     spec,
@@ -236,7 +239,7 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     entry_id: "entry1",
     device_id: DEVICE_ID,
     model: spec.label.replace("Onkyo ", ""),
-    version: "0.1.1-beta",
+    version: "0.1.2-beta",
     zones: spec.zones,
     volume_max: spec.volumeMax,
     volume_db_step: spec.dbStep,
@@ -339,6 +342,53 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     commit();
   };
 
+  // The receiver's CI settings: a copy of the fixture records, with the rules of ci_api.py.
+  const ciRecords = structuredClone(CI_DATA.records);
+  const ciBaseline = {};
+  const ciWrite = [];
+  hass.ciWrites = ciWrite;
+  hass.ciSilent = ciSilent || model === "small"; // a model without CI settings stays silent
+  const fail = (code, text) => Object.assign(new Error(text), { code });
+  const ciFind = (code, key = {}) =>
+    (ciRecords[code] ?? []).find((record) => Object.entries(key).every(([name, value]) => record.key[name] === value) && Object.keys(record.key).length === Object.keys(key).length);
+  const ciAnswer = (code, record) => ({ code, key: record.key, fields: { ...record.fields }, restorable: Object.keys(ciBaseline[code + JSON.stringify(record.key)] ?? {}) });
+  const ci = (message) => {
+    if (message.type === "onkyo_eiscp/ci_info") {
+      if (hass.ciSilent) return { supported: false, families: [] };
+      return { supported: true, families: CI_DATA.families };
+    }
+    const family = CI_DATA.families.find((item) => item.code === message.code);
+    if (!family) throw fail("ci_unknown_family", "Unknown settings family");
+    if (message.type === "onkyo_eiscp/ci_read") {
+      if (hass.ciSilent) throw fail("ci_no_reply", "The receiver did not answer");
+      const found = message.key ? [ciFind(message.code, message.key)] : ciRecords[message.code] ?? [];
+      if (found.includes(undefined)) throw fail("ci_no_reply", "The receiver did not answer");
+      return { code: message.code, records: found.map((record) => ciAnswer(message.code, record)).map(({ code: _code, ...rest }) => rest) };
+    }
+    if (!hass.user.is_admin) throw fail("unauthorized", "Unauthorized");
+    const record = ciFind(message.code, message.key ?? {});
+    if (message.type === "onkyo_eiscp/ci_set") {
+      ciWrite.push({ code: message.code, key: message.key ?? {}, changes: message.changes });
+      for (const [name, value] of Object.entries(message.changes)) {
+        const spec = family.fields[name];
+        if (!spec?.writable) throw fail("ci_refused", `CI ${message.code} write refused`);
+        if (!new RegExp(`^(?:${spec.pattern})$`).test(value) || value.length > spec.width) throw fail("ci_invalid", "invalid value");
+        if (message.code === "VIC") throw fail("ci_not_applied", "The receiver ignored the new value");
+        if (family.calibration) {
+          const saved = (ciBaseline[message.code + JSON.stringify(record.key)] ??= {});
+          saved[name] ??= record.fields[name];
+        }
+        for (const other of family.shared.includes(name) ? ciRecords[message.code] : [record]) other.fields[name] = value;
+      }
+      return ciAnswer(message.code, record);
+    }
+    const slot = message.code + JSON.stringify(record.key);
+    if (!ciBaseline[slot]) throw fail("ci_nothing_to_restore", "Nothing to restore for this record");
+    if (!message.keep) Object.assign(record.fields, ciBaseline[slot]);
+    delete ciBaseline[slot];
+    return ciAnswer(message.code, record);
+  };
+
   hass.callWS = async (message) => {
     wsCalls.push(message);
     if (hass.failNext) {
@@ -347,6 +397,7 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
       throw Object.assign(new Error(text), { code: "name_in_use" });
     }
     if (message.type === "onkyo_eiscp/card_info") return info();
+    if (message.type.startsWith("onkyo_eiscp/ci_")) return ci(message);
     if (message.type === "onkyo_eiscp/set_names") {
       const target = message.kind === "inputs" ? rx.inputNames : rx.modeNames;
       for (const key of Object.keys(target)) delete target[key];

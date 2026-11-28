@@ -129,6 +129,22 @@ await page.close();
 await shot(page, "panel-phone");
 await page.close();
 
+// Advanced settings: groups closed, then a few opened.
+const openCi = async (page, title) => {
+  await page.locator("onkyo-panel .cigroup", { hasText: title }).locator("[data-ci=group]").click();
+  await page.locator("onkyo-panel .cigroup", { hasText: title }).locator(".cibody .cirow, .cibody .cih2").first().waitFor();
+};
+for (const [theme, viewport] of [["dark", { ...DESKTOP, height: 1500 }], ["light", { ...PHONE, height: 2200 }]]) {
+  ({ page } = await openPanel(browser, server.url, { theme, viewport }));
+  await page.locator("onkyo-panel .cig").scrollIntoViewIfNeeded();
+  await shot(page, `panel-advanced-${theme}`);
+  await openCi(page, "Input assign");
+  await openCi(page, "Speaker levels");
+  await page.locator("onkyo-panel .cigroup", { hasText: "Speaker levels" }).locator("[data-ci=block]").first().click();
+  await shot(page, `panel-advanced-open-${theme}`);
+  await page.close();
+}
+
 await browser.close();
 await server.close();
 console.log(`Screenshots in ${OUT}`);

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.2-beta
+
+The sidebar page gets the receiver's advanced settings, the ones the removed Web Setup page held.
+
+- New "Advanced settings" section: input assign (audio source, HDMI, digital and analog jacks, input skip), input names and start volume, per-input audio and HDMI, TV out and HDMI (CEC, ARC), speaker levels, distances and crossovers, equalizer, power and volume limits, zones, and smaller options.
+- Speaker levels, distances and crossovers are part of the Dirac calibration: the first change to a record saves its old values, and Restore puts them back (Keep forgets them).
+- Speaker layout and network are shown and never changed. Video assign is shown read only, because the TX-RZ50 ignores changes to it.
+- Changes need an administrator. A model that does not answer these settings shows no section.
+- New websocket commands `onkyo_eiscp/ci_info`, `ci_read`, `ci_set` and `ci_restore`.
+
 ## 0.1.1-beta
 
 Fixes from the first check on a real Home Assistant.

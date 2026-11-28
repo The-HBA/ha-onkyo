@@ -48,6 +48,10 @@ SERVICE_SURVEY: Final = "survey"
 ATTR_CONFIG_ENTRY_ID: Final = "config_entry_id"
 ATTR_MESSAGE: Final = "message"
 WS_CARD_INFO: Final = "onkyo_eiscp/card_info"
+WS_CI_INFO: Final = "onkyo_eiscp/ci_info"
+WS_CI_READ: Final = "onkyo_eiscp/ci_read"
+WS_CI_SET: Final = "onkyo_eiscp/ci_set"
+WS_CI_RESTORE: Final = "onkyo_eiscp/ci_restore"
 
 # Translation keys for errors and repairs.
 ERROR_NOT_AVAILABLE: Final = "not_available"

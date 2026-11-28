@@ -98,6 +98,9 @@ def async_register_commands(hass: HomeAssistant) -> None:
     """Register the integration's websocket commands (once, in ``async_setup``)."""
     websocket_api.async_register_command(hass, ws_card_info)
     websocket_api.async_register_command(hass, ws_set_names)
+    from . import ci_api  # noqa: PLC0415  (it imports this module)
+
+    ci_api.register(hass)
 
 
 def _entry(hass: HomeAssistant, msg: dict[str, Any]) -> OnkyoConfigEntry:
