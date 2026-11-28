@@ -34,6 +34,12 @@ TX_RZ50: Final = Profile(
     model="TX-RZ50",
     listening_modes=_ordered(_PCM | {_DTS_HD_96K}),
     signal_modes={"pcm": _ordered(_PCM), "atmos": _ordered(_ATMOS)},
-    options={"DIM": ("00", "01", "02"), "DGF": ("00", "01", "03")},
+    options={
+        "DIM": ("00", "01", "02"),
+        "DGF": ("00", "01", "03"),
+        # OSD AUDIO and VIDEO do nothing on this model (checked by its owner, 2026-11-28); NRI
+        # has no control for them. HOME goes through NRI (Home is 0).
+        "OSD": ("UP", "DOWN", "LEFT", "RIGHT", "ENTER", "EXIT", "MENU", "HOME", "QUICK"),
+    },
     notes="No centre speaker, one subwoofer; DGF02 is ignored, DIM03 and DIM08 answer N/A.",
 )

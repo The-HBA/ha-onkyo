@@ -142,7 +142,9 @@ def test_remote_keys_follow_the_nri_controls() -> None:
     keys = _osd_keys(NRI)
     # The TX-RZ50 says Home is 0; Menu is 0 too, but Setup (also the MENU key) is 1.
     assert "HOME" not in keys
-    assert {"UP", "ENTER", "EXIT", "MENU", "QUICK", "AUDIO", "VIDEO"} <= set(keys)
+    assert {"UP", "ENTER", "EXIT", "MENU", "QUICK"} <= set(keys)
+    # The TX-RZ50 profile drops AUDIO and VIDEO (they do nothing on that model).
+    assert not {"AUDIO", "VIDEO"} & set(keys)
 
 
 def test_remote_keys_keep_home_when_nri_allows_it_or_says_nothing() -> None:
@@ -158,4 +160,4 @@ def test_remote_keys_drop_what_nri_switches_off() -> None:
     )
     keys = _osd_keys(off)
     assert not {"UP", "DOWN", "LEFT", "RIGHT", "ENTER", "MENU"} & set(keys)
-    assert {"EXIT", "AUDIO", "VIDEO", "QUICK"} <= set(keys)
+    assert {"EXIT", "QUICK"} <= set(keys)

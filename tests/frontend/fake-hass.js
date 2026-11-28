@@ -236,13 +236,13 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     entry_id: "entry1",
     device_id: DEVICE_ID,
     model: spec.label.replace("Onkyo ", ""),
-    version: "0.1.0-beta",
+    version: "0.1.1-beta",
     zones: spec.zones,
     volume_max: spec.volumeMax,
     volume_db_step: spec.dbStep,
     dirac_slots: spec.dirac ? spec.dirac.slice(1) : [],
-    // The TX-RZ50 does not support Home; the other fake models support every key.
-    remote_keys: ["up", "down", "left", "right", "enter", "exit", "menu", "home", "quick", "audio", "video"].filter((key) => spec.label !== "Onkyo TX-RZ50" || key !== "home"),
+    // The TX-RZ50 has no Home, Audio or Video key; the other fake models support every key.
+    remote_keys: ["up", "down", "left", "right", "enter", "exit", "menu", "home", "quick", "audio", "video"].filter((key) => spec.label !== "Onkyo TX-RZ50" || !["home", "audio", "video"].includes(key)),
     listening_mode_groups: Object.fromEntries(spec.modes.map((code) => [code, MODE_TABLE[code][1]])),
     inputs: orderedInputs().map((code) => ({
       code,

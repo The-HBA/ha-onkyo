@@ -31,6 +31,7 @@ async function using(options, body) {
 }
 
 const titles = (page) => page.locator("onkyo-panel .right .gt").allInnerTexts();
+const leftTitles = (page) => page.locator("onkyo-panel .leftx .gt").allInnerTexts();
 const calls = (page) => page.evaluate(() => window.hass.calls);
 
 describe("sidebar page", () => {
@@ -38,7 +39,9 @@ describe("sidebar page", () => {
     using({}, async (page) => {
       assert.equal(await page.locator("onkyo-panel h1").innerText(), "Onkyo");
       assert.equal(await page.locator("onkyo-panel onkyo-remote-card .hname").innerText(), "Onkyo TX-RZ50");
-      assert.deepEqual(await titles(page), ["Tone", "Levels", "Sound", "Setup", "Names", "Receiver"]);
+      assert.deepEqual(await titles(page), ["Tone", "Levels", "Sound", "Setup"]);
+      // Wide screen: names and receiver info sit under the card.
+      assert.deepEqual(await leftTitles(page), ["Names", "Receiver"]);
     }));
 
   test("a smaller model shows only what it has (RULES.md 4)", () =>
@@ -79,7 +82,7 @@ describe("sidebar page", () => {
     });
     await using({ admin: false }, async (page) => {
       assert.equal(await page.locator("onkyo-panel .setlink", { hasText: "Rename" }).count(), 0);
-      assert.match(await page.locator("onkyo-panel .right").innerText(), /Only an administrator/);
+      assert.match(await page.locator("onkyo-panel .leftx").innerText(), /Only an administrator/);
     });
   });
 
@@ -102,6 +105,9 @@ describe("sidebar page", () => {
       const left = await page.locator("onkyo-panel .left").boundingBox();
       const right = await page.locator("onkyo-panel .right").boundingBox();
       assert.ok(right.y >= left.y + left.height - 1, "settings sit below the card");
+      // One column: names and receiver info come last, after the settings.
+      assert.deepEqual(await leftTitles(page), []);
+      assert.deepEqual((await titles(page)).slice(-2), ["Names", "Receiver"]);
     }));
 
   test("a desktop shows the card beside the settings", () =>
@@ -109,7 +115,23 @@ describe("sidebar page", () => {
       const left = await page.locator("onkyo-panel .left").boundingBox();
       const right = await page.locator("onkyo-panel .right").boundingBox();
       assert.ok(right.x >= left.x + left.width - 1, "settings sit to the right of the card");
+      // The two columns end near the same height (no long right column beside empty space).
+      assert.ok(Math.abs(left.y + left.height - (right.y + right.height)) < right.height * 0.4, `${left.height} vs ${right.height}`);
     }));
+
+  test("a part that fails to load shows a message with Reload, not a blank page", async () => {
+    const page = await browser.newPage({ viewport: DESKTOP });
+    try {
+      await page.route("**/styles.js*", (route) => route.abort());
+      await page.goto(`${server.url}/panel.html`);
+      await page.waitForFunction(() => window.panelReady);
+      await page.evaluate(() => window.mountPanel({}));
+      await page.waitForFunction(() => document.querySelector("onkyo-panel")?.shadowRoot?.textContent?.includes("could not load"), null, { timeout: 5000 });
+      assert.equal(await page.locator("onkyo-panel button", { hasText: "Reload" }).count(), 1);
+    } finally {
+      await page.close();
+    }
+  });
 
   test("holding a stepper counts from the last value sent", () =>
     using({}, async (page) => {

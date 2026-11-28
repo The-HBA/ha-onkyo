@@ -53,8 +53,8 @@ describe("remote tab", () => {
   test("shows the D-pad, Enter, the keys the model supports and the volume group", () =>
     using({}, "Remote", async (page) => {
       assert.equal(await card(page, ".p-remote .dk").count(), 5);
-      // The TX-RZ50 does not support Home (card_info remote_keys).
-      assert.deepEqual(await card(page, ".p-remote .key").allInnerTexts(), ["Back", "Menu", "Quick menu", "Audio", "Video"]);
+      // The TX-RZ50 has no Home, Audio or Video key (card_info remote_keys).
+      assert.deepEqual(await card(page, ".p-remote .key").allInnerTexts(), ["Back", "Menu", "Quick menu"]);
       assert.equal(await card(page, ".p-remote .gt", ).filter({ hasText: "Volume" }).count(), 1);
       assert.match(await card(page, ".p-remote .vread").innerText(), /dB/);
     }));

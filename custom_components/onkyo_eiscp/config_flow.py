@@ -1,4 +1,4 @@
-"""Config flow (manual host, SSDP, reconfigure) and the options flow (names, order, volume)."""
+"""Config flow (manual host, SSDP, reconfigure) and the options flow (volume)."""
 
 from __future__ import annotations
 
@@ -21,20 +21,10 @@ from homeassistant.helpers.selector import (
     NumberSelector,
     NumberSelectorConfig,
     NumberSelectorMode,
-    SelectOptionDict,
-    SelectSelector,
-    SelectSelectorConfig,
-    SelectSelectorMode,
-    TextSelector,
 )
 
 from .const import (
-    CONF_HIDDEN,
-    CONF_INPUT_ORDER,
-    CONF_INPUTS,
-    CONF_LISTENING_MODES,
     CONF_MAX_VOLUME,
-    CONF_NAME,
     CONF_RESTORE_VOLUME,
     CORE_DOMAIN,
     DEFAULT_PORT,
@@ -44,11 +34,6 @@ from .const import (
 )
 from .lib import EiscpClient, EiscpError
 from .lib.codecs import DeviceInfo, parse_device_info
-from .naming import (
-    input_name,
-    ordered_input_codes,
-    table_mode_name,
-)
 
 if TYPE_CHECKING:
     from homeassistant.helpers.service_info.ssdp import SsdpServiceInfo
@@ -92,9 +77,9 @@ class OnkyoConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry: ConfigEntry) -> OnkyoOptionsFlow:
+    def async_get_options_flow(config_entry: ConfigEntry) -> OnkyoOptionsFlow:  # noqa: ARG004
         """Return the options flow."""
-        return OnkyoOptionsFlow(config_entry)
+        return OnkyoOptionsFlow()
 
     def _host_in_use(self, host: str) -> bool:
         """Return True when an entry already holds a connection to this host.
@@ -232,233 +217,28 @@ def _title(info: DeviceInfo) -> str:
 # ----- options flow ----------------------------------------------------------------------------
 
 
-def _clean(section: dict[str, dict[str, Any]], code: str) -> None:
-    """Drop the stored entry of ``code`` when it holds nothing."""
-    entry = section.get(code)
-    if entry is not None and not entry.get(CONF_NAME) and not entry.get(CONF_HIDDEN):
-        del section[code]
-
-
 class OnkyoOptionsFlow(OptionsFlowWithReload):
-    """Rename and hide inputs and listening modes, order inputs, set the volume limits."""
+    """Set the volume limits; names, hiding and order live in the card's rename sheet."""
 
-    def __init__(self, entry: ConfigEntry) -> None:
-        """Copy the stored options; nothing is saved until the user picks Save."""
-        options = entry.options
-        self._options: dict[str, Any] = {
-            CONF_INPUTS: {
-                code: dict(value) for code, value in options.get(CONF_INPUTS, {}).items()
-            },
-            CONF_LISTENING_MODES: {
-                code: dict(value) for code, value in options.get(CONF_LISTENING_MODES, {}).items()
-            },
-        }
-        for key in (CONF_INPUT_ORDER, CONF_MAX_VOLUME, CONF_RESTORE_VOLUME):
-            if key in options:
-                self._options[key] = options[key]
-        self._editing = ""
-
-    @property
-    def _caps(self) -> Capabilities:
-        return self.config_entry.runtime_data.data.capabilities
-
-    @property
-    def _values(self) -> dict[str, str]:
-        return dict(self.config_entry.runtime_data.data.values)
-
-    def _input_label(self, code: str) -> str:
-        return input_name(self._caps, self._options, code)
-
-    def _mode_label(self, code: str) -> str:
-        # Names for the list are the user's or the table's, never the live IFA name.
-        custom = self._options[CONF_LISTENING_MODES].get(code, {}).get(CONF_NAME)
-        return str(custom) if custom else table_mode_name(code)
-
-    async def async_step_init(self, _user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Show the menu (the entry must be loaded: the lists come from the receiver)."""
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Set the maximum volume and whether to put the volume back after power-on."""
         if self.config_entry.state is not ConfigEntryState.LOADED:
             return self.async_abort(reason="not_loaded")
-        return self.async_show_menu(
-            step_id="init",
-            menu_options=["inputs", "input_order", "listening_modes", "volume", "save"],
-        )
-
-    async def async_step_save(self, _user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Store the options and reload the entry."""
-        return self.async_create_entry(data=self._options)
-
-    # ----- inputs -----------------------------------------------------------------------------
-
-    async def async_step_inputs(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Pick an input to rename or hide."""
-        if user_input is not None:
-            if code := user_input.get("input"):
-                self._editing = code
-                return await self.async_step_input_edit()
-            return await self.async_step_init()
-        choices = [
-            SelectOptionDict(
-                value=code,
-                label=_with_flag(self._input_label(code), self._hidden(CONF_INPUTS, code)),
-            )
-            for code in ordered_input_codes(self._caps, self._options)
-        ]
-        schema = probatio.Schema(
-            {
-                probatio.Optional("input"): SelectSelector(
-                    SelectSelectorConfig(options=choices, mode=SelectSelectorMode.DROPDOWN)
-                )
-            }
-        )
-        return self.async_show_form(step_id="inputs", data_schema=schema)
-
-    async def async_step_input_edit(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Rename or hide one input."""
-        code = self._editing
-        errors: dict[str, str] = {}
-        if user_input is not None:
-            name = user_input.get(CONF_NAME, "").strip()
-            default = next((item.name for item in self._caps.inputs if item.code == code), code)
-            taken = {
-                self._input_label(other)
-                for other in (item.code for item in self._caps.inputs)
-                if other != code
-            }
-            shown = name or default
-            if shown in taken:
-                errors[CONF_NAME] = "name_in_use"
-            else:
-                stored = self._options[CONF_INPUTS].setdefault(code, {})
-                stored[CONF_NAME] = "" if shown == default else shown
-                stored[CONF_HIDDEN] = bool(user_input.get(CONF_HIDDEN, False))
-                _clean(self._options[CONF_INPUTS], code)
-                return await self.async_step_inputs()
-        suggested = user_input or {
-            CONF_NAME: self._input_label(code),
-            CONF_HIDDEN: self._hidden(CONF_INPUTS, code),
-        }
-        return self.async_show_form(
-            step_id="input_edit",
-            data_schema=self.add_suggested_values_to_schema(_EDIT_SCHEMA, suggested),
-            errors=errors,
-            description_placeholders={"code": code},
-        )
-
-    async def async_step_input_order(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Pick the inputs in the order the source list shows them."""
-        receiver_order = [item.code for item in self._caps.inputs]
-        if user_input is not None:
-            chosen = list(user_input.get(CONF_INPUT_ORDER, []))
-            rest = [code for code in receiver_order if code not in chosen]
-            if chosen + rest == receiver_order:
-                self._options.pop(CONF_INPUT_ORDER, None)
-            else:
-                self._options[CONF_INPUT_ORDER] = chosen
-            return await self.async_step_init()
-        choices = [
-            SelectOptionDict(value=code, label=self._input_label(code))
-            for code in ordered_input_codes(self._caps, self._options)
-        ]
-        schema = probatio.Schema(
-            {
-                probatio.Required(CONF_INPUT_ORDER): SelectSelector(
-                    SelectSelectorConfig(
-                        options=choices,
-                        multiple=True,
-                        sort=False,
-                        mode=SelectSelectorMode.DROPDOWN,
-                    )
-                )
-            }
-        )
-        return self.async_show_form(
-            step_id="input_order",
-            data_schema=self.add_suggested_values_to_schema(
-                schema, {CONF_INPUT_ORDER: ordered_input_codes(self._caps, self._options)}
-            ),
-        )
-
-    # ----- listening modes ----------------------------------------------------------------------
-
-    async def async_step_listening_modes(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Pick a listening mode to rename or hide."""
-        if user_input is not None:
-            if code := user_input.get("mode"):
-                self._editing = code
-                return await self.async_step_mode_edit()
-            return await self.async_step_init()
-        choices = [
-            SelectOptionDict(
-                value=code,
-                label=_with_flag(self._mode_label(code), self._hidden(CONF_LISTENING_MODES, code)),
-            )
-            for code in self._caps.listening_modes
-        ]
-        schema = probatio.Schema(
-            {
-                probatio.Optional("mode"): SelectSelector(
-                    SelectSelectorConfig(options=choices, mode=SelectSelectorMode.DROPDOWN)
-                )
-            }
-        )
-        return self.async_show_form(step_id="listening_modes", data_schema=schema)
-
-    async def async_step_mode_edit(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Rename or hide one listening mode."""
-        code = self._editing
-        errors: dict[str, str] = {}
-        if user_input is not None:
-            name = user_input.get(CONF_NAME, "").strip()
-            default = table_mode_name(code)
-            taken = {
-                self._mode_label(other) for other in self._caps.listening_modes if other != code
-            }
-            shown = name or default
-            if shown in taken:
-                errors[CONF_NAME] = "name_in_use"
-            else:
-                stored = self._options[CONF_LISTENING_MODES].setdefault(code, {})
-                stored[CONF_NAME] = "" if shown == default else shown
-                stored[CONF_HIDDEN] = bool(user_input.get(CONF_HIDDEN, False))
-                _clean(self._options[CONF_LISTENING_MODES], code)
-                return await self.async_step_listening_modes()
-        suggested = user_input or {
-            CONF_NAME: self._mode_label(code),
-            CONF_HIDDEN: self._hidden(CONF_LISTENING_MODES, code),
-        }
-        return self.async_show_form(
-            step_id="mode_edit",
-            data_schema=self.add_suggested_values_to_schema(_EDIT_SCHEMA, suggested),
-            errors=errors,
-            description_placeholders={"code": code},
-        )
-
-    # ----- volume -------------------------------------------------------------------------------
-
-    async def async_step_volume(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Set the maximum volume and whether to put the volume back after power-on."""
-        zone = self._caps.zone(ZONE_MAIN)
+        caps: Capabilities = self.config_entry.runtime_data.data.capabilities
+        options = dict(self.config_entry.options)
+        zone = caps.zone(ZONE_MAIN)
         top = zone.volume_max if zone else 100
         half_db = bool(zone and zone.half_db)
         if user_input is not None:
             raw = _to_raw(float(user_input[CONF_MAX_VOLUME]), half_db=half_db)
             raw = min(max(raw, 1), top)
             if raw >= top:
-                self._options.pop(CONF_MAX_VOLUME, None)
+                options.pop(CONF_MAX_VOLUME, None)
             else:
-                self._options[CONF_MAX_VOLUME] = raw
-            self._options[CONF_RESTORE_VOLUME] = bool(user_input[CONF_RESTORE_VOLUME])
-            return await self.async_step_init()
-        current = int(self._options.get(CONF_MAX_VOLUME, top))
-        shown = _from_raw(current, half_db=half_db)
+                options[CONF_MAX_VOLUME] = raw
+            options[CONF_RESTORE_VOLUME] = bool(user_input[CONF_RESTORE_VOLUME])
+            return self.async_create_entry(data=options)
+        current = int(options.get(CONF_MAX_VOLUME, top))
         selector = NumberSelector(
             NumberSelectorConfig(
                 min=_from_raw(1, half_db=half_db),
@@ -475,32 +255,15 @@ class OnkyoOptionsFlow(OptionsFlowWithReload):
             }
         )
         return self.async_show_form(
-            step_id="volume",
+            step_id="init",
             data_schema=self.add_suggested_values_to_schema(
                 schema,
                 {
-                    CONF_MAX_VOLUME: shown,
-                    CONF_RESTORE_VOLUME: self._options.get(
-                        CONF_RESTORE_VOLUME, DEFAULT_RESTORE_VOLUME
-                    ),
+                    CONF_MAX_VOLUME: _from_raw(current, half_db=half_db),
+                    CONF_RESTORE_VOLUME: options.get(CONF_RESTORE_VOLUME, DEFAULT_RESTORE_VOLUME),
                 },
             ),
         )
-
-    def _hidden(self, section: str, code: str) -> bool:
-        return bool(self._options[section].get(code, {}).get(CONF_HIDDEN, False))
-
-
-_EDIT_SCHEMA = probatio.Schema(
-    {
-        probatio.Optional(CONF_NAME): TextSelector(),
-        probatio.Optional(CONF_HIDDEN, default=False): BooleanSelector(),
-    }
-)
-
-
-def _with_flag(label: str, hidden: bool) -> str:  # noqa: FBT001
-    return f"{label} (hidden)" if hidden else label
 
 
 def _from_raw(raw: int, *, half_db: bool) -> float:
