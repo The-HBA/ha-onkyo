@@ -204,6 +204,7 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
       states[zid] = mkState(zid, unavailable ? "unavailable" : z.power, unavailable ? {} : {
         friendly_name: `${spec.label} ${zone}`,
         source_list: names.slice(1).concat(["Source"]),
+        source_codes: zcodes.slice(1).concat(["80"]),
         source_code: z.source,
         ...(zonOn ? { source: names[zcodes.indexOf(z.source)] ?? "Source", is_volume_muted: z.muted } : {}),
         ...(zonOn && z.volume ? { volume_level: z.raw / 80, volume_db: z.raw - 80 } : {}),
@@ -235,11 +236,13 @@ export function makeHass({ model = "rz50", power = "on", signal = "atmos", admin
     entry_id: "entry1",
     device_id: DEVICE_ID,
     model: spec.label.replace("Onkyo ", ""),
-    version: "0.0.3",
+    version: "0.1.0-beta",
     zones: spec.zones,
     volume_max: spec.volumeMax,
     volume_db_step: spec.dbStep,
     dirac_slots: spec.dirac ? spec.dirac.slice(1) : [],
+    // The TX-RZ50 does not support Home; the other fake models support every key.
+    remote_keys: ["up", "down", "left", "right", "enter", "exit", "menu", "home", "quick", "audio", "video"].filter((key) => spec.label !== "Onkyo TX-RZ50" || key !== "home"),
     listening_mode_groups: Object.fromEntries(spec.modes.map((code) => [code, MODE_TABLE[code][1]])),
     inputs: orderedInputs().map((code) => ({
       code,

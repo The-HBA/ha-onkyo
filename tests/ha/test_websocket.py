@@ -60,6 +60,9 @@ async def test_card_info(
     assert info["volume_db_step"] == 0.5
     assert info["volume_max"] > 0
     assert set(info["dirac_slots"]) <= {"slot_1", "slot_2", "slot_3"}
+    # The TX-RZ50 does not support the Home key (profile), so the card hides it.
+    assert "home" not in info["remote_keys"]
+    assert {"up", "enter", "exit", "menu", "quick", "audio", "video"} <= set(info["remote_keys"])
     groups = info["listening_mode_groups"]
     assert groups["00"] == "stereo"
     assert groups["80"] == "surround"

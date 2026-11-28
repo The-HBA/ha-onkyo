@@ -50,10 +50,11 @@ describe("tab row", () => {
 });
 
 describe("remote tab", () => {
-  test("shows the D-pad, Enter, six keys and the volume group", () =>
+  test("shows the D-pad, Enter, the keys the model supports and the volume group", () =>
     using({}, "Remote", async (page) => {
       assert.equal(await card(page, ".p-remote .dk").count(), 5);
-      assert.deepEqual(await card(page, ".p-remote .key").allInnerTexts(), ["Back", "Home", "Menu", "Quick menu", "Audio", "Video"]);
+      // The TX-RZ50 does not support Home (card_info remote_keys).
+      assert.deepEqual(await card(page, ".p-remote .key").allInnerTexts(), ["Back", "Menu", "Quick menu", "Audio", "Video"]);
       assert.equal(await card(page, ".p-remote .gt", ).filter({ hasText: "Volume" }).count(), 1);
       assert.match(await card(page, ".p-remote .vread").innerText(), /dB/);
     }));
@@ -242,6 +243,16 @@ describe("playing tab", () => {
       const group = card(page, ".grp:has(.gt:text('Quick settings'))");
       assert.equal(await group.evaluate((el) => getComputedStyle(el).pointerEvents), "none");
       assert.equal(await card(page, ".qnote").count(), 0);
+    }));
+
+  test("a model that supports every key shows Home", () =>
+    using({ model: "small" }, "Remote", async (page) => {
+      assert.deepEqual(await card(page, ".p-remote .key").allInnerTexts(), ["Back", "Home", "Menu", "Quick menu", "Audio", "Video"]);
+    }));
+
+  test("Receiver settings link is for administrators only", () =>
+    using({ admin: false }, "Playing", async (page) => {
+      assert.equal(await card(page, ".setlink").count(), 0);
     }));
 
   test("Receiver settings opens the sidebar page", () =>

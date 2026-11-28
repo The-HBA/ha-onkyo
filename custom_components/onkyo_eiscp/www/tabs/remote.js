@@ -1,6 +1,7 @@
 // The Remote tab: the on-screen menu keys of the receiver (the remote entity) and the volume.
 // Arrows repeat while held (the shell's data-rep); the other keys send on release.
 
+// The keys the model supports come from card_info (`remote_keys`); without it every key shows.
 const KEYS = [
   ["exit", "back", "Back"],
   ["home", "home", "Home"],
@@ -27,7 +28,9 @@ export default {
     const arrows = ARROWS.map(
       (key) => `<button class="dk ${key} pr" data-a="key" data-v="${key}" data-rep aria-label="${key[0].toUpperCase()}${key.slice(1)}">${h.icon(key)}</button>`,
     ).join("");
-    const keys = KEYS.map(
+    const supported = ctx.info?.remote_keys;
+    const has = (key) => !Array.isArray(supported) || supported.includes(key);
+    const keys = KEYS.filter(([key]) => has(key)).map(
       ([key, icon, label]) => `<button class="key pr" data-a="key" data-v="${key}" aria-label="${label}">${h.icon(icon)}<span>${label}</span></button>`,
     ).join("");
     return `${standby}<div class="col"><div class="grp ctl"><div class="gh"><span class="gt">On-screen menu</span><span class="gv">On the TV or projector</span></div>

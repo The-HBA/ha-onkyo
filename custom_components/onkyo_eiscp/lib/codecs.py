@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 from xml.etree import ElementTree as ET
 
@@ -147,6 +147,8 @@ class DeviceInfo:
     friendly_name: str
     zones: tuple[NetZone, ...]
     inputs: tuple[NetInput, ...]
+    controls: Mapping[str, str] = field(default_factory=dict)
+    """The ``controllist`` of NRI: control id to its ``value`` (``"0"`` means not supported)."""
 
 
 # ----- public entry points -----------------------------------------------------------------
@@ -466,4 +468,9 @@ def parse_device_info(xml: str) -> DeviceInfo:
         friendly_name=text("friendlyname"),
         zones=zones,
         inputs=inputs,
+        controls={
+            control.get("id", ""): control.get("value", "")
+            for control in device.findall("controllist/control")
+            if control.get("id")
+        },
     )

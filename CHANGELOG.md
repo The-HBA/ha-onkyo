@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.0-beta
+
+The first version with the full feature set. It has been checked against a simulated TX-RZ50 and in a fake Home Assistant page, not yet on a live Home Assistant.
+
+- Entities for the main zone: selects (late night and others), numbers (tone, levels, sleep timer, A/V sync), switches (Music Optimizer), Dirac Live slot, audio and video sensors, and a `remote` entity for the on-screen menu keys.
+- Zone 2 and zone 3 media players, with source lists that include "follow the main zone".
+- Actions `send_raw` and `survey`, and a repair when the core Onkyo integration uses the same receiver.
+- Remote card with Main, Modes, Remote, Playing and Zones tabs, and the sidebar page "Onkyo" with receiver settings and rename tools.
+- Remote keys come from what the receiver reports, so a model without a Home key does not show one.
+- The settings link on the Playing tab shows to administrators only.
+
 ## 0.0.2
 
 - Renamed to Onkyo Remote and switched to the Onkyo logo. The integration ID `onkyo_eiscp` is unchanged, so nothing needs to be set up again.
