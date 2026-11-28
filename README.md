@@ -2,11 +2,11 @@
 
 A Home Assistant integration for Onkyo network receivers (and Pioneer and Integra models that use the same eISCP protocol). It is local only: it talks to the receiver on your network, with no cloud and no accounts.
 
-Status: 0.1.0-beta. Built and checked on an Onkyo TX-RZ50. Other models are meant to work (the integration reads what the receiver supports) and are not tested yet.
+Status: 0.1.1-beta. Built and checked on an Onkyo TX-RZ50. Other models are meant to work (the integration reads what the receiver supports) and are not tested yet.
 
 Parts of this project were written with AI-assisted tooling.
 
-## What works in 0.1.0-beta
+## What works in 0.1.1-beta
 
 | Area | What you get |
 |---|---|
@@ -18,7 +18,7 @@ Parts of this project were written with AI-assisted tooling.
 | Remote | On-screen menu keys through the `remote` entity |
 | Actions | `send_raw` for any eISCP command, `survey` to record what your model answers |
 | Repairs | A notice when the core Onkyo integration uses the same receiver |
-| Options | Rename and hide inputs and modes, order the inputs, maximum volume, restore volume after power on |
+| Names and options | Rename, hide and order inputs and modes in one sheet; maximum volume and restore volume in Configure |
 | Remote card | One card with Main, Modes, Remote, Playing and Zones tabs, and a sidebar page "Onkyo" for the receiver settings |
 | Diagnostics | Capabilities and values, with address and identifiers hidden |
 
@@ -42,16 +42,9 @@ The receiver closes its older connection when the same computer opens a new one.
 
 ## Names
 
-Open the integration, choose Configure, and pick what to change.
+Rename, hide and order inputs and listening modes in one sheet: press Edit on the card's Input or Modes group, or open the Onkyo sidebar page and pick Names. Drag inputs to change their order. An empty name goes back to the receiver's own name. Hidden items stay available to the `send_raw` action. Only administrators can change names.
 
-| Step | Effect |
-|---|---|
-| Rename or hide inputs | Pick an input, give it a name, or hide it from the source list |
-| Order of inputs | Pick the inputs in the order you want them listed |
-| Rename or hide listening modes | Same for modes. Names must be unique |
-| Volume | The maximum volume is 100 percent on the slider. Optionally put the volume back after power on |
-
-An empty name goes back to the receiver's own name. Hidden items stay available to the `send_raw` action.
+The integration's Configure button keeps the volume settings: the maximum volume (100 percent on the slider) and whether to put the volume back after power on.
 
 ## Develop
 

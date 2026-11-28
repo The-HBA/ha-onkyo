@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1-beta
+
+Fixes from the first check on a real Home Assistant.
+
+- Configure now holds only the volume settings. Rename, hide and order inputs and modes in the sheet (Edit on the card, or Names on the sidebar page); the one-by-one steps are gone. Names you set before stay.
+- The sidebar page puts Names and Receiver under the card on wide screens, so the two columns end at about the same height.
+- The sidebar page shows a message with a Reload button when a file fails to load, instead of a blank page.
+- The TX-RZ50 no longer shows the Audio and Video keys on the Remote tab; they do nothing on that model.
+
 ## 0.1.0-beta
 
 The first version with the full feature set. It has been checked against a simulated TX-RZ50 and in a fake Home Assistant page, not yet on a live Home Assistant.

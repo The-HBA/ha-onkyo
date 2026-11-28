@@ -5,10 +5,19 @@
 const VERSION = new URL(import.meta.url).search;
 const load = (path) => import(new URL(`${path}${VERSION}`, import.meta.url).href);
 
-const shared = await load("./shared.js");
-const { STYLE } = await load("./styles.js");
-await load("./onkyo-remote-card.js");
-const { Remote, esc, icon, optionLabel, pickDevice, receivers, segmented } = shared;
+// The element is defined at once and loads its parts when it is shown, so a file that fails to
+// load (a stale cache right after an update, a dropped connection) shows a message, not a blank page.
+let shared, STYLE, Remote, esc, icon, optionLabel, pickDevice, receivers, segmented;
+let ready = null;
+const loadParts = () => {
+  ready ??= (async () => {
+    shared = await load("./shared.js");
+    ({ STYLE } = await load("./styles.js"));
+    await load("./onkyo-remote-card.js");
+    ({ Remote, esc, icon, optionLabel, pickDevice, receivers, segmented } = shared);
+  })();
+  return ready;
+};
 
 const HOLD_DELAY = 450;
 const HOLD_REPEAT = 120;
@@ -81,8 +90,20 @@ class OnkyoPanel extends HTMLElement {
   }
 
   connectedCallback() {
-    this._build();
-    if (this._hass) this._update();
+    loadParts().then(
+      () => {
+        this._build();
+        if (this._hass) this._update();
+      },
+      (error) => {
+        console.error("onkyo-panel: could not load", error);
+        ready = null;
+        this.shadowRoot.innerHTML = `<div style="padding:24px;font-family:var(--paper-font-body1_-_font-family,sans-serif);color:var(--primary-text-color)">
+          <p>The Onkyo page could not load. Reload the page; if it stays blank, clear the browser cache.</p>
+          <button type="button" style="font:inherit;padding:8px 16px;border-radius:8px;border:0;background:var(--primary-color);color:var(--text-primary-color,#fff);cursor:pointer">Reload</button></div>`;
+        this.shadowRoot.querySelector("button").addEventListener("click", () => location.reload());
+      },
+    );
   }
 
   _build() {
@@ -97,19 +118,22 @@ class OnkyoPanel extends HTMLElement {
       .cols{display:flex;gap:16px;align-items:flex-start;padding:16px;max-width:1100px;margin:0 auto}
       .cols.narrow{flex-direction:column;padding:8px}
       .cols.narrow > *{width:100%}
-      .left{flex:0 0 420px}
+      .left{flex:0 0 420px;display:flex;flex-direction:column;gap:12px}
+      .leftx{display:flex;flex-direction:column;gap:12px}
+      .leftx:empty{display:none}
       .cols.narrow .left{flex:none}
       .right{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
       .panelwrap .grp{background:var(--card-background-color)}
       .rowsel{display:flex;flex-direction:column;gap:4px}
       .empty{padding:24px;text-align:center;color:var(--secondary-text-color)}
     </style>
-    <div class="panelwrap"><div class="bar"></div><div class="cols"><div class="left"></div><div class="right"></div></div></div>`;
+    <div class="panelwrap"><div class="bar"></div><div class="cols"><div class="left"><div class="leftx"></div></div><div class="right"></div></div></div>`;
     this._root = this.shadowRoot.querySelector(".panelwrap");
     this._bar = this._root.querySelector(".bar");
     this._cols = this._root.querySelector(".cols");
     this._left = this._root.querySelector(".left");
     this._right = this._root.querySelector(".right");
+    this._leftx = this._root.querySelector(".leftx");
     this._root.addEventListener("click", (event) => this._onClick(event));
     this._root.addEventListener("change", (event) => {
       if (event.target.matches("[data-device]")) {
@@ -145,7 +169,7 @@ class OnkyoPanel extends HTMLElement {
     }
     if (!this._card) {
       this._card = document.createElement("onkyo-remote-card");
-      this._left.append(this._card);
+      this._left.prepend(this._card);
     }
     if (this._card._config?.device_id !== this._deviceId) {
       this._card.setConfig({ type: "custom:onkyo-remote-card", device_id: this._deviceId ?? undefined });
@@ -157,7 +181,16 @@ class OnkyoPanel extends HTMLElement {
     if (seen.length === this._seen.length && seen.every((item, index) => item === this._seen[index])) return;
     this._seen = seen;
     this._renderPicker(list);
-    this._right.innerHTML = this._deviceId ? this._settingsHtml(remote) : `<div class="empty">No Onkyo receiver found. Add one under Settings, Devices and services.</div>`;
+    if (!this._deviceId) {
+      this._right.innerHTML = `<div class="empty">No Onkyo receiver found. Add one under Settings, Devices and services.</div>`;
+      this._leftx.innerHTML = "";
+      return;
+    }
+    // Wide screens: names and receiver info go under the card, so both columns end near the same
+    // height. Narrow screens: one column, everything after the card.
+    const extra = this._namesHtml() + this._receiverHtml(remote);
+    this._right.innerHTML = this._settingsHtml(remote) + (this._narrow ? extra : "");
+    this._leftx.innerHTML = this._narrow ? "" : extra;
   }
 
   async _fetchInfo() {
@@ -196,8 +229,6 @@ class OnkyoPanel extends HTMLElement {
       const items = section.items.map((item) => this._itemHtml(remote, item)).filter(Boolean);
       if (items.length) blocks.push(`<div class="grp"><div class="gh"><span class="gt">${section.title}</span></div>${items.join("")}</div>`);
     }
-    blocks.push(this._namesHtml());
-    blocks.push(this._receiverHtml(remote));
     return blocks.join("");
   }
 
@@ -234,7 +265,7 @@ class OnkyoPanel extends HTMLElement {
          <button class="setlink pr" data-a="rename" data-v="modes">${icon("pencil", 22)}<span class="n">Rename and hide listening modes<small>Each shows only when the signal allows it</small></span>${icon("right", 22)}</button>`
       : `<div class="qnote">${icon("alertO", 18)}<span>Only an administrator can rename inputs and modes.</span></div>`;
     return `<div class="grp"><div class="gh"><span class="gt">Names</span></div>${edit}
-      <button class="setlink pr" data-a="options">${icon("cog", 22)}<span class="n">Volume limits and more<small>Open the integration's options</small></span>${icon("open", 22)}</button></div>`;
+      <button class="setlink pr" data-a="options">${icon("cog", 22)}<span class="n">Volume limits<small>Open the integration's options</small></span>${icon("open", 22)}</button></div>`;
   }
 
   _receiverHtml(remote) {
