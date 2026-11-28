@@ -37,3 +37,27 @@ class NoReplyError(EiscpError):
         super().__init__(f"no reply to {code}{param}")
         self.code = code
         self.param = param
+
+
+class CiRefusedError(EiscpError):
+    """A CI (config) write that the library refuses to send: read-only or unknown settings."""
+
+    def __init__(self, code: str, reason: str) -> None:
+        """Remember which family was refused and why."""
+        super().__init__(f"CI {code} write refused: {reason}")
+        self.code = code
+        self.reason = reason
+
+
+class CiNotAppliedError(EiscpError):
+    """A CI set was sent but the record read back without the new value (ignored)."""
+
+    def __init__(self, code: str, message: str, change: object = None) -> None:
+        """Remember which family and message had no effect, and the ``CiChange`` if any.
+
+        ``change`` (with ``after``) lets the caller restore the fields that did apply.
+        """
+        super().__init__(f"CI {code} set had no effect: {message!r}")
+        self.code = code
+        self.message = message
+        self.change = change

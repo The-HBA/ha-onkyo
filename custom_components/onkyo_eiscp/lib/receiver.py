@@ -19,10 +19,12 @@ from dataclasses import dataclass, replace
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, Final
 
+from . import ci
 from .capabilities import Capabilities, probe, queryable_codes, read_codes, supported_codes
 from .client import DEFAULT_PORT, NOT_AVAILABLE, EiscpClient
 from .commands import COMMANDS, Reply, Value
 from .exceptions import (
+    CiNotAppliedError,
     ConnectionClosedError,
     EiscpError,
     NoReplyError,
@@ -118,6 +120,7 @@ class Receiver:
         self._reread_task: asyncio.Task[None] | None = None
         self._power_tasks: list[asyncio.Task[None]] = []
         self._reread_wanted = False
+        self._ci_lock = asyncio.Lock()
 
     # ----- state ----------------------------------------------------------------------------
 
@@ -288,6 +291,62 @@ class Receiver:
             self._last_audio = asyncio.get_running_loop().time()
         return reply
 
+    # ----- CI config commands (specs/web-setup-backup.md) -----------------------------------
+
+    async def ci_read(self, code: str, key: Mapping[str, str] | None = None) -> ci.CiRecord:
+        """Read one CI record, for example ``ci_read("LCC", {"MM": "MM1"})``.
+
+        A family with a key (selector, preset ...) stays silent without it, so ``key`` is
+        required for those. Raises ``NoReplyError`` when the receiver does not answer.
+        """
+        message = ci.query_message(code, key)
+        param = await self._require_client().request(
+            message, ci.reply_code(code), self.timing.query_timeout
+        )
+        record = ci.decode(ci.reply_code(code) + param)
+        wanted = {name: value.strip() for name, value in (key or {}).items()}
+        if record.key != wanted:
+            # a late reply to an earlier read of another record: never use it
+            raise NoReplyError(ci.reply_code(code), message)
+        return record
+
+    async def ci_set(
+        self, code: str, changes: Mapping[str, str], key: Mapping[str, str] | None = None
+    ) -> ci.CiChange:
+        """Set some fields of one CI record, read it back and return the change.
+
+        The record is read first, so the returned ``CiChange`` holds the old values and
+        ``restore_message``; use ``ci_restore`` to put them back (do this for the calibration
+        families LCC, SDC and COC, RULES 7 and 17). Raises ``CiRefusedError`` for a read-only
+        family or field and ``CiNotAppliedError`` when the receiver ignored the set.
+        """
+        client = self._require_client()
+        async with self._ci_lock:
+            before = await self.ci_read(code, key)
+            change = ci.plan_set(before, changes, key)
+            await client.send(change.set_message)
+            after = await self._ci_read_back(change)
+            change = replace(change, after=after)
+            if not ci.applied(after, change.changes):
+                raise CiNotAppliedError(code, change.set_message, change)
+            return change
+
+    async def ci_restore(self, change: ci.CiChange) -> ci.CiRecord:
+        """Put the old values of ``change`` back and return the record read back."""
+        client = self._require_client()
+        async with self._ci_lock:
+            await client.send(change.restore_message)
+            after = await self._ci_read_back(change)
+            if not ci.applied(after, change.old):
+                raise CiNotAppliedError(
+                    change.code, change.restore_message, replace(change, after=after)
+                )
+            return after
+
+    async def _ci_read_back(self, change: ci.CiChange) -> ci.CiRecord:
+        await asyncio.sleep(self.timing.read_back_delay)
+        return await self.ci_read(change.code, change.key)
+
     async def send_raw(self, message: str, wait: float = 1.0) -> list[str]:
         """Send any message (admin only) and return every message seen in the next ``wait`` s."""
         client = self._require_client()
@@ -347,6 +406,8 @@ class Receiver:
 
     def _on_message(self, message: Message) -> None:
         code, param = message.code, message.param
+        if code.startswith(ci.PREFIX):
+            return  # CI records are read on demand, never kept as state
         if param == NOT_AVAILABLE:
             if self._sets_in_flight[code] > 0:
                 return  # a refused set: ``set`` handles it per listening mode

@@ -1,10 +1,13 @@
 """HA-free eISCP library for Onkyo, Pioneer and Integra network receivers."""
 
+from . import ci
 from .capabilities import Capabilities, InputInfo, ZoneInfo, probe
 from .client import EiscpClient
 from .commands import COMMANDS, DIRAC_SLOTS, LISTENING_MODES, NEVER_OFFER_MODES
 from .discovery import Discovered, discover
 from .exceptions import (
+    CiNotAppliedError,
+    CiRefusedError,
     CodecError,
     ConnectionClosedError,
     EiscpError,
@@ -23,6 +26,8 @@ __all__ = [
     "NEVER_OFFER_MODES",
     "PROFILES",
     "Capabilities",
+    "CiNotAppliedError",
+    "CiRefusedError",
     "CodecError",
     "ConnectionClosedError",
     "Discovered",
@@ -38,6 +43,7 @@ __all__ = [
     "Receiver",
     "Timing",
     "ZoneInfo",
+    "ci",
     "discover",
     "encode",
     "parse_data",

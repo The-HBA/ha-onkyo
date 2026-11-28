@@ -115,6 +115,19 @@ class EiscpClient:
             raise NotAvailableError(code, param)
         return reply
 
+    async def request(
+        self,
+        message: str,
+        reply_code: str,
+        timeout: float = 2.0,  # noqa: ASYNC109
+    ) -> str:
+        """Send ``message`` and return the parameter of the next message coded ``reply_code``.
+
+        Raises ``NoReplyError`` when the receiver stays silent. CI reads use this: the reply
+        code (``sMNC``) can differ from the one asked (``sMN-``).
+        """
+        return await self._request(message, "", timeout, reply_code)
+
     async def command(self, code: str, param: str) -> None:
         """Send ``code`` and ``param`` without waiting for an answer."""
         await self.send(code + param)
@@ -123,12 +136,19 @@ class EiscpClient:
         """Return when the connection has closed."""
         await self._closed.wait()
 
-    async def _request(self, code: str, param: str, timeout: float) -> str:  # noqa: ASYNC109
+    async def _request(
+        self,
+        code: str,
+        param: str,
+        timeout: float,  # noqa: ASYNC109
+        reply_code: str | None = None,
+    ) -> str:
         """One request in flight per code; return the parameter of the next message with it."""
-        lock = self._locks.setdefault(code, asyncio.Lock())
+        wait = reply_code or code
+        lock = self._locks.setdefault(wait, asyncio.Lock())
         async with lock:
             future: asyncio.Future[str] = asyncio.get_running_loop().create_future()
-            self._waiters[code] = future
+            self._waiters[wait] = future
             try:
                 await self.send(code + param)
                 async with asyncio.timeout(timeout):
@@ -136,7 +156,7 @@ class EiscpClient:
             except TimeoutError:
                 raise NoReplyError(code, param) from None
             finally:
-                self._waiters.pop(code, None)
+                self._waiters.pop(wait, None)
 
     def _fail_waiters(self) -> None:
         for future in list(self._waiters.values()):

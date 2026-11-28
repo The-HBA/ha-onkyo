@@ -5,6 +5,9 @@ A packet is a 16 byte header followed by the data part:
     "ISCP" | header size (4 bytes, 16) | data size (4 bytes) | version (1 byte, 1) | 3 reserved
     data: "!" + unit type + 3 letter code + parameter + end bytes
 
+CI (custom install, config) messages carry a lower-case ``s`` in front of the code, for example
+``!1sLCCMMMM1FL+07``. The parser then returns a four character code (``sLCC``).
+
 We send CR as the end byte. Receivers end replies with EOF, CR, LF (hex 1A 0D 0A), and some
 replies carry only CR LF, so the parser accepts any run of CR, LF and EOF at the end.
 """
@@ -23,6 +26,7 @@ UNIT_TYPE = "1"
 END_BYTES = "\x1a\r\n"
 MAX_DATA_SIZE = 1 << 20
 CODE_LENGTH = 3
+CI_PREFIX = "s"
 _HEADER = struct.Struct(">4sIIB3x")
 
 
@@ -49,7 +53,11 @@ def parse_data(raw: str) -> Message:
     if not body.startswith("!") or len(body) < 2 + CODE_LENGTH:
         msg = f"not an eISCP message: {raw!r}"
         raise FrameError(msg)
-    return Message(raw=raw, unit=body[1], code=body[2:5], param=body[5:])
+    length = CODE_LENGTH + 1 if body[2] == CI_PREFIX else CODE_LENGTH
+    if len(body) < 2 + length:
+        msg = f"not an eISCP message: {raw!r}"
+        raise FrameError(msg)
+    return Message(raw=raw, unit=body[1], code=body[2 : 2 + length], param=body[2 + length :])
 
 
 class FrameParser:

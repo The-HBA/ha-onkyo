@@ -41,10 +41,12 @@ class Fixture:
     nri: str
     behavior: dict[str, Any]
     inputs: dict[str, str] = field(default_factory=dict)
+    ci_records: tuple[str, ...] = ()
+    ci_ignored: tuple[str, ...] = ()
 
     @classmethod
     def load(cls, folder: Path) -> Fixture:
-        """Read the five fixture files (profile, state, writes, behavior, nri) from ``folder``."""
+        """Read the fixture files (ci.json only when present) from ``folder``."""
         profile = _read(folder / "profile.json")
         state = _read(folder / "state.json")
         writes: dict[tuple[str, str], list[Write]] = {}
@@ -65,7 +67,11 @@ class Fixture:
             writes.setdefault((write.code, write.param), []).append(write)
         nri = (folder / "nri.xml").read_text(encoding="utf-8")
         inputs = {sid.upper(): name for sid, value, name in SELECTOR.findall(nri) if int(value) > 0}
+        ci_path = folder / "ci.json"
+        ci_data = _read(ci_path) if ci_path.exists() else {}
         return cls(
+            ci_records=tuple(ci_data.get("records", [])),
+            ci_ignored=tuple(ci_data.get("ignored", [])),
             profile=profile,
             on=state["on"],
             standby=state["standby"],

@@ -11,6 +11,7 @@ import time
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
+from .ci import CiStore
 from .fixture import RELATIVE_PARAMS, STATE_FREE_KINDS, Fixture, Write
 
 if TYPE_CHECKING:
@@ -56,6 +57,7 @@ class Receiver:
         # SWL (subwoofer level) is stored per input; behavior.json may seed ``input_swl``.
         self.input_swl: dict[str, str] = dict(behavior.get("input_swl", {}))
         self.last_mode_change: float | None = None
+        self.ci = CiStore(fixture.ci_records, fixture.ci_ignored)
 
     @classmethod
     def from_folder(cls, folder: Path, clock: Callable[[], float] = time.monotonic) -> Receiver:
@@ -77,6 +79,8 @@ class Receiver:
 
     def handle(self, code: str, param: str) -> Result:
         """Answer one message."""
+        if code.startswith("s"):  # CI (config) message, lower-case s in front of the code
+            return Result(replies=self.ci.handle(code, param))
         if param == "QSTN":
             value = self._answer(code)
             return Result(replies=[] if value is None else [code + value])
